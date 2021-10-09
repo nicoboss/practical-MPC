@@ -1,3 +1,6 @@
-dist
-node_modules
-app.js
+tools/rsync
+client/dist
+client/node_modules
+client/app.js
+server/server.exe
+tester/tester.exe

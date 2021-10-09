@@ -1,0 +1,20 @@
+stages:
+  - build
+  - test
+  - clean
+
+build:
+  stage: build
+  script:
+    - docker-compose build
+
+test:
+  stage: test
+  script:
+    - docker-compose up
+
+clean:
+  stage: clean
+  script:
+    - docker-compose down
+    - docker system prune --all --force

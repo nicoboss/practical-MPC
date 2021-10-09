@@ -8,50 +8,15 @@
 		"emeraldwalk.runonsave": {
 			"commands": [
 				{
-					"match": "app.ts",
+					"match": "*",
 					"isAsync": false,
-					"cmd": "rmdir /Q /S dist",
+					"cmd": "cd tools && .\\rsync.cmd",
 				},
 				{
 					"match": "app.ts",
 					"isAsync": false,
-					"cmd": "mkdir dist",
-				},
-				{
-					"match": "app.ts",
-					"isAsync": false,
-					"cmd": "copy node_modules\\jiff-mpc\\lib\\jiff-client.js dist",
-				},
-				{
-					"match": "app.ts",
-					"isAsync": false,
-					"cmd": "npx tsc app.ts",
-				},
-				{
-					"match": "app.ts",
-					"isAsync": false,
-					"cmd": "npx webpack",
-				},
-				{
-					"match": "app.ts",
-					"isAsync": false,
-					"cmd": "del app.js",
-				},
-				{
-					"match": "app.ts",
-					"isAsync": false,
-					"cmd": "copy jiff-client.js dist",
-				},
-				//{
-				//	"match": "app.ts",
-				//	"isAsync": false,
-				//	"cmd": "set NODE_ENV=production && browserify app.js > bundle.js",
-				//},
-				//{
-				//	"match": "app.ts",
-				//	"isAsync": false,
-				//	"cmd": "set NODE_ENV=production && browserify app.js | terser --compress --mangle > bundle-min.js",
-				//}
+					"cmd": "cd client && .\\build.cmd",
+				}
 			]
 		}
 	}
