@@ -8,19 +8,12 @@ variables:
   VH_FRONTEND: mpc.nico.re
 
 stages:
-  - test
-  - build
-  - deploy
-
-build:
-  extends: .custom-job
-  stage: build
-  script:
-    - docker-compose build
+  - test 
 
 test:
   extends: .custom-job
   stage: test
   script:
+    - docker-compose build
     - docker-compose up --abort-on-container-exit
     - docker-compose down
