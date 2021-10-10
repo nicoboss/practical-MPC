@@ -11,19 +11,22 @@ func getRequest(url string) string {
 	for n := 0; n <= 30; n++ {
 		resp, err := http.Get(url)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			log.Println("In einer Sekunde erneut versuchen...")
 			time.Sleep(time.Second)
 			continue
 		}
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			log.Println("In einer Sekunde erneut versuchen...")
 			time.Sleep(time.Second)
 			continue
 		}
 		responseBody := string(body)
 		return responseBody
 	}
+	log.Fatalln("Zu viele Fehlversuche!")
 	panic("Zu viele Fehlversuche!")
 }
 

@@ -29,6 +29,9 @@ services:
         ipv4_address: 192.168.3.102
         aliases:
           - tester.mpc.nico.re
+    depends_on:
+      - "server"
+      - "client"
 networks:
   static-network:
     ipam:
