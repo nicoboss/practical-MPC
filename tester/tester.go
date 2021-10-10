@@ -4,19 +4,27 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 func getRequest(url string) string {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Fatalln(err)
+	for n := 0; n <= 30; n++ {
+		resp, err := http.Get(url)
+		if err != nil {
+			log.Fatalln(err)
+			time.Sleep(time.Second)
+			continue
+		}
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln(err)
+			time.Sleep(time.Second)
+			continue
+		}
+		responseBody := string(body)
+		return responseBody
 	}
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	responseBody := string(body)
-	return responseBody
+	panic("Zu viele Fehlversuche!")
 }
 
 func main() {
