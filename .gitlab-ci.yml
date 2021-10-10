@@ -22,5 +22,5 @@ test:
   extends: .custom-job
   stage: test
   script:
-    - docker-compose up
+    - docker-compose up --abort-on-container-exit
     - docker-compose down
