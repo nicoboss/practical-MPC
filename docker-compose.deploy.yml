@@ -2,13 +2,7 @@ version: "3.7"
 
 services:
   server:
-    container_name: server
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-      args:
-        GIT_VERSION: $GIT_VERSION
-        GIT_DATE: $GIT_DATE
+    image: $CI_REGISTRY_IMAGE/PracticalMPC/server:$IMAGE_TAG
     command: go run server.go
     ports:
       - "8001:8080"
@@ -18,13 +12,7 @@ services:
         aliases:
           - server.mpc.nico.re
   client:
-    container_name: client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-      args:
-        GIT_VERSION: $GIT_VERSION
-        GIT_DATE: $GIT_DATE
+    image: $CI_REGISTRY_IMAGE/PracticalMPC/client:$IMAGE_TAG
     command: npx http-server
     ports:
       - "8002:8080"
@@ -36,13 +24,7 @@ services:
     depends_on:
       - "server"
   tester:
-    container_name: tester
-    build:
-      context: ./tester
-      dockerfile: Dockerfile
-      args:
-        GIT_VERSION: $GIT_VERSION
-        GIT_DATE: $GIT_DATE
+    image: $CI_REGISTRY_IMAGE/PracticalMPC/tester:$IMAGE_TAG
     command: go run tester.go
     networks:
       static-network:

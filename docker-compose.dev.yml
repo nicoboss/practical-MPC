@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  server:
+    image: $CI_REGISTRY_IMAGE/PracticalMPC/server:$IMAGE_TAG
+    command: go run server.go
+    ports:
+      - "8001:8080"
+    networks:
+      static-network:
+        ipv4_address: 192.168.3.100
+        aliases:
+          - server.mpc.nico.re
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        GIT_VERSION: $GIT_VERSION
+        GIT_DATE: $GIT_DATE
+    command: npx http-server
+    ports:
+      - "8002:8080"
+    networks:
+      static-network:
+        ipv4_address: 192.168.3.101
+        aliases:
+          - client.mpc.nico.re
+    depends_on:
+      - "server"
+  tester:
+    container_name: tester
+    build:
+      context: ./tester
+      dockerfile: Dockerfile
+      args:
+        GIT_VERSION: $GIT_VERSION
+        GIT_DATE: $GIT_DATE
+    command: go run tester.go
+    networks:
+      static-network:
+        ipv4_address: 192.168.3.102
+        aliases:
+          - tester.mpc.nico.re
+    depends_on:
+      - "server"
+      - "client"
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 192.168.3.0/24
+  
