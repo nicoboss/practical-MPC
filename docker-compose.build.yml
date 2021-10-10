@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   server:
-    image: $CI_REGISTRY_IMAGE/PracticalMPC/server:$IMAGE_TAG
+    image: $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -11,7 +11,7 @@ services:
         GIT_DATE: $GIT_DATE
     command: go build server.go
   client:
-    image: $CI_REGISTRY_IMAGE/PracticalMPC/client:$IMAGE_TAG
+    image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -19,7 +19,7 @@ services:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
   tester:
-    image: $CI_REGISTRY_IMAGE/PracticalMPC/tester:$IMAGE_TAG
+    image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
     build:
       context: ./tester
       dockerfile: Dockerfile

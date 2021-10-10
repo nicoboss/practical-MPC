@@ -17,9 +17,9 @@ build:
   stage: build
   script:
       - docker-compose -f docker-compose.build.yml build
-      - docker push $CI_REGISTRY_IMAGE/PracticalMPC/server:$IMAGE_TAG
-      - docker push $CI_REGISTRY_IMAGE/PracticalMPC/client:$IMAGE_TAG
-      - docker push $CI_REGISTRY_IMAGE/PracticalMPC/tester:$IMAGE_TAG
+      - docker push $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
+      - docker push $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
+      - docker push $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
 test:
   extends: .custom-job
   stage: test

@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   server:
-    image: $CI_REGISTRY_IMAGE/PracticalMPC/server:$IMAGE_TAG
+    image: $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
     command: go run server.go
     ports:
       - "8001:8080"
@@ -12,7 +12,7 @@ services:
         aliases:
           - server.mpc.nico.re
   client:
-    image: $CI_REGISTRY_IMAGE/PracticalMPC/client:$IMAGE_TAG
+    image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
     command: npx http-server
     ports:
       - "8002:8080"
@@ -24,7 +24,7 @@ services:
     depends_on:
       - "server"
   tester:
-    image: $CI_REGISTRY_IMAGE/PracticalMPC/tester:$IMAGE_TAG
+    image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
     command: go run tester.go
     networks:
       static-network:
