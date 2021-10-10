@@ -7,6 +7,9 @@ variables:
   STACK_NAME: PracticalMPC
   VH_FRONTEND: mpc.nico.re
 
+environment:
+  name: staging
+
 stages:
   - build
   - test
@@ -24,5 +27,5 @@ test:
   extends: .custom-job
   stage: test
   script:
-    - docker-compose -f docker-compose.build.yml up --abort-on-container-exit
-    - docker-compose -f docker-compose.build.yml down
+    - docker-compose -f docker-compose.deploy.yml up --abort-on-container-exit
+    - docker-compose -f docker-compose.deploy.yml down
