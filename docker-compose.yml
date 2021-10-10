@@ -16,7 +16,7 @@ services:
       static-network:
         ipv4_address: 192.168.3.100
         aliases:
-          - server.nico.re
+          - server.mpc.nico.re
   client:
     container_name: client
     build:
@@ -32,7 +32,7 @@ services:
       static-network:
         ipv4_address: 192.168.3.101
         aliases:
-          - client.nico.re
+          - client.mpc.nico.re
     depends_on:
       - "server"
   tester:
@@ -48,7 +48,7 @@ services:
       static-network:
         ipv4_address: 192.168.3.102
         aliases:
-          - tester.nico.re
+          - tester.mpc.nico.re
     depends_on:
       - "server"
       - "client"
