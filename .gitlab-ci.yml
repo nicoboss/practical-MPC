@@ -7,9 +7,6 @@ variables:
   STACK_NAME: PracticalMPC
   VH_FRONTEND: mpc.nico.re
 
-environment:
-  name: staging
-
 stages:
   - build
   - test
