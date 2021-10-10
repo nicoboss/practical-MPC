@@ -24,5 +24,6 @@ test:
   extends: .custom-job
   stage: test
   script:
-    - docker-compose -f docker-compose.deploy.yml up --abort-on-container-exit
-    - docker-compose -f docker-compose.deploy.yml down
+    - docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+    - docker-compose -f docker-compose.test.yml down
+    - docker-compose -f docker-compose.test.yml rm --force

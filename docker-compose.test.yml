@@ -21,6 +21,14 @@ services:
         ipv4_address: 192.168.3.101
         aliases:
           - client.mpc.nico.re
+  tester:
+    image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
+    command: go run tester.go
+    networks:
+      static-network:
+        ipv4_address: 192.168.3.102
+        aliases:
+          - tester.mpc.nico.re
 networks:
   static-network:
     ipam:
