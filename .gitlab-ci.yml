@@ -26,9 +26,3 @@ test:
   script:
     - docker-compose -f docker-compose.deploy.yml up --abort-on-container-exit
     - docker-compose -f docker-compose.deploy.yml down
-
-deploy:
-  extends: .custom-job
-  stage: deploy
-  environment:
-    name: staging
