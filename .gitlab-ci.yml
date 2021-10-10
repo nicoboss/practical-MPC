@@ -1,20 +1,14 @@
 stages:
   - build
-  - test
-  - clean
 
 build:
   stage: build
-  script:
-    - docker-compose build
-
-test:
-  stage: test
-  script:
-    - docker-compose up
-
-clean:
-  stage: clean
-  script:
-    - docker-compose down
-    - docker system prune --all --force
+  trigger:
+    include:
+      - project: chr-share/devops/gitlab-cicd
+        ref: v4-stable
+        file: cryptolab/auto.cicd.yml
+  variables:
+    STACK_NAME: PracticalMPC
+    VH_APP: mpc.nico.re
+    FS_ROOT: .
