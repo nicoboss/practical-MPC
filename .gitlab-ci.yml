@@ -4,7 +4,7 @@ include:
     file: cryptolab/auto.cd.yml
 
 variables:
-  STACK_NAME: PracticalMPC
+  STACK_NAME: CryptoLabPracticalMPC
   VH_FRONTEND: mpc.nico.re
 
 stages:
