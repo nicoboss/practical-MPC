@@ -5,5 +5,8 @@
       "strict": true,
       "jsx": "preserve",
       "moduleResolution": "node",
+      "allowJs": true,
+      "declaration": true,
+      "outDir": "dist"
     }
   }
