@@ -15,10 +15,8 @@ RUN apt-get update \
     iproute2
 COPY . /root
 RUN npm install
-RUN rm -rf dist
-RUN mkdir dist
-RUN cp node_modules/jiff-mpc/lib/jiff-client.js dist
+RUN rm -rf dist && mkdir dist
 RUN npx tsc app.ts
 RUN npx webpack
 RUN rm -f app.js
-CMD /bin/bash --init-file ./run.sh
+CMD npx http-server
