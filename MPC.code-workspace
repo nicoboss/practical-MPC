@@ -8,14 +8,9 @@
 		"emeraldwalk.runonsave": {
 			"commands": [
 				{
-					"match": "*",
-					"isAsync": false,
-					"cmd": "cd tools && .\\rsync.cmd",
-				},
-				{
 					"match": "app.ts",
 					"isAsync": false,
-					"cmd": "cd client && .\\build.cmd",
+					"cmd": "cd client && npx tsc app.ts && npx webpack",
 				}
 			]
 		}
