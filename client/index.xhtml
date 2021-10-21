@@ -4,14 +4,33 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TypeScript: Hello, World!</title>
+    <title>MPC</title>
+    <style>
+        .error {
+          color: #FF0000;
+        }
+      </style>
 </head>
 <body>
-    <h1>TypeScript: Hello, World!</h1>
-    <div id="counter">
-        Counter: {{ counter }}
+    <h1>JIFF MPC Visualisierung</h1>
+    <h2>JavaScript Implementation of Federated Functionalities (JIFF)</h2>
+    <div id="main_app">
+        <button-counter/>
+        <button-alert/>
+        <br/><br/><hr/>
+        <h1>Connect JIFF</h1>
+        <label for="computation_id">Computation ID</label><input id="computation_id" value="test"></input><br/><br/>
+        <label for="count">Party Count</label>
+        <input id="count" pattern="[0-9]*" value="2"/>
+        <connect-button/>
+        <br/><br/><hr/>
+        <h1>Sum Numbers under MPC</h1>
+        <label for="number">Input Number (between 0 and 100)</label>
+        <input id="number" pattern="[0-9]+"/>
+        <submit-button/>
+        <br/><br/><hr/>
+        <div id="output"></div>
     </div>
 </body>
-<script src="dist/jiff-client.js"></script>
 <script src="dist/main.js"></script>
 </html>
