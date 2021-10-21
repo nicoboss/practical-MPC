@@ -8,5 +8,12 @@ const config = {
     optimization: {
         minimize: false
     },
+    resolve: {
+        fallback: {
+            crypto: false,
+            path: false
+        },
+    },
 };
+
 module.exports = config;
