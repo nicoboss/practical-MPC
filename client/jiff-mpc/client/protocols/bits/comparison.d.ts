@@ -1,0 +1,12 @@
+export function ceq(jiff: any, bits: any, constant: number, op_id?: string): any;
+export function cneq(jiff: any, bits: any, constant: number, op_id?: string): any;
+export function cgt(jiff: any, bits: any, constant: number, op_id?: string): any;
+export function cgteq(jiff: any, bits: any, constant: number, op_id?: string): any;
+export function clt(jiff: any, bits: any, constant: number, op_id?: string): any;
+export function clteq(jiff: any, bits: any, constant: number, op_id?: string): any;
+export function seq(jiff: any, bits1: any, bits2: any, op_id?: string): any;
+export function sneq(jiff: any, bits1: any, bits2: any, op_id?: string): any;
+export function sgt(jiff: any, bits1: any, bits2: any, op_id?: string): any;
+export function sgteq(jiff: any, bits1: any, bits2: any, op_id?: string): any;
+export function slt(jiff: any, bits1: any, bits2: any, op_id?: string): any;
+export function slteq(jiff: any, bits1: any, bits2: any, op_id?: string): any;
