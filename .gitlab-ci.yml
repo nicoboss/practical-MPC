@@ -1,25 +1,18 @@
 include:
   - project: chr-share/devops/gitlab-cicd
     ref: v4-stable
-    file: cryptolab/auto.cd.yml
+    file: cryptolab/auto.cicd.yml
 
 variables:
-  STACK_NAME: PracticalMPC
-  VH_FRONTEND: mpc.nico.re
+  STACK_NAME: CryptoLabPracticalMPC
+  VH_FRONTEND: mpc.nico.re.cryptolab
 
 stages:
   - build
   - test
+  - publish
   - deploy
 
-build:
-  extends: .custom-job
-  stage: build
-  script:
-      - docker-compose -f docker-compose.build.yml build
-      - docker push $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
-      - docker push $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
-      - docker push $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
 test:
   extends: .custom-job
   stage: test
