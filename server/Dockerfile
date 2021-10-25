@@ -14,5 +14,5 @@ RUN apt-get update \
     iputils-ping \
     iproute2
 COPY . /root
-RUN go build server.go
+RUN go build .
 CMD /bin/bash --init-file ./run.sh
