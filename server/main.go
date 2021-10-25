@@ -1,68 +1,45 @@
-// Copyright 2013 The Gorilla WebSocket Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package main
 
 import (
-	"flag"
+	"encoding/json"
 	"log"
 	"net/http"
-	"net/url"
+
+	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", ":8080", "http service address")
+var upgrader = websocket.Upgrader{}
 
-func handleSocketIoRequest(w http.ResponseWriter, r *http.Request) {
-	m, _ := url.ParseQuery(r.URL.RawQuery)
-	log.Println("EIO: ", m["EIO"])             // the current version of the Engine.IO protocol
-	log.Println("transport: ", m["transport"]) // the transport being established
-	log.Println("t: ", m["t"])                 // a hashed timestamp for cache-busting
-
-	//m := {
-	//	"type": "open",
-	//	"data": {
-	//		"sid":          "36Yib8-rSutGQYLfAAAD", // the unique session id
-	//		"upgrades":     {"websocket"},          // the list of possible transport upgrades
-	//		"pingInterval": 25000,                  // the 1st parameter for the heartbeat mechanism
-	//		"pingTimeout":  5000,                   // the 2nd parameter for the heartbeat mechanism
-	//	},
-	//}
-}
-
-func serveHome(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Access-Control-Allow-Methods", "Access-Control-Allow-Methods")
-	log.Println(r.URL)
-
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+func socketHandler(w http.ResponseWriter, r *http.Request) {
+	// Upgrade der Verbindung von HTTP auf websocket
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Print("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
 		return
 	}
-	if r.URL.Path == "/" {
-		http.ServeFile(w, r, "home.html")
-		return
-	}
-	//if strings.HasPrefix(r.URL.Path, "/socket.io/?") {
-	handleSocketIoRequest(w, r)
-	return
-	//}
+	defer conn.Close()
 
-	http.Error(w, "Not found", http.StatusNotFound)
+	// Main loop
+	for {
+		messageType, message, err := conn.ReadMessage()
+		if err != nil {
+			log.Println("Fehler beim lesen der websocket Nachricht:", err)
+			break
+		}
+		log.Printf("Received: %s", message)
+		data := map[string]string{}
+		json.Unmarshal([]byte(message), &data)
+		log.Print(data)
+		err = conn.WriteMessage(messageType, message)
+		if err != nil {
+			log.Println("Fehler beim schreiben der websocket Nachricht:", err)
+			break
+		}
+	}
 }
 
 func main() {
-	flag.Parse()
-	hub := newHub()
-	go hub.run()
-	http.HandleFunc("/", serveHome)
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		r.Header.Set("Access-Control-Allow-Origin", "*")
-		serveWs(hub, w, r)
-	})
-	err := http.ListenAndServe(*addr, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	http.HandleFunc("/", socketHandler)
+	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
