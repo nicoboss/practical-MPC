@@ -14,6 +14,11 @@ const config = {
             path: false
         },
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.browser': true
+        })
+    ],
 };
 
 module.exports = config;
