@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -22,16 +23,38 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Main loop
 	for {
-		messageType, message, err := conn.ReadMessage()
+		messageType, data, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Fehler beim lesen der websocket Nachricht:", err)
 			break
 		}
-		log.Printf("Received: %s", message)
-		data := map[string]string{}
-		json.Unmarshal([]byte(message), &data)
-		log.Print(data)
-		err = conn.WriteMessage(messageType, message)
+		log.Printf("Received: %s", data)
+		msg := map[string]string{}
+		json.Unmarshal([]byte(data), &msg)
+		log.Print(msg)
+
+		switch socketProtocol := msg["socketProtocol"]; socketProtocol {
+		case "initialization":
+			fmt.Println("initialization")
+		case "share":
+			fmt.Println("share")
+		case "open":
+			fmt.Println("open")
+		case "custom":
+			fmt.Println("custom")
+		case "crypto_provider":
+			fmt.Println("crypto_provider")
+		case "disconnect":
+			fmt.Println("disconnect")
+		case "close":
+			fmt.Println("close")
+		case "free":
+			fmt.Println("free")
+		default:
+			fmt.Printf("Unimplementiertes socketProtocol: %s.\n", socketProtocol)
+		}
+
+		err = conn.WriteMessage(messageType, data)
 		if err != nil {
 			log.Println("Fehler beim schreiben der websocket Nachricht:", err)
 			break
