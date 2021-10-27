@@ -1,7 +1,10 @@
 include:
   - project: chr-share/devops/gitlab-cicd
     ref: v4-stable
-    file: cryptolab/auto.cicd.yml
+    file: 
+      - cryptolab/auto.cicd.yml
+      - config/cryptolab.bda-mpc.yml
+
 
 variables:
   STACK_NAME: CryptoLabPracticalMPC
