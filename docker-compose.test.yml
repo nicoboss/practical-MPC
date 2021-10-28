@@ -3,7 +3,7 @@ version: "3.7"
 services:
   server:
     image: $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
-    command: go run server.go
+    command: go run .
     ports:
       - "8001:8080"
     networks:
