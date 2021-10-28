@@ -1,29 +1,46 @@
 version: "3.7"
 
+networks:
+  internal:
+  ingress:
+    name: traefik-public
+    external: true
+
 services:
+
   server:
     image: $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
-    command: go run server.go
-    ports:
-      - "8001:8080"
     networks:
-      static-network:
-        ipv4_address: 192.168.3.100
+      internal:
         aliases:
           - server.mpc.nico.re
+      ingress:
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.zone == default
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.${STACK_NAME}Server.rule=Host(`${VH_SERVER}.${SWARM_DOMAIN_INTERN}`)'
+        - 'traefik.http.routers.${STACK_NAME}Server.entrypoints=intern'
+        - 'traefik.http.services.${STACK_NAME}Server.loadbalancer.server.port=8080'
+
   client:
     image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
     command: npx http-server
-    ports:
-      - "8002:8080"
     networks:
-      static-network:
-        ipv4_address: 192.168.3.101
+      internal:
         aliases:
           - client.mpc.nico.re
-networks:
-  static-network:
-    ipam:
-      config:
-        - subnet: 192.168.3.0/24
-  
+      ingress:
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.zone == default
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.${STACK_NAME}Client.rule=Host(`${VH_CLIENT}.${SWARM_DOMAIN_INTERN}`)'
+        - 'traefik.http.routers.${STACK_NAME}Client.entrypoints=intern'
+        - 'traefik.http.services.${STACK_NAME}Client.loadbalancer.server.port=8080'

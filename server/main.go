@@ -206,7 +206,7 @@ func initializeParty(computation_id string, party_id string, public_key string, 
 		var currentSpareIds = computationMaps.SpareIds[computation_id]
 		for i := range currentSpareIds {
 			if currentSpareIds[i] == false {
-				party_id = string(i)
+				party_id = fmt.Sprint(i)
 				break
 			}
 		}
@@ -331,5 +331,5 @@ func main() {
 	socketMaps.PartyId = make(map[*websocket.Conn]string)
 	http.HandleFunc("/test", socketHandlerTester)
 	http.HandleFunc("/", socketHandler)
-	log.Fatal(http.ListenAndServe("server.mpc.nico.re:8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
