@@ -32,5 +32,5 @@ func getRequest(url string) string {
 
 func main() {
 	log.Printf(getRequest("http://client.mpc.nico.re:8080"))
-	log.Printf(getRequest("http://server.mpc.nico.re:8080"))
+	log.Printf(getRequest("http://server.mpc.nico.re:8080/test"))
 }

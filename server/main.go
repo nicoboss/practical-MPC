@@ -319,12 +319,17 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func socketHandlerTester(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Success!"))
+}
+
 func main() {
 	log.Println("Server Started!")
 	assertAvailablePRNG()
 	socketMaps.SocketId = make(map[string]map[string]*websocket.Conn)
 	socketMaps.ComputationId = make(map[*websocket.Conn]string)
 	socketMaps.PartyId = make(map[*websocket.Conn]string)
+	http.HandleFunc("/test", socketHandlerTester)
 	http.HandleFunc("/", socketHandler)
-	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
+	log.Fatal(http.ListenAndServe("server.mpc.nico.re:8080", nil))
 }
