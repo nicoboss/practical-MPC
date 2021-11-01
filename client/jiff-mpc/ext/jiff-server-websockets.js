@@ -126,6 +126,8 @@ var $ = require('jquery-deferred');
 
             party_id = output.message.party_id;
             output.message = JSON.stringify(output.message);
+            
+            console.log(JSON.stringify({ socketProtocol: 'initialization', data: output.message }));
             socket.send(JSON.stringify({ socketProtocol: 'initialization', data: output.message }));
 
             // Now that party is connected and has the needed public keys,
@@ -135,6 +137,7 @@ var $ = require('jquery-deferred');
             // Change error to its own protocol type since ws does not support error messages natively
 
             /* Messages sent over socket.io are now under the label 'data' while previously used protocols are sent under 'socketProtocol' */
+            console.log(JSON.stringify({ socketProtocol: 'error', data: JSON.stringify({ errorProtocol: 'initialization', error: output.error }) }));
             socket.send(JSON.stringify({ socketProtocol: 'error', data: JSON.stringify({ errorProtocol: 'initialization', error: output.error }) }));
           }
           // END OF SOCKET SPECIFIC OUTPUT/CLEANUP
@@ -296,9 +299,11 @@ var $ = require('jquery-deferred');
       var message = { socketProtocol: label, data: msg };
       if (socket != null) {
         if (callback == null) {
+          console.log(JSON.stringify(message));
           socket.send(JSON.stringify(message));
         } else {
           // emit the message, if an acknowledgment is received, remove it from mailbox
+          console.log(JSON.stringify(message));
           socket.send(JSON.stringify(message), null, function () {
             callback();
           });
