@@ -51,8 +51,7 @@ import { createApp } from 'vue';
 
 const app = createApp({})
 
-export default app.component('button-counter', {
-  name: 'Hello',
+app.component('button-counter', {
   data() {
     return {
       count: 0
