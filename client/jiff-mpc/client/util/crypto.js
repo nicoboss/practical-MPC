@@ -9,6 +9,11 @@
  */
 exports.encrypt_and_sign = function (jiff, message, encryption_public_key, signing_private_key) {
   var nonce = jiff.sodium_.randombytes_buf(jiff.sodium_.crypto_box_NONCEBYTES);
+  console.log("encrypt_and_sign:");
+  console.log("message:" + message);
+  console.log("encryption_public_key: " + encryption_public_key);
+  console.log("signing_private_key: " + signing_private_key);
+  console.log("nonce: " + nonce);
   var cipher = jiff.sodium_.crypto_box_easy(message, nonce, encryption_public_key, signing_private_key);
 
   var result = { nonce: '[' + nonce.toString() + ']', cipher: '[' + cipher.toString() + ']' };
