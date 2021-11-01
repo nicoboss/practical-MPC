@@ -5,9 +5,10 @@ include:
       - cryptolab/auto.cicd.yml
       - config/cryptolab.bda-mpc.yml
 
-
 variables:
   STACK_NAME: CryptoLabPracticalMPC
+  VH_SERVER:  server.mpc.cryptolab
+  VH_CLIENT:  client.mpc.cryptolab
   VH_FRONTEND: mpc.nico.re.cryptolab
 
 stages:
