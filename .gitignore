@@ -4,3 +4,4 @@ client/node_modules
 client/app.js
 server/server.exe
 tester/tester.exe
+selenium/target
