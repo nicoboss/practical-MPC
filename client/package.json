@@ -11,6 +11,7 @@
     "@babel/types": "7.16.0",
     "@types/node": "16.11.6",
     "bignumber.js": "9.0.1",
+    "chai": "4.3.4",
     "cross-env": "7.0.3",
     "docdash": "1.2.0",
     "express": "4.17.1",
