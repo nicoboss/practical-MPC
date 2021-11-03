@@ -12,21 +12,22 @@
       </style>
 </head>
 <body>
-    <h1>JIFF MPC Visualisierung</h1>
-    <h2>JavaScript Implementation of Federated Functionalities (JIFF)</h2>
+    <h1 id="title">JIFF MPC Visualisierung</h1>
+    <h2 id="subtitle">JavaScript Implementation of Federated Functionalities (JIFF)</h2>
     <div id="main_app">
-        <button-counter/>
-        <button-alert/>
+        <hr/>
+        <h1>VueJS Testing</h1>
+        <vue-test/>
         <br/><br/><hr/>
-        <h1>Connect JIFF</h1>
-        <label for="computation_id">Computation ID</label><input id="computation_id" value="test"></input><br/><br/>
-        <label for="count">Party Count</label>
-        <input id="count" pattern="[0-9]*" value="2"/>
+        <h1>JIFF Einstellungen</h1>
+        <label for="computation_id">Berechnungsname</label><input id="computation_id" value="test"></input><br/><br/>
+        <label for="party_count">Anzahl Teilnehmer</label>
+        <input id="party_count" pattern="[0-9]*" value="2"/>
         <connect-button/>
         <br/><br/><hr/>
-        <h1>Sum Numbers under MPC</h1>
-        <label for="number">Input Number (between 0 and 100)</label>
-        <input id="number" pattern="[0-9]+"/>
+        <h1>JIFF Berechnung</h1>
+        <label for="client_input">Zahl (zwischen 0 und 100)</label>
+        <input id="client_input" pattern="[0-9]+"/>
         <submit-button/>
         <br/><br/><hr/>
         <div id="output"></div>

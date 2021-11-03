@@ -51,33 +51,15 @@ import { createApp } from 'vue';
 
 const app = createApp({})
 
-app.component('button-counter', {
+app.component('vue-test', {
   data() {
     return {
       count: 0
     }
   },
   template: `
-    <button v-on:click="count++">
-      You clicked me {{ count }} times.
-    </button>`
-})
-
-app.component('button-alert', {
-  data() {
-    return {
-      alertMessage: 'Hi'
-    }
-  },
-  methods: {
-    showMsg(arg: string) {
-      alert(this.alertMessage);
-      this.alertMessage = 'Bye'
-    }
-  },
-  template: `
-    <button v-on:click="showMsg('Hi')">
-      alert: {{ alertMessage }}
+    <button id="vue-test-button" v-on:click="count++">
+      {{ count }}
     </button>`
 })
 
@@ -85,14 +67,13 @@ app.component('connect-button', {
   data() {
     return {
       connectButtonEnabled: true,
-      connectButtonText: 'Hi'
     }
   },
   methods: {
     connectButtonClick() {
       this.connectButtonEnabled = false;
       let computation_id = (<HTMLInputElement>document.getElementById("computation_id")).value;
-      let party_count = parseInt((<HTMLInputElement>document.getElementById("count")).value);
+      let party_count = parseInt((<HTMLInputElement>document.getElementById("party_count")).value);
     
       if (isNaN(party_count)) {
         log("Die Partyanzahl muss eine gültige Zahl sein!", LogType.ERROR);
@@ -129,8 +110,8 @@ app.component('connect-button', {
     }
   },
   template: `
-    <button v-on:click="connectButtonClick()" v-bind:disabled="!connectButtonEnabled">
-      Connect
+    <button id="connect_button" v-on:click="connectButtonClick()" v-bind:disabled="!connectButtonEnabled">
+      Verbinden
     </button>`
 })
 
@@ -139,12 +120,11 @@ app.component('submit-button', {
   data() {
     return {
       submitButtonEnabled: true,
-      connectButtonText: 'Hi'
     }
   },
   methods: {
     submitButtonClick() {
-      let input = parseInt((<HTMLInputElement>document.getElementById("number")).value);
+      let input = parseInt((<HTMLInputElement>document.getElementById("client_input")).value);
       if (isNaN(input)) {
         log("Der input muss eine gültige Zahl sein!", LogType.ERROR);
         return;
@@ -160,8 +140,8 @@ app.component('submit-button', {
     }
   },
   template: `
-    <button v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
-      Sum
+    <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
+      Summe Berechnen
     </button>`
 })
 
