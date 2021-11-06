@@ -10,27 +10,72 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/miguelsandro/curve25519-go/axlsign"
-	//"github.com/miguelsandro/curve25519-go/axlsign"
-	//"github.com/jamesruan/sodium" //choco install pkgconfiglite
 )
+
+type JSON_key []uint8
+
+func (u JSON_key) MarshalJSON() ([]byte, error) {
+	var result string
+	if u == nil {
+		result = "null"
+	} else {
+		result = strings.Join(strings.Fields(fmt.Sprintf("%d", u)), ",")
+	}
+	return []byte(result), nil
+}
+
+func (receiver *JSON_key) UnmarshalJSON(b []byte) error {
+	int_arr := []int{}
+	err := json.Unmarshal(b[1:len(b)-1], &int_arr)
+	if err != nil {
+		return err
+	}
+	key := make([]uint8, len(int_arr))
+	for i, item := range int_arr {
+		key[i] = uint8(item)
+	}
+	var key_as_JSON_key = JSON_key(key)
+	receiver = &key_as_JSON_key
+	return nil
+}
 
 // speichert Zustände der Berechnung
 type ComputationMaps struct {
-	ClientIds   map[string][]string           // { computation_id -> [ party1_id, party2_id, ...] } for only registered/initialized clients
-	SpareIds    map[string][]bool             // { computation_id -> <interval object> }
-	MaxCount    map[string]int                // { computation_id -> <max number of parties allowed> }
-	Keys        map[string]map[string][]uint8 // { computation_id -> { party_id -> <public_key> } }
-	SecretKeys  map[string][]uint8            // { computation_id -> <privateKey> }
-	FreeParties map[string]map[string]bool    // { computation_id -> { id of every free party -> true } }
+	ClientIds   map[string][]string            // { computation_id -> [ party1_id, party2_id, ...] } for only registered/initialized clients
+	SpareIds    map[string][]bool              // { computation_id -> <interval object> }
+	MaxCount    map[string]int                 // { computation_id -> <max number of parties allowed> }
+	Keys        map[string]map[string]JSON_key // { computation_id -> { party_id -> <public_key> } }
+	SecretKeys  map[string]JSON_key            // { computation_id -> <privateKey> }
+	FreeParties map[string]map[string]bool     // { computation_id -> { id of every free party -> true } }
+}
+
+func NewComputationMaps() *ComputationMaps {
+	computationMaps := new(ComputationMaps)
+	computationMaps.ClientIds = make(map[string][]string)
+	computationMaps.SpareIds = make(map[string][]bool)
+	computationMaps.MaxCount = make(map[string]int)
+	computationMaps.Keys = make(map[string]map[string]JSON_key)
+	computationMaps.SecretKeys = make(map[string]JSON_key)
+	computationMaps.FreeParties = make(map[string]map[string]bool)
+	return computationMaps
 }
 
 type SocketMaps struct {
 	SocketId      map[string]map[string]*websocket.Conn
 	ComputationId map[*websocket.Conn]string
 	PartyId       map[*websocket.Conn]string
+}
+
+func NewSocketMaps() *SocketMaps {
+	socketMaps := new(SocketMaps)
+	socketMaps.SocketId = make(map[string]map[string]*websocket.Conn)
+	socketMaps.ComputationId = make(map[*websocket.Conn]string)
+	socketMaps.PartyId = make(map[*websocket.Conn]string)
+	return socketMaps
 }
 
 type InputMessage struct {
@@ -41,12 +86,12 @@ type InputMessage struct {
 type InputMessageDataInitialization struct {
 	Computation_id string
 	Party_count    int
-	Public_key     string
+	Public_key     JSON_key
 }
 
 type OutputMessage struct {
-	SocketProtocol string
-	Data           string
+	SocketProtocol string `json:"socketProtocol"`
+	Data           string `json:"data"`
 }
 
 type InnerOutputMessageError struct {
@@ -55,23 +100,37 @@ type InnerOutputMessageError struct {
 }
 
 type InitializePartyMsg struct {
-	party_id    string
-	party_count int
-	public_keys map[string]string
+	Party_id    string              `json:"party_id"`
+	Party_count int                 `json:"party_count"`
+	Public_keys map[string]JSON_key `json:"public_keys"`
+}
+
+func NewInitializePartyMsg(party_id string, party_count int, public_keys map[string]JSON_key) *InitializePartyMsg {
+	initializePartyMsg := new(InitializePartyMsg)
+	initializePartyMsg.Party_id = party_id
+	initializePartyMsg.Party_count = party_count
+	initializePartyMsg.Public_keys = public_keys
+	return initializePartyMsg
 }
 
 type InnerCryptoMap struct {
-	shares []string
-	values []string
+	Shares []string
+	Values []string
 }
 
 type KeymapToSend struct {
-	public_keys map[string]string
+	Public_keys map[string]JSON_key
+}
+
+func NewKeymapToSend() *KeymapToSend {
+	keymapToSend := new(KeymapToSend)
+	keymapToSend.Public_keys = make(map[string]JSON_key)
+	return keymapToSend
 }
 
 var upgrader = websocket.Upgrader{}
-var computationMaps = new(ComputationMaps)
-var socketMaps = new(SocketMaps)
+var computationMaps = NewComputationMaps()
+var socketMaps = NewSocketMaps()
 var mailbox = make(map[string]map[string][]string)                    // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
 var cryptoMap = make(map[string]map[string]map[string]InnerCryptoMap) // { computation_id -> { op_id -> { party_id -> { 'shares': [ numeric shares for this party ], 'values': <any non-secret value(s) for this party> } } } }
 
@@ -93,7 +152,7 @@ func toObj(str []byte, obj interface{}) {
 func getPartyIdInt(party_id string) int {
 	party_id_int, err := strconv.Atoi(party_id)
 	if err != nil {
-		log.Fatal("party_id ist keine Ganzzahl")
+		log.Fatal("party_id \"" + party_id + "\" ist keine Ganzzahl")
 	}
 	return party_id_int
 }
@@ -124,22 +183,12 @@ func GenerateRandomBytes(n int) []uint8 {
 	return b
 }
 
-func parseKey(keyString string) []byte {
-	var arr []byte
-	toObj([]byte(keyString), &arr)
-	return arr
-}
-
-func dumpKey(key []byte) string {
-	return ("[" + string(key) + "]")
-}
-
 func initComputation(computation_id string, party_id string, party_count int) {
 	if computationMaps.ClientIds[computation_id] == nil {
 		computationMaps.ClientIds[computation_id] = make([]string, party_count)
 		computationMaps.MaxCount[computation_id] = party_count
 		computationMaps.FreeParties[computation_id] = make(map[string]bool)
-		computationMaps.Keys[computation_id] = make(map[string][]uint8)
+		computationMaps.Keys[computation_id] = make(map[string]JSON_key)
 		socketMaps.SocketId[computation_id] = make(map[string]*websocket.Conn)
 		mailbox[computation_id] = make(map[string][]string)
 		cryptoMap[computation_id] = make(map[string]map[string]InnerCryptoMap)
@@ -150,7 +199,7 @@ func initComputation(computation_id string, party_id string, party_count int) {
 	}
 }
 
-func storeAndSendPublicKey(computation_id string, party_id string, public_key string) map[string]string {
+func storeAndSendPublicKey(computation_id string, party_id string, public_key JSON_key) map[string]JSON_key {
 	// Öffendlicher Schlüssel speichern
 	var tmp = computationMaps.Keys[computation_id]
 	if _, ok := tmp["s1"]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
@@ -160,15 +209,16 @@ func storeAndSendPublicKey(computation_id string, party_id string, public_key st
 	}
 
 	if party_id != "s1" {
-		tmp[party_id] = parseKey(public_key)
+		tmp[party_id] = public_key
 	}
 
 	// Sammeln und formatieren der Schlüssel
-	var keymap_to_send = new(KeymapToSend)
-	keymap_to_send.public_keys = make(map[string]string)
+	var keymap_to_send = NewKeymapToSend()
 	for key, _ := range tmp {
-		if val, ok := computationMaps.Keys[computation_id][key]; !ok {
-			keymap_to_send.public_keys[key] = dumpKey(val)
+		if val, ok := computationMaps.Keys[computation_id][key]; ok {
+			keymap_to_send.Public_keys[key] = val
+		} else {
+			log.Fatal("Fehler beim generieren des Schlüsselpaars")
 		}
 	}
 	var broadcast_message = toJSON(keymap_to_send)
@@ -181,11 +231,11 @@ func storeAndSendPublicKey(computation_id string, party_id string, public_key st
 		}
 	}
 
-	return keymap_to_send.public_keys
+	return keymap_to_send.Public_keys
 }
 
 // Initialisierung einer Partei. Rückgabe: Initialisierungsnachricht mit der Partei-ID oder eine Fehlermeldung
-func initializeParty(computation_id string, party_id string, public_key string, party_count int, _s1 bool) (bool, InitializePartyMsg) {
+func initializeParty(computation_id string, party_id string, public_key JSON_key, party_count int, _s1 bool) (bool, *InitializePartyMsg) {
 
 	log.Println("Server inizialisiert mit ", computation_id, "-", party_id, " #", party_count, "::", _s1)
 
@@ -222,7 +272,8 @@ func initializeParty(computation_id string, party_id string, public_key string, 
 	// Initialisierungsnachricht für den Client erstellen
 	keymap_to_send := storeAndSendPublicKey(computation_id, party_id, public_key)
 
-	var message = InitializePartyMsg{party_id: party_id, party_count: 0, public_keys: keymap_to_send}
+	var message = NewInitializePartyMsg(party_id, 0, keymap_to_send)
+	log.Printf("Message: %s", toJSON(message))
 	return true, message
 }
 
@@ -230,7 +281,9 @@ func initialization(data string, party_id string, socket *websocket.Conn) {
 
 	var inputData = &InputMessageDataInitialization{}
 	toObj([]byte(data), inputData)
-
+	println("==========================================")
+	println(len(inputData.Public_key))
+	println("==========================================")
 	success, message := initializeParty(inputData.Computation_id, party_id, inputData.Public_key, inputData.Party_count, false)
 
 	if socketMaps.SocketId[inputData.Computation_id] == nil {
@@ -238,11 +291,11 @@ func initialization(data string, party_id string, socket *websocket.Conn) {
 	}
 
 	if success {
-		socketMaps.SocketId[inputData.Computation_id][message.party_id] = socket
+		socketMaps.SocketId[inputData.Computation_id][message.Party_id] = socket
 		socketMaps.ComputationId[socket] = inputData.Computation_id
-		socketMaps.PartyId[socket] = message.party_id
+		socketMaps.PartyId[socket] = message.Party_id
 
-		party_id = message.party_id
+		party_id = message.Party_id
 		outputMessageObj := &OutputMessage{
 			SocketProtocol: "initialization",
 			Data:           toJSON(message),
@@ -287,7 +340,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Unmarshaled: %s", inputMessage.Data)
 
 		log.Print(inputMessage)
-		party_id := "party_id"
+		party_id := "0"
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {
 		case "initialization":
