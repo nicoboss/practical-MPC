@@ -18,3 +18,7 @@ replace PracticalMPC/Server/mailbox => ./mailbox
 require PracticalMPC/Server/mailbox v0.0.0-00010101000000-000000000000
 replace PracticalMPC/Server/storage => ./storage
 require PracticalMPC/Server/storage v0.0.0-00010101000000-000000000000
+replace PracticalMPC/Server/socket => ./socket
+require PracticalMPC/Server/socket v0.0.0-00010101000000-000000000000
+replace PracticalMPC/Server/protocol => ./protocol
+require PracticalMPC/Server/protocol v0.0.0-00010101000000-000000000000
