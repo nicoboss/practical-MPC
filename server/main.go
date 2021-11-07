@@ -118,7 +118,7 @@ type InnerCryptoMap struct {
 }
 
 type KeymapToSend struct {
-	Public_keys map[string]JSON_key
+	Public_keys map[string]JSON_key `json:"public_keys"`
 }
 
 func NewKeymapToSend() *KeymapToSend {
@@ -132,6 +132,7 @@ var computationMaps = NewComputationMaps()
 var socketMaps = NewSocketMaps()
 var mailbox = make(map[string]map[string][]string)                    // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
 var cryptoMap = make(map[string]map[string]map[string]InnerCryptoMap) // { computation_id -> { op_id -> { party_id -> { 'shares': [ numeric shares for this party ], 'values': <any non-secret value(s) for this party> } } } }
+var party_id_counter int = 1
 
 func toJSON(obj interface{}) string {
 	jsonObj, err := json.Marshal(obj)
@@ -182,10 +183,6 @@ func GenerateRandomBytes(n int) []uint8 {
 	return b
 }
 
-func safe_emit(broadcast_message string, computation_id string, party string) {
-	log.Println("safe_emit unimplemented!")
-}
-
 func initComputation(computation_id string, party_id string, party_count int) {
 	if computationMaps.ClientIds[computation_id] == nil {
 		computationMaps.ClientIds[computation_id] = make([]string, party_count)
@@ -217,7 +214,7 @@ func storeAndSendPublicKey(computation_id string, party_id string, public_key JS
 
 	// Sammeln und formatieren der Schlüssel
 	var keymap_to_send = NewKeymapToSend()
-	for key, _ := range tmp {
+	for key := range tmp {
 		if val, ok := computationMaps.Keys[computation_id][key]; ok {
 			keymap_to_send.Public_keys[key] = val
 		} else {
@@ -229,7 +226,7 @@ func storeAndSendPublicKey(computation_id string, party_id string, public_key JS
 	// Öffentlicher Schlüssel an alle zuvor verbundenen Parteien ausser der Partei welche dieses Update verursacht hat senden
 	for _, party := range computationMaps.ClientIds[computation_id] {
 		if party != party_id {
-			safe_emit(broadcast_message, computation_id, party)
+			mailbox[computation_id][party] = append(mailbox[computation_id][party], broadcast_message)
 		}
 	}
 
@@ -241,7 +238,7 @@ func initializeParty(computation_id string, party_id string, public_key JSON_key
 
 	log.Println("Server inizialisiert mit ", computation_id, "-", party_id, " #", party_count, "::", _s1)
 
-	if _s1 != true && party_id == "s1" {
+	if !_s1 && party_id == "s1" {
 		log.Fatal("party_id s1 ist für den Server reserviert und darf nicht von einem Client verwendet werden!")
 	}
 
@@ -251,13 +248,13 @@ func initializeParty(computation_id string, party_id string, public_key JSON_key
 	}
 
 	if party_id != "" {
-		if party_id != "s1" && !computationMaps.SpareIds[computation_id][getPartyIdInt(party_id)] == false {
+		if party_id != "s1" && computationMaps.SpareIds[computation_id][getPartyIdInt(party_id)-1] {
 			log.Fatal("party_id existiert schon")
 		}
 	} else { // generate einer freien party_id
 		var currentSpareIds = computationMaps.SpareIds[computation_id]
 		for i := range currentSpareIds {
-			if currentSpareIds[i] == false {
+			if !currentSpareIds[i] {
 				party_id = fmt.Sprint(i)
 				break
 			}
@@ -265,7 +262,7 @@ func initializeParty(computation_id string, party_id string, public_key JSON_key
 	}
 
 	if party_id != "s1" {
-		computationMaps.SpareIds[computation_id][getPartyIdInt(party_id)] = true
+		computationMaps.SpareIds[computation_id][getPartyIdInt(party_id)-1] = true
 	}
 
 	// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten.
@@ -288,12 +285,23 @@ func initialization(data string, party_id string, socket *websocket.Conn) {
 		socketMaps.SocketId[inputData.Computation_id] = make(map[string]*websocket.Conn)
 	}
 
+	for party_id_of_mailbox := range mailbox[inputData.Computation_id] {
+		for _, mail := range mailbox[inputData.Computation_id][party_id_of_mailbox] {
+			if socketMaps.SocketId[inputData.Computation_id][party_id_of_mailbox] != nil {
+				outputMessageObj := &OutputMessage{
+					SocketProtocol: "public_keys",
+					Data:           mail,
+				}
+				socketMaps.SocketId[inputData.Computation_id][party_id_of_mailbox].WriteJSON(outputMessageObj)
+				log.Printf("Sent: %s", toJSON(outputMessageObj))
+			}
+		}
+	}
+
 	if success {
 		socketMaps.SocketId[inputData.Computation_id][message.Party_id] = socket
 		socketMaps.ComputationId[socket] = inputData.Computation_id
 		socketMaps.PartyId[socket] = message.Party_id
-
-		party_id = message.Party_id
 		outputMessageObj := &OutputMessage{
 			SocketProtocol: "initialization",
 			Data:           toJSON(message),
@@ -323,8 +331,6 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer conn.Close()
-
-	var party_id_counter int = 1
 
 	// Main loop
 	for {
