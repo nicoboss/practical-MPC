@@ -1,4 +1,4 @@
-module PracticalMPC/Server/mailbox
+module PracticalMPC/Server/crypto
 
 go 1.17
 

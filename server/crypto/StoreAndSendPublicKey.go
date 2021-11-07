@@ -1,4 +1,4 @@
-package keygen
+package crypto
 
 import (
 	"PracticalMPC/Server/conversions"
