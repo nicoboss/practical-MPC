@@ -4,58 +4,26 @@ package main
 
 import (
 	"crypto/rand"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strconv"
 
+	"PracticalMPC/Server/conversions"
+	"PracticalMPC/Server/keygen"
+	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/structs"
 	"PracticalMPC/Server/types"
 
 	"github.com/gorilla/websocket"
-	"github.com/miguelsandro/curve25519-go/axlsign"
 )
 
 var upgrader = websocket.Upgrader{}
 var computationMaps = structs.NewComputationMaps()
 var socketMaps = structs.NewSocketMaps()
-var mailbox = make(map[string]map[string][]string)                            // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
 var cryptoMap = make(map[string]map[string]map[string]structs.InnerCryptoMap) // { computation_id -> { op_id -> { party_id -> { 'shares': [ numeric shares for this party ], 'values': <any non-secret value(s) for this party> } } } }
 var party_id_counter int = 1
-
-func toJSON(obj interface{}) string {
-	jsonObj, err := json.Marshal(obj)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	return string(jsonObj)
-}
-
-func toObj(str []byte, obj interface{}) {
-	err := json.Unmarshal(str, obj)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func getPartyIdInt(party_id string) int {
-	party_id_int, err := strconv.Atoi(party_id)
-	if err != nil {
-		log.Fatal("party_id \"" + party_id + "\" ist keine Ganzzahl")
-	}
-	return party_id_int
-}
-
-func contains(s []string, str string) bool {
-	for _, item := range s {
-		if item == str {
-			return true
-		}
-	}
-	return false
-}
 
 func assertAvailablePRNG() {
 	buf := make([]byte, 1)
@@ -65,15 +33,6 @@ func assertAvailablePRNG() {
 	}
 }
 
-func GenerateRandomBytes(n int) []uint8 {
-	b := make([]uint8, n)
-	_, err := rand.Read(b)
-	if err != nil {
-		panic(err)
-	}
-	return b
-}
-
 func initComputation(computation_id string, party_id string, party_count int) {
 	if computationMaps.ClientIds[computation_id] == nil {
 		computationMaps.ClientIds[computation_id] = make([]string, party_count)
@@ -81,47 +40,13 @@ func initComputation(computation_id string, party_id string, party_count int) {
 		computationMaps.FreeParties[computation_id] = make(map[string]bool)
 		computationMaps.Keys[computation_id] = make(map[string]types.JSON_key)
 		socketMaps.SocketId[computation_id] = make(map[string]*websocket.Conn)
-		mailbox[computation_id] = make(map[string][]string)
+		mailbox.Init(computation_id)
 		cryptoMap[computation_id] = make(map[string]map[string]structs.InnerCryptoMap)
 	}
 
-	if !(contains(computationMaps.ClientIds[computation_id], party_id)) {
+	if !(types.Contains(computationMaps.ClientIds[computation_id], party_id)) {
 		computationMaps.ClientIds[computation_id] = append(computationMaps.ClientIds[computation_id], party_id)
 	}
-}
-
-func storeAndSendPublicKey(computation_id string, party_id string, public_key types.JSON_key) map[string]types.JSON_key {
-	// Öffendlicher Schlüssel speichern
-	var tmp = computationMaps.Keys[computation_id]
-	if _, ok := tmp["s1"]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
-		var genkey = axlsign.GenerateKeyPair(GenerateRandomBytes(32)) // Generieren des Schlüsselpaars
-		computationMaps.SecretKeys[computation_id] = genkey.PrivateKey
-		tmp["s1"] = genkey.PublicKey
-	}
-
-	if party_id != "s1" {
-		tmp[party_id] = public_key
-	}
-
-	// Sammeln und formatieren der Schlüssel
-	var keymap_to_send = structs.NewKeymapToSend()
-	for key := range tmp {
-		if val, ok := computationMaps.Keys[computation_id][key]; ok {
-			keymap_to_send.Public_keys[key] = val
-		} else {
-			log.Fatal("Fehler beim generieren des Schlüsselpaars")
-		}
-	}
-	var broadcast_message = toJSON(keymap_to_send)
-
-	// Öffentlicher Schlüssel an alle zuvor verbundenen Parteien ausser der Partei welche dieses Update verursacht hat senden
-	for _, party := range computationMaps.ClientIds[computation_id] {
-		if party != party_id {
-			mailbox[computation_id][party] = append(mailbox[computation_id][party], broadcast_message)
-		}
-	}
-
-	return keymap_to_send.Public_keys
 }
 
 // Initialisierung einer Partei. Rückgabe: Initialisierungsnachricht mit der Partei-ID oder eine Fehlermeldung
@@ -139,7 +64,7 @@ func initializeParty(computation_id string, party_id string, public_key types.JS
 	}
 
 	if party_id != "" {
-		if party_id != "s1" && computationMaps.SpareIds[computation_id][getPartyIdInt(party_id)-1] {
+		if party_id != "s1" && computationMaps.SpareIds[computation_id][conversions.GetPartyIdInt(party_id)-1] {
 			log.Fatal("party_id existiert schon")
 		}
 	} else { // generate einer freien party_id
@@ -153,14 +78,14 @@ func initializeParty(computation_id string, party_id string, public_key types.JS
 	}
 
 	if party_id != "s1" {
-		computationMaps.SpareIds[computation_id][getPartyIdInt(party_id)-1] = true
+		computationMaps.SpareIds[computation_id][conversions.GetPartyIdInt(party_id)-1] = true
 	}
 
 	// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten.
 	initComputation(computation_id, party_id, party_count)
 
 	// Initialisierungsnachricht für den Client erstellen
-	keymap_to_send := storeAndSendPublicKey(computation_id, party_id, public_key)
+	keymap_to_send := keygen.StoreAndSendPublicKey(computationMaps, computation_id, party_id, public_key)
 
 	var message = structs.NewInitializePartyMsg(party_id, party_count, keymap_to_send)
 	return true, message
@@ -169,25 +94,14 @@ func initializeParty(computation_id string, party_id string, public_key types.JS
 func initialization(data string, party_id string, socket *websocket.Conn) {
 
 	var inputData = &structs.InputMessageDataInitialization{}
-	toObj([]byte(data), inputData)
+	conversions.ToObj([]byte(data), inputData)
 	success, message := initializeParty(inputData.Computation_id, party_id, inputData.Public_key, inputData.Party_count, false)
 
 	if socketMaps.SocketId[inputData.Computation_id] == nil {
 		socketMaps.SocketId[inputData.Computation_id] = make(map[string]*websocket.Conn)
 	}
 
-	for party_id_of_mailbox := range mailbox[inputData.Computation_id] {
-		for _, mail := range mailbox[inputData.Computation_id][party_id_of_mailbox] {
-			if socketMaps.SocketId[inputData.Computation_id][party_id_of_mailbox] != nil {
-				outputMessageObj := &structs.OutputMessage{
-					SocketProtocol: "public_keys",
-					Data:           mail,
-				}
-				socketMaps.SocketId[inputData.Computation_id][party_id_of_mailbox].WriteJSON(outputMessageObj)
-				log.Printf("Sent: %s", toJSON(outputMessageObj))
-			}
-		}
-	}
+	mailbox.SendMails(socketMaps, inputData.Computation_id)
 
 	if success {
 		socketMaps.SocketId[inputData.Computation_id][message.Party_id] = socket
@@ -195,10 +109,10 @@ func initialization(data string, party_id string, socket *websocket.Conn) {
 		socketMaps.PartyId[socket] = message.Party_id
 		outputMessageObj := &structs.OutputMessage{
 			SocketProtocol: "initialization",
-			Data:           toJSON(message),
+			Data:           conversions.ToJSON(message),
 		}
 		socket.WriteJSON(outputMessageObj)
-		log.Printf("Sent: %s", toJSON(outputMessageObj))
+		log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
 
 		// Now that party is connected and has the needed public keys,
 		// send the mailbox with pending messages to the party.
@@ -206,10 +120,10 @@ func initialization(data string, party_id string, socket *websocket.Conn) {
 	} else {
 		// Change error to its own protocol type since ws does not support error messages natively
 		/* Messages sent over socket.io are now under the label 'data' while previously used protocols are sent under 'socketProtocol' */
-		innerOutputMessageErrorObj := &structs.InnerOutputMessageError{ErrorProtocol: "initialization", Error: toJSON(message)}
-		outputMessageObj := &structs.OutputMessage{SocketProtocol: "error", Data: toJSON(innerOutputMessageErrorObj)}
+		innerOutputMessageErrorObj := &structs.InnerOutputMessageError{ErrorProtocol: "initialization", Error: conversions.ToJSON(message)}
+		outputMessageObj := &structs.OutputMessage{SocketProtocol: "error", Data: conversions.ToJSON(innerOutputMessageErrorObj)}
 		socket.WriteJSON(outputMessageObj)
-		log.Printf("Sent: %s", toJSON(outputMessageObj))
+		log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
 	}
 }
 
@@ -233,7 +147,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Received: %s", data)
 
 		var inputMessage = &structs.InputMessage{}
-		toObj(data, inputMessage)
+		conversions.ToObj(data, inputMessage)
 
 		log.Print(inputMessage)
 
