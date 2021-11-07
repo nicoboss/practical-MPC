@@ -28,7 +28,7 @@ func (u JSON_key) MarshalJSON() ([]byte, error) {
 	return []byte(result), nil
 }
 
-func (receiver *JSON_key) UnmarshalJSON(b []byte) error {
+func (result *JSON_key) UnmarshalJSON(b []byte) error {
 	int_arr := []int{}
 	err := json.Unmarshal(b[1:len(b)-1], &int_arr)
 	if err != nil {
@@ -38,8 +38,7 @@ func (receiver *JSON_key) UnmarshalJSON(b []byte) error {
 	for i, item := range int_arr {
 		key[i] = uint8(item)
 	}
-	var key_as_JSON_key = JSON_key(key)
-	receiver = &key_as_JSON_key
+	*result = key
 	return nil
 }
 
@@ -183,6 +182,10 @@ func GenerateRandomBytes(n int) []uint8 {
 	return b
 }
 
+func safe_emit(broadcast_message string, computation_id string, party string) {
+	log.Println("safe_emit unimplemented!")
+}
+
 func initComputation(computation_id string, party_id string, party_count int) {
 	if computationMaps.ClientIds[computation_id] == nil {
 		computationMaps.ClientIds[computation_id] = make([]string, party_count)
@@ -226,8 +229,7 @@ func storeAndSendPublicKey(computation_id string, party_id string, public_key JS
 	// Öffentlicher Schlüssel an alle zuvor verbundenen Parteien ausser der Partei welche dieses Update verursacht hat senden
 	for _, party := range computationMaps.ClientIds[computation_id] {
 		if party != party_id {
-			//safe_emit("public_keys", broadcast_message, computation_id, party)
-			log.Println("public_keys", broadcast_message, computation_id, party)
+			safe_emit(broadcast_message, computation_id, party)
 		}
 	}
 
@@ -272,8 +274,7 @@ func initializeParty(computation_id string, party_id string, public_key JSON_key
 	// Initialisierungsnachricht für den Client erstellen
 	keymap_to_send := storeAndSendPublicKey(computation_id, party_id, public_key)
 
-	var message = NewInitializePartyMsg(party_id, 0, keymap_to_send)
-	log.Printf("Message: %s", toJSON(message))
+	var message = NewInitializePartyMsg(party_id, party_count, keymap_to_send)
 	return true, message
 }
 
@@ -281,9 +282,6 @@ func initialization(data string, party_id string, socket *websocket.Conn) {
 
 	var inputData = &InputMessageDataInitialization{}
 	toObj([]byte(data), inputData)
-	println("==========================================")
-	println(len(inputData.Public_key))
-	println("==========================================")
 	success, message := initializeParty(inputData.Computation_id, party_id, inputData.Public_key, inputData.Party_count, false)
 
 	if socketMaps.SocketId[inputData.Computation_id] == nil {
@@ -326,6 +324,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
+	var party_id_counter int = 1
+
 	// Main loop
 	for {
 		messageType, data, err := conn.ReadMessage()
@@ -337,14 +337,14 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 		var inputMessage = &InputMessage{}
 		toObj(data, inputMessage)
-		log.Printf("Unmarshaled: %s", inputMessage.Data)
 
 		log.Print(inputMessage)
-		party_id := "0"
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {
 		case "initialization":
 			fmt.Println("initialization")
+			party_id := strconv.Itoa(party_id_counter)
+			party_id_counter++
 			initialization(inputMessage.Data, party_id, conn)
 		case "share":
 			fmt.Println("share")
