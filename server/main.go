@@ -23,7 +23,7 @@ func (u JSON_key) MarshalJSON() ([]byte, error) {
 	if u == nil {
 		result = "null"
 	} else {
-		result = strings.Join(strings.Fields(fmt.Sprintf("%d", u)), ",")
+		result = "\"" + strings.Join(strings.Fields(fmt.Sprintf("%d", u)), ",") + "\""
 	}
 	return []byte(result), nil
 }
