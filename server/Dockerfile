@@ -28,7 +28,6 @@ LABEL description="Praktische sichere Multi-Party-Computation Server"
 
 # install app
 COPY --from=builder /app/app /app/app
-COPY ./res /app/res
 WORKDIR /app/
 EXPOSE 8080/tcp
 
