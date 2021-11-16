@@ -23,7 +23,7 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Main loop
 	for {
-		messageType, data, err := conn.ReadMessage()
+		_, data, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Fehler beim lesen der websocket Nachricht:", err)
 			break
@@ -43,6 +43,7 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 			protocol.Initialization(inputMessage.Data, party_id, conn)
 		case "share":
 			fmt.Println("share")
+			protocol.HandleShare(inputMessage.Data, conn)
 		case "open":
 			fmt.Println("open")
 		case "custom":
@@ -57,12 +58,6 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("free")
 		default:
 			fmt.Println("Unimplementiertes socketProtocol:", socketProtocol)
-		}
-
-		err = conn.WriteMessage(messageType, data)
-		if err != nil {
-			log.Println("Fehler beim schreiben der websocket Nachricht:", err)
-			break
 		}
 	}
 }

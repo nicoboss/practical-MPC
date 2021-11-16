@@ -8,6 +8,7 @@ import (
 	"PracticalMPC/Server/types"
 	"fmt"
 	"log"
+	"strconv"
 )
 
 // Initialisierung einer Partei. Rückgabe: Initialisierungsnachricht mit der Partei-ID oder eine Fehlermeldung
@@ -48,6 +49,10 @@ func initializeParty(computation_id string, party_id string, public_key types.JS
 	// Initialisierungsnachricht für den Client erstellen
 	keymap_to_send := crypto.StoreAndSendPublicKey(storage.ComputationMaps, computation_id, party_id, public_key)
 
-	var message = structs.NewInitializePartyMsg(party_id, party_count, keymap_to_send)
+	party_id_int, err := strconv.Atoi(party_id)
+	if err != nil {
+		log.Fatalln("from_party_id ist kein integer")
+	}
+	var message = structs.NewInitializePartyMsg(party_id_int, party_count, keymap_to_send)
 	return true, message
 }
