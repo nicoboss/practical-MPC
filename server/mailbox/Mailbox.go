@@ -6,27 +6,24 @@ import (
 	"log"
 )
 
-var mailbox = make(map[string]map[string][]string) // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
+var mailbox = make(map[string]map[string][]*structs.OutputMessage) // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
 
 func Init(computation_id string) {
-	mailbox[computation_id] = make(map[string][]string)
+	mailbox[computation_id] = make(map[string][]*structs.OutputMessage)
 }
 
-func Append(computation_id string, party_id string, broadcast_message string) {
-	mailbox[computation_id][party_id] = append(mailbox[computation_id][party_id], broadcast_message)
+func Append(computation_id string, party_id string, message *structs.OutputMessage) {
+	mailbox[computation_id][party_id] = append(mailbox[computation_id][party_id], message)
 }
 
 func SendMails(socketMaps *structs.SocketMaps, computation_id string) {
 	for party_id_of_mailbox := range mailbox[computation_id] {
-		for _, mail := range mailbox[computation_id][party_id_of_mailbox] {
-			if socketMaps.SocketId[computation_id][party_id_of_mailbox] != nil {
-				outputMessageObj := &structs.OutputMessage{
-					SocketProtocol: "public_keys",
-					Data:           mail,
-				}
-				socketMaps.SocketId[computation_id][party_id_of_mailbox].WriteJSON(outputMessageObj)
-				log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
+		if socketMaps.SocketId[computation_id][party_id_of_mailbox] != nil {
+			for _, mail := range mailbox[computation_id][party_id_of_mailbox] {
+				socketMaps.SocketId[computation_id][party_id_of_mailbox].WriteJSON(*mail)
+				log.Printf("Sent: %s", conversions.ToJSON(*mail))
 			}
+			mailbox[computation_id][party_id_of_mailbox] = nil
 		}
 	}
 

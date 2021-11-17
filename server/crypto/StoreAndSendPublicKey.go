@@ -37,7 +37,11 @@ func StoreAndSendPublicKey(computationMaps *structs.ComputationMaps, computation
 	// Öffentlicher Schlüssel an alle zuvor verbundenen Parteien ausser der Partei welche dieses Update verursacht hat senden
 	for _, party := range computationMaps.ClientIds[computation_id] {
 		if party != party_id {
-			mailbox.Append(computation_id, party, broadcast_message)
+			outputMessageObj := &structs.OutputMessage{
+				SocketProtocol: "public_keys",
+				Data:           broadcast_message,
+			}
+			mailbox.Append(computation_id, party, outputMessageObj)
 		}
 	}
 
