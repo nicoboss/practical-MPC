@@ -16,7 +16,7 @@ func HandleShare(data string, socket *websocket.Conn) {
 	if err != nil {
 		log.Fatalln("from_party_id ist kein integer")
 	}
-	var message = &structs.InputMessageDataShare{}
+	var message = &structs.MessageDataShare{}
 	conversions.ToObj([]byte(data), message)
 
 	var to_party_id = message.Party_id
