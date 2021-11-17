@@ -39,6 +39,6 @@ exports.decrypt_and_sign = function (jiff, cipher_text, decryption_secret_key, s
   try {
     return jiff.sodium_.crypto_box_open_easy(cipher_text, nonce, signing_public_key, decryption_secret_key, 'text');
   } catch (_) {
-    throw new Error('Bad signature or Bad nonce: Cipher: ' + cipher_text + '.  DecSKey: ' + decryption_secret_key + '.  SignPKey: ' + signing_public_key);
+    throw new Error('Bad signature or Bad nonce:\nnonce: ' + nonce + '\ncipher_text: ' + cipher_text + '\ndecryption_secret_key: ' + decryption_secret_key + '\nsigning_public_key: ' + signing_public_key);
   }
 };

@@ -2,6 +2,7 @@ package protocol
 
 import (
 	"PracticalMPC/Server/conversions"
+	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"PracticalMPC/Server/structs"
 	"log"
@@ -11,7 +12,7 @@ import (
 )
 
 func HandleShare(data string, socket *websocket.Conn) {
-
+	computation_id := storage.SocketMaps.ComputationId[socket]
 	from_party_id, err := strconv.Atoi(storage.SocketMaps.PartyId[socket])
 	if err != nil {
 		log.Fatalln("from_party_id ist kein integer")
@@ -21,14 +22,10 @@ func HandleShare(data string, socket *websocket.Conn) {
 
 	var to_party_id = message.Party_id
 	message.Party_id = from_party_id
-	log.Printf("Weiterleiten von Share von %d => %d", from_party_id, to_party_id)
+	log.Printf("Weiterleiten von Share von %s => %s", from_party_id, to_party_id)
 
-	outputMessageObj := &structs.OutputMessage{
-		SocketProtocol: "share",
-		Data:           conversions.ToJSON(message),
-	}
+	var outputMessageObj = new(structs.OutputMessage)
+	outputMessageObj.SocketProtocol = "share"
 
-	socket.WriteJSON(outputMessageObj)
-	log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
-
+	mailbox.Append(computation_id, strconv.Itoa(to_party_id), conversions.ToJSON(outputMessageObj))
 }

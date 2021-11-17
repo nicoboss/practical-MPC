@@ -35,27 +35,28 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 
 	// Fals nicht schon gespeichert muss berechnet werden
 	result, ok := storage.CryptoMap[computation_id][op_id]
-	if ok {
+	if !ok {
 		var secrets = crypto.CryptoProviderHandlersNumbers(Zp, params)
 		var shares = make(map[int][]int)
 		if len(secrets) != 0 {
 			for i := 0; i < len(receivers_list); i++ {
-				shares[receivers_list[i]] = make([]int, len(receivers_list))
+				shares[receivers_list[i]] = []int{}
 			}
 			for i := 0; i < len(secrets); i++ {
-				var oneShare = make([]int, len(receivers_list)) //jiffServer.hooks.computeShares(jiffServer, secrets[i], receivers_list, threshold, Zp);
-				log.Fatalln("computeShares noch nicht implementiert!")
+				var oneShare = crypto.ComputeShares(secrets[i], receivers_list, threshold, Zp)
+				log.Println(conversions.ToJSON(oneShare))
 				for j := 0; j < len(receivers_list); j++ {
-					shares[receivers_list[j]][j] = oneShare[receivers_list[j]]
+					shares[receivers_list[j]] = append(shares[receivers_list[j]], oneShare[receivers_list[j]])
 				}
 			}
 		}
-		result := &structs.InnerCryptoMap{
-			Values: secrets,
-			Shares: shares,
-		}
-		storage.CryptoMap[computation_id][op_id] = *result
+		result.Values = secrets
+		result.Shares = shares
+		storage.CryptoMap[computation_id][op_id] = result
 	}
+
+	log.Println(conversions.ToJSON(result.Shares))
+	log.Println(from_party_id)
 
 	outputMessageCryptoProvider := &structs.OutputMessageCryptoProvider{
 		Op_id:     op_id,
