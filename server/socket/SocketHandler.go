@@ -44,12 +44,13 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 		case "share":
 			fmt.Println("share")
 			protocol.HandleShare(inputMessage.Data, conn)
+		case "crypto_provider":
+			protocol.HandleCryptoProvider(inputMessage.Data, conn)
+			fmt.Println("crypto_provider")
 		case "open":
 			fmt.Println("open")
 		case "custom":
 			fmt.Println("custom")
-		case "crypto_provider":
-			fmt.Println("crypto_provider")
 		case "disconnect":
 			fmt.Println("disconnect")
 		case "close":

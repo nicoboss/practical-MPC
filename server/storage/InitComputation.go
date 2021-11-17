@@ -16,7 +16,7 @@ func InitComputation(computation_id string, party_id string, party_count int) {
 		ComputationMaps.Keys[computation_id] = make(map[string]types.JSON_key)
 		SocketMaps.SocketId[computation_id] = make(map[string]*websocket.Conn)
 		mailbox.Init(computation_id)
-		CryptoMap[computation_id] = make(map[string]map[string]structs.InnerCryptoMap)
+		CryptoMap[computation_id] = make(map[string]structs.InnerCryptoMap)
 	}
 
 	if !(types.Contains(ComputationMaps.ClientIds[computation_id], party_id)) {
