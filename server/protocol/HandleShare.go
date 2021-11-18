@@ -22,7 +22,6 @@ func HandleShare(data string, socket *websocket.Conn) {
 
 	var to_party_id = message.Party_id
 	message.Party_id = from_party_id
-	log.Printf("Weiterleiten von Share von %d => %d", from_party_id, to_party_id)
 
 	var outputMessageObj = new(structs.OutputMessage)
 	outputMessageObj.SocketProtocol = "share"

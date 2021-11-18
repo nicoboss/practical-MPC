@@ -32,11 +32,11 @@ func Initialization(data string, party_id string, socket *websocket.Conn) {
 			Data:           conversions.ToJSON(message),
 		}
 		socket.WriteJSON(outputMessageObj)
-		log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
+		log.Printf("[SENT][%s][%s]: %s", party_id, outputMessageObj.SocketProtocol, outputMessageObj.Data)
 	} else {
 		innerOutputMessageErrorObj := &structs.InnerOutputMessageError{ErrorProtocol: "initialization", Error: conversions.ToJSON(message)}
 		outputMessageObj := &structs.OutputMessage{SocketProtocol: "error", Data: conversions.ToJSON(innerOutputMessageErrorObj)}
 		socket.WriteJSON(outputMessageObj)
-		log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
+		log.Printf("[SENT][%s][%s]: %s", party_id, outputMessageObj.SocketProtocol, outputMessageObj.Data)
 	}
 }

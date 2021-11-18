@@ -1,7 +1,6 @@
 package mailbox
 
 import (
-	"PracticalMPC/Server/conversions"
 	"PracticalMPC/Server/structs"
 	"log"
 )
@@ -21,7 +20,7 @@ func SendMails(socketMaps *structs.SocketMaps, computation_id string) {
 		if socketMaps.SocketId[computation_id][party_id_of_mailbox] != nil {
 			for _, mail := range mailbox[computation_id][party_id_of_mailbox] {
 				socketMaps.SocketId[computation_id][party_id_of_mailbox].WriteJSON(*mail)
-				log.Printf("Sent: %s", conversions.ToJSON(*mail))
+				log.Printf("[SENT][%s][%s]: %s", party_id_of_mailbox, mail.SocketProtocol, mail.Data)
 			}
 			mailbox[computation_id][party_id_of_mailbox] = nil
 		}

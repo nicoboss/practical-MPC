@@ -28,25 +28,29 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("Fehler beim lesen der websocket Nachricht:", err)
 			break
 		}
-		log.Printf("Received: %s", data)
 
 		var inputMessage = &structs.InputMessage{}
 		conversions.ToObj(data, inputMessage)
 
-		log.Print(inputMessage)
+		var party_id string
+		var ok bool
+		if inputMessage.SocketProtocol == "initialization" {
+			party_id = strconv.Itoa(storage.Party_id_counter)
+			storage.Party_id_counter++
+		} else if party_id, ok = storage.SocketMaps.PartyId[conn]; !ok {
+			log.Fatalln("Eine neue Verbindung muss mit socketProtocol initialization beginnen!")
+		}
+
+		log.Printf("[RECEIVED][%s][%s]: %s", party_id, inputMessage.SocketProtocol, inputMessage.Data)
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {
 		case "initialization":
-			fmt.Println("initialization")
-			party_id := strconv.Itoa(storage.Party_id_counter)
-			storage.Party_id_counter++
+
 			protocol.Initialization(inputMessage.Data, party_id, conn)
 		case "share":
-			fmt.Println("share")
 			protocol.HandleShare(inputMessage.Data, conn)
 		case "crypto_provider":
 			protocol.HandleCryptoProvider(inputMessage.Data, conn)
-			fmt.Println("crypto_provider")
 		case "open":
 			fmt.Println("open")
 		case "custom":

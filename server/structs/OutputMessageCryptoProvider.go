@@ -5,6 +5,5 @@ type OutputMessageCryptoProvider struct {
 	Receivers []int  `json:"receivers"`
 	Threshold int    `json:"threshold"`
 	Zp        int    `json:"Zp"`
-	Values    []int  `json:"values"`
 	Shares    []int  `json:"shares"`
 }

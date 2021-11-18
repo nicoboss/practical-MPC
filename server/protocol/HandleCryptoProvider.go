@@ -3,6 +3,7 @@ package protocol
 import (
 	"PracticalMPC/Server/conversions"
 	"PracticalMPC/Server/crypto"
+	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"PracticalMPC/Server/structs"
 	"log"
@@ -44,7 +45,6 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 			}
 			for i := 0; i < len(secrets); i++ {
 				var oneShare = crypto.ComputeShares(secrets[i], receivers_list, threshold, Zp)
-				log.Println(conversions.ToJSON(oneShare))
 				for j := 0; j < len(receivers_list); j++ {
 					shares[receivers_list[j]] = append(shares[receivers_list[j]], oneShare[receivers_list[j]])
 				}
@@ -55,15 +55,11 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 		storage.CryptoMap[computation_id][op_id] = result
 	}
 
-	log.Println(conversions.ToJSON(result.Shares))
-	log.Println(from_party_id)
-
 	outputMessageCryptoProvider := &structs.OutputMessageCryptoProvider{
 		Op_id:     op_id,
 		Receivers: receivers_list,
 		Threshold: threshold,
 		Zp:        Zp,
-		Values:    result.Values,
 		Shares:    result.Shares[from_party_id],
 	}
 
@@ -73,7 +69,11 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 		Data:           conversions.ToJSON(outputMessageCryptoProvider),
 	}
 
-	socket.WriteJSON(outputMessageObj)
-	log.Printf("Sent: %s", conversions.ToJSON(outputMessageObj))
+	for _, reciever := range outputMessageCryptoProvider.Receivers {
+		if reciever != from_party_id {
+			mailbox.Append(computation_id, strconv.Itoa(reciever), outputMessageObj)
+		}
+	}
+	mailbox.SendMails(storage.SocketMaps, computation_id)
 
 }
