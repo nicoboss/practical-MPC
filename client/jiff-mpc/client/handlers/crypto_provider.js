@@ -12,6 +12,8 @@ module.exports = function (jiffClient) {
 
     var op_id = json_msg['op_id'];
     if (jiffClient.deferreds[op_id] == null) {
+      console.log("duplicate message: ignore:")
+      console.log(op_id)
       return; // duplicate message: ignore
     }
 

@@ -74,6 +74,5 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 			mailbox.Append(computation_id, strconv.Itoa(reciever), outputMessageObj)
 		}
 	}
-	mailbox.SendMails(storage.SocketMaps, computation_id)
 
 }

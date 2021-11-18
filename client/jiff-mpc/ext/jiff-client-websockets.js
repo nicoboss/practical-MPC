@@ -158,6 +158,7 @@
        */
       this.socket.onmessage = function (msg, callback) {
         msg = JSON.parse(msg.data);
+        console.log(msg.data)
 
         switch (msg.socketProtocol) {
           case 'initialization':

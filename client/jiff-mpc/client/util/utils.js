@@ -24,6 +24,8 @@ module.exports = function (jiffClient) {
     for (var i = 0; i < count; i++) {
       var deferred = new jiffClient.helpers.Deferred();
       shares.push(new jiffClient.SecretShare(deferred.promise, holders, threshold, Zp));
+      console.log("many_secret_shares:");
+      console.log(deferred);
       deferreds.push(deferred);
     }
 

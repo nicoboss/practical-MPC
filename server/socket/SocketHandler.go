@@ -52,7 +52,7 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 		case "crypto_provider":
 			protocol.HandleCryptoProvider(inputMessage.Data, conn)
 		case "open":
-			fmt.Println("open")
+			protocol.HandleOpen(inputMessage.Data, conn)
 		case "custom":
 			fmt.Println("custom")
 		case "disconnect":

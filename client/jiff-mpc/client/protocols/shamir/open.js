@@ -90,6 +90,8 @@ module.exports = {
         jiff.deferreds[op_id] = {};
       }
 
+      console.log("deferred:");
+      console.log(final_deferred);
       jiff.deferreds[op_id].deferred = final_deferred;
       jiff.deferreds[op_id].threshold = share.threshold;
       jiff.deferreds[op_id].total = share.holders.length;
