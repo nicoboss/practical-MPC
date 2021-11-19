@@ -1,5 +1,10 @@
 package crypto
 
+import (
+	"PracticalMPC/Server/conversions"
+	"log"
+)
+
 func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[int]int {
 	var shares = make(map[int]int)
 
@@ -10,6 +15,8 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 	for i := 1; i <= t; i++ {
 		polynomial[i] = GenerateRandomInt(Zp)
 	}
+
+	log.Println(conversions.ToJSON(polynomial))
 
 	for i := 0; i < len(parties_list); i++ {
 		var p_id = parties_list[i]
@@ -22,6 +29,12 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 			power = (power * p_id) % Zp
 		}
 	}
+
+	var a = shares[1]
+	shares[1] = shares[2]
+	shares[2] = a
+
+	log.Println(conversions.ToJSON(shares))
 
 	return shares
 }

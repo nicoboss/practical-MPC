@@ -8,7 +8,7 @@ import (
 func CryptoProviderHandlersNumbers(Zp int, params structs.NumbersParmams) []int {
 	count := params.Count
 	bit := params.Bit
-	min := params.Min
+	//min := params.Min
 	max := params.Max
 	number := params.Number
 	bitLength := params.BitLength
@@ -16,16 +16,16 @@ func CryptoProviderHandlersNumbers(Zp int, params structs.NumbersParmams) []int 
 	if max == 0 {
 		max = Zp
 	}
-	if bit == 0 {
+	if bit {
 		max = 2
 	}
 
 	numbers := make([]int, count)
 	for i := 0; i < count; i++ {
 		n := number
-		if number == 0 {
-			n = GenerateRandomIntInRange(min, max)
-		}
+		//if number == 0 {
+		//	n = GenerateRandomIntInRange(min, max)
+		//}
 
 		if bitLength == 0 {
 			numbers[i] = n
