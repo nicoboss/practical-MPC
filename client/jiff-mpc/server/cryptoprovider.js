@@ -34,6 +34,14 @@ CryptoProviderHandlers.prototype.numbers = function (jiff, computation_id, recei
   var number = params['number'];
   var bitLength = params['bitLength'];
 
+  console.log(params);
+  console.log(count);
+  console.log(bit);
+  console.log(min);
+  console.log(max);
+  console.log(number);
+  console.log(bitLength);
+
   if (min == null) {
     min = 0;
   }

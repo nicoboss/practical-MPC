@@ -1,7 +1,14 @@
 tools/rsync
 client/dist
 client/node_modules
-client/app.js
 server/server.exe
 tester/tester.exe
+client/app.js
+client/components/connect-button.js
+client/components/submit-button.js
+client/components/vue-test.js
+client/modules/logger.js
+client/mpc/mpc_compute.js
+client/mpc/mpc_connect.js
 selenium/target
+selenium/.settings
