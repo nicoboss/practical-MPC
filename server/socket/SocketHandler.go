@@ -9,7 +9,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 )
+
+var socketMutex = &sync.Mutex{}
 
 func SocketHandler(w http.ResponseWriter, r *http.Request) {
 	// Upgrade der Verbindung von HTTP auf websocket
@@ -32,6 +35,7 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 		var inputMessage = &structs.InputMessage{}
 		conversions.ToObj(data, inputMessage)
 
+		socketMutex.Lock()
 		var party_id string
 		var ok bool
 		if inputMessage.SocketProtocol == "initialization" {
@@ -45,7 +49,6 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {
 		case "initialization":
-
 			protocol.Initialization(inputMessage.Data, party_id, conn)
 		case "share":
 			protocol.HandleShare(inputMessage.Data, conn)
@@ -64,5 +67,6 @@ func SocketHandler(w http.ResponseWriter, r *http.Request) {
 		default:
 			fmt.Println("Unimplementiertes socketProtocol:", socketProtocol)
 		}
+		socketMutex.Unlock()
 	}
 }

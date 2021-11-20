@@ -69,10 +69,6 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 		Data:           conversions.ToJSON(outputMessageCryptoProvider),
 	}
 
-	for _, reciever := range outputMessageCryptoProvider.Receivers {
-		if reciever != from_party_id {
-			mailbox.Append(computation_id, strconv.Itoa(reciever), outputMessageObj)
-		}
-	}
+	mailbox.Append(computation_id, strconv.Itoa(from_party_id), outputMessageObj)
 
 }

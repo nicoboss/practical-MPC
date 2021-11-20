@@ -16,7 +16,7 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 		polynomial[i] = GenerateRandomInt(Zp)
 	}
 
-	log.Println(conversions.ToJSON(polynomial))
+	log.Println("polynomial: " + conversions.ToJSON(polynomial))
 
 	for i := 0; i < len(parties_list); i++ {
 		var p_id = parties_list[i]
@@ -30,11 +30,7 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 		}
 	}
 
-	var a = shares[1]
-	shares[1] = shares[2]
-	shares[2] = a
-
-	log.Println(conversions.ToJSON(shares))
+	log.Println("shares: " + conversions.ToJSON(shares))
 
 	return shares
 }
