@@ -11,3 +11,5 @@ var ComputationMaps = structs.NewComputationMaps()
 var SocketMaps = structs.NewSocketMaps()
 var CryptoMap = make(map[string]map[string]structs.InnerCryptoMap) // { computation_id -> { op_id -> { 'shares': [ numeric shares for this party ], 'values': <any non-secret value(s) for this party> } } } }
 var Party_id_counter int = 1
+var Loggers = make(map[*websocket.Conn]int)
+var Logger_id_counter int = 1

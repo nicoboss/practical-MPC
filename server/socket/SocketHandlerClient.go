@@ -14,7 +14,7 @@ import (
 
 var socketMutex = &sync.Mutex{}
 
-func SocketHandler(w http.ResponseWriter, r *http.Request) {
+func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 	// Upgrade der Verbindung von HTTP auf websocket
 	storage.Upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := storage.Upgrader.Upgrade(w, r, nil)
