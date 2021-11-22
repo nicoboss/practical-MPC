@@ -1,8 +1,6 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 /// <reference path='../modules/logger.ts'/>
 
-import { Console } from "console";
-
 var logger = require('../modules/logger');
 var jsonSyntaxHighlight = require('../modules/jsonSyntaxHighlight');
 
@@ -10,35 +8,41 @@ exports.vue_logger = function (app :any) {
   app.component('vue-logger', {
     data() {
       return {
-        connection: null
+        connection: null,
+        connectButtonEnabled: true
       }
     },
     methods: {
       sendMessage: function(message: any) {
         logger.log(message, logger.LogType.INFO);
         this.connection.send(message);
-      }
-    },
-    created: function() {
-      this.connection = new WebSocket("ws://127.0.0.1:8080/logger")
-  
-      this.connection.onmessage = function(event: any) {
-        var loggerMsgObj = JSON.parse(event.data)
-        var socketMsgObj = JSON.parse(loggerMsgObj.message)
-        var dataMsgObj = JSON.parse(socketMsgObj.data)
-        socketMsgObj.data = dataMsgObj
-        loggerMsgObj.message = socketMsgObj
-        logger.log(jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2)), logger.LogType.INFO);
-      }
-  
-      this.connection.onopen = function(event: any) {
-        logger.log(event.data, logger.LogType.INFO)
-      }
-  
+      },
+      connectButtonClick() {
+        this.connectButtonEnabled = false;
+        let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;
+        let conn = new WebSocket(hostname);
+        this.connection = conn;
+    
+        conn.onmessage = function(event: any) {
+          var loggerMsgObj = JSON.parse(event.data);
+          if (loggerMsgObj.loggerProtocol == "ClientToServer" || loggerMsgObj.loggerProtocol == "ServerToClient") {
+            var socketMsgObj = JSON.parse(loggerMsgObj.message);
+            var dataMsgObj = JSON.parse(socketMsgObj.data);
+            socketMsgObj.data = dataMsgObj;
+            loggerMsgObj.message = socketMsgObj;
+          }
+          logger.log(jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2)), logger.LogType.INFO);
+        }
+    
+        conn.onopen = function(event: any) {
+          conn.send('register');
+        }
+        
+      },
     },
     template: `
-      <button v-on:click="sendMessage('register')">
-        Send Message
+      <button id="connect_button" v-on:click="connectButtonClick()" v-bind:disabled="!connectButtonEnabled">
+        Verbinden
       </button>`
   })
 }

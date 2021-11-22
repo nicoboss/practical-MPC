@@ -2,6 +2,7 @@ package socket
 
 import (
 	"PracticalMPC/Server/storage"
+	"PracticalMPC/Server/structs"
 	"fmt"
 	"log"
 	"net/http"
@@ -30,18 +31,36 @@ func SocketHandlerLogger(w http.ResponseWriter, r *http.Request) {
 
 		switch action {
 		case "register":
-			storage.Logger_id_counter++
 			storage.Loggers[conn] = storage.Logger_id_counter
-			outputMsg := fmt.Sprintf("Logger %d registriert!", storage.Logger_id_counter)
-			conn.WriteMessage(1, []byte(outputMsg))
+			message := fmt.Sprintf("Logger %d registriert!", storage.Logger_id_counter)
+			serverMessageLoggerObj := &structs.ServerMessageLogger{
+				LoggerProtocol: "ServerToLogger",
+				Message:        message,
+			}
+			conn.WriteJSON(*serverMessageLoggerObj)
+			log.Println(message)
+			storage.Logger_id_counter++
 		case "unregister":
 			_, ok := storage.Loggers[conn]
 			if ok {
+				message := fmt.Sprintf("Logger %d unregistriert!", storage.Loggers[conn])
+				serverMessageLoggerObj := &structs.ServerMessageLogger{
+					LoggerProtocol: "ServerToLogger",
+					Message:        message,
+				}
+				conn.WriteJSON(*serverMessageLoggerObj)
 				delete(storage.Loggers, conn)
+				log.Println(message)
 			}
 			conn.Close()
 		default:
-			log.Println("Unimplementierte logger action:", action)
+			message := fmt.Sprintf("Unimplementierte logger action: %s", action)
+			serverMessageLoggerObj := &structs.ServerMessageLogger{
+				LoggerProtocol: "ServerToLogger",
+				Message:        message,
+			}
+			conn.WriteJSON(*serverMessageLoggerObj)
+			log.Println(message)
 		}
 	}
 }

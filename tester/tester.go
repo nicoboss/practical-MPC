@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -31,6 +32,17 @@ func getRequest(url string) string {
 }
 
 func main() {
-	log.Printf(getRequest("http://client.mpc.nico.re:8080"))
-	log.Printf(getRequest("http://server.mpc.nico.re:8080/test"))
+
+	// Standartwerte können mit Command Line Arguments überschreiben werden
+	clientAddress := "http://client.mpc.nico.re:8080"
+	serverAddress := "http://server.mpc.nico.re:8080/test"
+
+	args := os.Args[1:]
+	if len(args) >= 2 {
+		clientAddress = args[0]
+		serverAddress = args[1]
+	}
+
+	log.Printf(getRequest(clientAddress))
+	log.Printf(getRequest(serverAddress))
 }

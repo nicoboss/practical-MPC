@@ -42,7 +42,7 @@ func SendReceivedToLoggers(message *structs.InputMessage, sender_party_id string
 }
 
 func SendSentToLoggers(message *structs.OutputMessage, reciever_party_id string) {
-	outputMessagesLoggerObj := &structs.OutputMessagesLogger{
+	outputMessagesLoggerObj := &structs.OutputMessageLogger{
 		LoggerProtocol:    "ServerToClient",
 		Reciever_party_id: reciever_party_id,
 		Message:           conversions.ToJSON(message),

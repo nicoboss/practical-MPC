@@ -31,23 +31,8 @@ exports.connect_button = function (app :any) {
             logger.log("Alle Parteien verbunden!", logger.LogType.INFO);
             this.connectButtonEnabled = false;
           };
-      
-          var hostname = window.location.hostname.trim();
-          var port = '8080';
-          if (port == null || port === '') {
-            port = '80';
-          }
-          if (!(hostname.startsWith('http://') || hostname.startsWith('https://'))) {
-            hostname = 'http://' + hostname;
-          }
-          if (hostname.endsWith('/')) {
-            hostname = hostname.substring(0, hostname.length-1);
-          }
-          if (hostname.indexOf(':') > -1 && hostname.lastIndexOf(':') > hostname.indexOf(':')) {
-            hostname = hostname.substring(0, hostname.lastIndexOf(':'));
-          }
-      
-          hostname = hostname + ':' + port;
+          
+          let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;
           mpcConnect.mpc_connect(hostname, computation_id, options);
         }
       }
