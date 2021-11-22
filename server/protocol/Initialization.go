@@ -5,7 +5,6 @@ import (
 	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"PracticalMPC/Server/structs"
-	"log"
 	"strconv"
 
 	"github.com/gorilla/websocket"
@@ -21,7 +20,7 @@ func Initialization(data string, party_id string, socket *websocket.Conn) {
 		storage.SocketMaps.SocketId[inputData.Computation_id] = make(map[string]*websocket.Conn)
 	}
 
-	mailbox.SendMails(storage.SocketMaps, inputData.Computation_id)
+	mailbox.SendMails(inputData.Computation_id)
 
 	if success {
 		storage.SocketMaps.SocketId[inputData.Computation_id][strconv.Itoa(message.Party_id)] = socket
@@ -31,12 +30,12 @@ func Initialization(data string, party_id string, socket *websocket.Conn) {
 			SocketProtocol: "initialization",
 			Data:           conversions.ToJSON(message),
 		}
-		socket.WriteJSON(outputMessageObj)
-		log.Printf("[SENT][%s][%s]: %s", party_id, outputMessageObj.SocketProtocol, outputMessageObj.Data)
+		mailbox.Append(inputData.Computation_id, party_id, outputMessageObj)
+		mailbox.SendMails(inputData.Computation_id)
 	} else {
 		innerOutputMessageErrorObj := &structs.InnerOutputMessageError{ErrorProtocol: "initialization", Error: conversions.ToJSON(message)}
 		outputMessageObj := &structs.OutputMessage{SocketProtocol: "error", Data: conversions.ToJSON(innerOutputMessageErrorObj)}
-		socket.WriteJSON(outputMessageObj)
-		log.Printf("[SENT][%s][%s]: %s", party_id, outputMessageObj.SocketProtocol, outputMessageObj.Data)
+		mailbox.Append(inputData.Computation_id, party_id, outputMessageObj)
+		mailbox.SendMails(inputData.Computation_id)
 	}
 }

@@ -1,6 +1,6 @@
 package structs
 
 type InputMessage struct {
-	SocketProtocol string
-	Data           string
+	SocketProtocol string `json:"socketProtocol"`
+	Data           string `json:"data"`
 }

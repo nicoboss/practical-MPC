@@ -28,5 +28,5 @@ func HandleShare(data string, socket *websocket.Conn) {
 	outputMessageObj.Data = conversions.ToJSON(message)
 
 	mailbox.Append(computation_id, strconv.Itoa(to_party_id), outputMessageObj)
-	mailbox.SendMails(storage.SocketMaps, computation_id)
+	mailbox.SendMails(computation_id)
 }

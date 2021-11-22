@@ -2,6 +2,7 @@ package socket
 
 import (
 	"PracticalMPC/Server/conversions"
+	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/protocol"
 	"PracticalMPC/Server/storage"
 	"PracticalMPC/Server/structs"
@@ -46,6 +47,7 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Printf("[RECEIVED][%s][%s]: %s", party_id, inputMessage.SocketProtocol, inputMessage.Data)
+		mailbox.SendReceivedToLoggers(inputMessage, party_id)
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {
 		case "initialization":

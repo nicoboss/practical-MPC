@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/structs"
 	"PracticalMPC/Server/types"
 
@@ -15,7 +14,6 @@ func InitComputation(computation_id string, party_id string, party_count int) {
 		ComputationMaps.FreeParties[computation_id] = make(map[string]bool)
 		ComputationMaps.Keys[computation_id] = make(map[string]types.JSON_key)
 		SocketMaps.SocketId[computation_id] = make(map[string]*websocket.Conn)
-		mailbox.Init(computation_id)
 		CryptoMap[computation_id] = make(map[string]structs.InnerCryptoMap)
 	}
 

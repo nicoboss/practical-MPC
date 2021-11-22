@@ -1,4 +1,10 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
+/// <reference path='../modules/logger.ts'/>
+
+import { Console } from "console";
+
+var logger = require('../modules/logger');
+var jsonSyntaxHighlight = require('../modules/jsonSyntaxHighlight');
 
 exports.vue_logger = function (app :any) {
   app.component('vue-logger', {
@@ -9,22 +15,24 @@ exports.vue_logger = function (app :any) {
     },
     methods: {
       sendMessage: function(message: any) {
-        console.log("Hello")
-        console.log(this.connection);
+        logger.log(message, logger.LogType.INFO);
         this.connection.send(message);
       }
     },
     created: function() {
-      console.log("Starting connection to WebSocket Server")
       this.connection = new WebSocket("ws://127.0.0.1:8080/logger")
   
       this.connection.onmessage = function(event: any) {
-        console.log(event);
+        var loggerMsgObj = JSON.parse(event.data)
+        var socketMsgObj = JSON.parse(loggerMsgObj.message)
+        var dataMsgObj = JSON.parse(socketMsgObj.data)
+        socketMsgObj.data = dataMsgObj
+        loggerMsgObj.message = socketMsgObj
+        logger.log(jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2)), logger.LogType.INFO);
       }
   
       this.connection.onopen = function(event: any) {
-        console.log(event)
-        console.log("Successfully connected to the echo websocket server...")
+        logger.log(event.data, logger.LogType.INFO)
       }
   
     },
