@@ -14,7 +14,9 @@ exports.mpc_connect = function (hostname: string, computation_id: string, option
   saved_instance = new JIFFClient(hostname, computation_id, opt);
   var secure_communication: boolean;
   secure_communication = (<HTMLInputElement>document.getElementById("secure_communication")).checked;
-  saved_instance.sodium_ = secure_communication
+  if (!secure_communication) {
+    saved_instance.sodium_ = false;
+  }
   saved_instance.apply_extension(jiff_websockets, opt);
   exports.saved_instance = saved_instance;
 };

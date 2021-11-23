@@ -51,3 +51,13 @@ func SendSentToLoggers(message *structs.OutputMessage, reciever_party_id string)
 		logger.WriteJSON(*outputMessagesLoggerObj)
 	}
 }
+
+func SendServerToLoggers(message string) {
+	serverMessageLoggerObj := &structs.ServerMessageLogger{
+		LoggerProtocol: "ServerToLogger",
+		Message:        message,
+	}
+	for logger, _ := range storage.Loggers {
+		logger.WriteJSON(*serverMessageLoggerObj)
+	}
+}
