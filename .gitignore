@@ -12,6 +12,7 @@ client/components/vue-test.js
 client/modules/logger.js
 client/mpc/mpc_compute.js
 client/mpc/mpc_connect.js
+client/mpc/mpc_preprocessing.js
 logger/components/vue-logger.js
 logger/components/vue-test.js
 selenium/target

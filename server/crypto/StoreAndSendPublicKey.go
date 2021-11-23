@@ -13,7 +13,10 @@ import (
 func StoreAndSendPublicKey(computationMaps *structs.ComputationMaps, computation_id string, party_id string, public_key types.JSON_key) map[string]types.JSON_key {
 	// Öffendlicher Schlüssel speichern
 	var tmp = computationMaps.Keys[computation_id]
-	if _, ok := tmp["s1"]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
+
+	if len(public_key) == 0 {
+		tmp["s1"] = types.JSON_key{}
+	} else if _, ok := tmp["s1"]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
 		var genkey = axlsign.GenerateKeyPair(generateRandomBytes(32)) // Generieren des Schlüsselpaars
 		computationMaps.SecretKeys[computation_id] = genkey.PrivateKey
 		tmp["s1"] = genkey.PublicKey
