@@ -12,6 +12,9 @@ exports.mpc_connect = function (hostname: string, computation_id: string, option
   use_crypto_provider = (<HTMLInputElement>document.getElementById("use_crypto_provider")).checked;
   opt.crypto_provider = use_crypto_provider
   saved_instance = new JIFFClient(hostname, computation_id, opt);
+  var secure_communication: boolean;
+  secure_communication = (<HTMLInputElement>document.getElementById("secure_communication")).checked;
+  saved_instance.sodium_ = secure_communication
   saved_instance.apply_extension(jiff_websockets, opt);
   exports.saved_instance = saved_instance;
 };
