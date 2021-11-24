@@ -40,8 +40,15 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 		var party_id string
 		var ok bool
 		if inputMessage.SocketProtocol == "initialization" {
-			party_id = strconv.Itoa(storage.Party_id_counter)
-			storage.Party_id_counter++
+			var inputData = &structs.InputMessageDataInitialization{}
+			conversions.ToObj([]byte(inputMessage.Data), inputData)
+
+			// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten
+			party_id = strconv.Itoa(storage.InitComputation(inputData.Computation_id, inputData.Party_count))
+
+			// Initialisierung der Mailbox
+			mailbox.Init(inputData.Computation_id)
+
 		} else if party_id, ok = storage.SocketMaps.PartyId[conn]; !ok {
 			log.Fatalln("Eine neue Verbindung muss mit socketProtocol initialization beginnen!")
 		}

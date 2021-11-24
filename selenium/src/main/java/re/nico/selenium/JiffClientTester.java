@@ -41,7 +41,7 @@ public class JiffClientTester {
         Thread.sleep(500);
         try {
             WebElement title = driver.findElement(By.id("title"));
-            return title.getText().equals("JIFF MPC Visualisierung");
+            return title.getText().equals("Praktische sichere Multi-Party-Computation: Client");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             test.log(Status.FAIL, "Exception: " + e.getMessage());

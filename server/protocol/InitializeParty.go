@@ -3,7 +3,6 @@ package protocol
 import (
 	"PracticalMPC/Server/conversions"
 	"PracticalMPC/Server/crypto"
-	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"PracticalMPC/Server/structs"
 	"PracticalMPC/Server/types"
@@ -41,10 +40,6 @@ func initializeParty(computation_id string, party_id string, public_key types.JS
 	if party_id != "s1" {
 		storage.ComputationMaps.SpareIds[computation_id][conversions.GetPartyIdInt(party_id)-1] = true
 	}
-
-	// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten.
-	storage.InitComputation(computation_id, party_id, party_count)
-	mailbox.Init(computation_id)
 
 	// Initialisierungsnachricht für den Client erstellen
 	keymap_to_send := crypto.StoreAndSendPublicKey(storage.ComputationMaps, computation_id, party_id, public_key)
