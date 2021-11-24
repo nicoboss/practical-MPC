@@ -23,7 +23,7 @@ services:
           - client.mpc.nico.re
   tester:
     image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
-    command: go run tester.go
+    command: go run tester.go client.mpc.nico.re:8080 server.mpc.nico.re:8080
     networks:
       static-network:
         ipv4_address: 192.168.3.102

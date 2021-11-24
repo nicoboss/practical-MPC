@@ -14,5 +14,5 @@ RUN apt-get update \
     iputils-ping \
     iproute2
 COPY . /root
-RUN go build tester.go client.mpc.nico.re:8080 server.mpc.nico.re:8080
+RUN go build tester.go
 CMD /bin/bash --init-file ./run.sh
