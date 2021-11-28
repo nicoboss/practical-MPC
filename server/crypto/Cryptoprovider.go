@@ -2,7 +2,7 @@ package crypto
 
 import (
 	"PracticalMPC/Server/structs"
-	"log"
+	"fmt"
 )
 
 func CryptoProviderHandlersTriplet(Zp int, params structs.NumbersParmams) []int {
@@ -28,19 +28,30 @@ func CryptoProviderHandlersNumbers(Zp int, params structs.NumbersParmams) []int 
 		max = 2
 	}
 
-	numbers := make([]int, count)
+	var numbers []int
+	if bitLength == 0 {
+		numbers = make([]int, count)
+	} else {
+		numbers = make([]int, bitLength) //Mit 0 initialisiert
+	}
+
 	for i := 0; i < count; i++ {
 		n := number
 		//if number == 0 {
 		//	n = GenerateRandomIntInRange(min, max)
 		//}
-
 		if bitLength == 0 {
 			numbers[i] = n
 		} else {
-			log.Fatalln("number_to_bits nicht implementiert!")
+			binString := fmt.Sprintf("%b", n)
+			for pos, char := range binString {
+				if char == '1' {
+					numbers[pos] = 1
+				} else {
+					numbers[pos] = 0
+				}
+			}
 		}
 	}
-
 	return numbers
 }

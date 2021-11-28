@@ -11,14 +11,22 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
   }
   // MPC implementierung
   var shares = jiff_instance.share(input);
-  var sum = shares[1];
+  var sum;
   if ((<HTMLInputElement>document.getElementById("calculate_sum")).checked) {
+    sum = shares[1];
     for (var i = 2; i <= jiff_instance.party_count; i++) {
       sum = sum.sadd(shares[i]);
     }
   } else if ((<HTMLInputElement>document.getElementById("calculate_multi")).checked) {
+    sum = shares[1];
     for (var i = 2; i <= jiff_instance.party_count; i++) {
       sum = sum.smult(shares[i]);
+    }
+  } else if ((<HTMLInputElement>document.getElementById("calculate_threshold")).checked) {
+    var threshold = Number((<HTMLInputElement>document.getElementById("threshold_input")).value)
+    sum = shares[1].cgt(threshold);
+    for (var i = 2; i <= jiff_instance.party_count; i++) {
+      sum = sum.sadd(shares[i].cgt(threshold));
     }
   }
   return jiff_instance.open(sum);

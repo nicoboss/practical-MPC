@@ -75,8 +75,6 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 	}
 
 	mailbox.Append(computation_id, strconv.Itoa(from_party_id), outputMessageObj)
-	if label == "triplet" {
-		mailbox.SendMails(computation_id)
-	}
+	mailbox.SendMails(computation_id)
 
 }
