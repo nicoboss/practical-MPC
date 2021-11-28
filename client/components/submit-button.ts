@@ -31,7 +31,7 @@ exports.submit_button = function (app :any) {
     },
     template: `
       <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
-        Summe Berechnen
+        Berechnen
       </button>`
   })
 }

@@ -30,14 +30,19 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 	threshold := message.Threshold
 	Zp := message.Zp
 
-	if label != "numbers" {
-		log.Fatalln("Nur CryptoProviderHandlersNumbers ist momentan implementiert!")
-	}
-
 	// Fals nicht schon gespeichert muss berechnet werden
 	result, ok := storage.CryptoMap[computation_id][op_id]
 	if !ok {
-		var secrets = crypto.CryptoProviderHandlersNumbers(Zp, params)
+		var secrets []int
+		switch label {
+		case "triplet":
+			secrets = crypto.CryptoProviderHandlersTriplet(Zp, params)
+		case "numbers":
+			secrets = crypto.CryptoProviderHandlersNumbers(Zp, params)
+		default:
+			log.Fatalln("Nur CryptoProviderHandlers für " + label + " ist nicht implementiert!")
+		}
+
 		var shares = make(map[int][]int)
 		if len(secrets) != 0 {
 			for i := 0; i < len(receivers_list); i++ {
@@ -70,5 +75,8 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 	}
 
 	mailbox.Append(computation_id, strconv.Itoa(from_party_id), outputMessageObj)
+	if label == "triplet" {
+		mailbox.SendMails(computation_id)
+	}
 
 }

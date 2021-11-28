@@ -5,6 +5,14 @@ import (
 	"log"
 )
 
+func CryptoProviderHandlersTriplet(Zp int, params structs.NumbersParmams) []int {
+	var a = GenerateRandomInt(Zp)
+	var b = GenerateRandomInt(Zp)
+	var c = (a * b) % Zp
+	secrets := []int{a, b, c}
+	return secrets
+}
+
 func CryptoProviderHandlersNumbers(Zp int, params structs.NumbersParmams) []int {
 	count := params.Count
 	bit := params.Bit

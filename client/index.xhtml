@@ -26,7 +26,11 @@
         <label for="use_crypto_provider">Sichere Kommunikation (sicherheitskritisch)</label><input type="checkbox" id="secure_communication" checked="true"/><br/><br/>
         <connect-button/>
         <br/><br/><hr/>
-        <h1>Summenberechnung</h1>
+        <h1>Berechnung</h1>
+        <input type="radio" id="calculate_sum" name="operation" value="sum"/>
+        <label for="calculate_sum">Summe</label>
+        <input type="radio" id="calculate_multi" name="operation" value="multi"/>
+        <label for="calculate_multi">Multiplikation</label><br/>
         <label for="client_input">Zahl (zwischen 0 und 100)</label>
         <input id="client_input" pattern="[0-9]+"/>
         <submit-button/>
