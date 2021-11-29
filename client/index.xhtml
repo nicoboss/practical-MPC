@@ -27,10 +27,13 @@
         <connect-button/>
         <br/><br/><hr/>
         <h1>Berechnung</h1>
-        <input type="radio" id="calculate_sum" name="operation" value="sum"/>
+        <input type="radio" id="calculate_sum" name="operation" value="sum" checked="true"/>
         <label for="calculate_sum">Summe</label>
         <input type="radio" id="calculate_multi" name="operation" value="multi"/>
         <label for="calculate_multi">Multiplikation</label><br/>
+        <input type="radio" id="calculate_voting" name="operation" value="voting"/>
+        <label for="calculate_voting">Abstimmen</label>
+        <label for="security_checks">Sicherheitschecks</label><input type="checkbox" id="security_checks" checked="true"/><br/>
         <input type="radio" id="calculate_threshold" name="operation" value="threshold"/>
         <label for="calculate_threshold">Threshold</label>
         <input id="threshold_input" pattern="[0-9]+"/><br/>

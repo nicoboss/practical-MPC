@@ -37,5 +37,5 @@ exports.submit_button = function (app :any) {
 }
 
 function handleResult(result: any) {
-  logger.log("Result is: " + result, logger.LogType.RESULT);
+  logger.log("Resultat: " + result, logger.LogType.RESULT);
 }
