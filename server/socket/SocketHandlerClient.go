@@ -66,7 +66,7 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 		case "open":
 			protocol.HandleOpen(inputMessage.Data, conn)
 		case "custom":
-			fmt.Println("custom")
+			protocol.HandleCustom(inputMessage.Data, conn)
 		case "disconnect":
 			fmt.Println("disconnect")
 		case "close":
