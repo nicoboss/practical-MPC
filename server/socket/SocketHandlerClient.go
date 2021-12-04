@@ -1,15 +1,17 @@
 package socket
 
 import (
-	"PracticalMPC/Server/conversions"
+	"PracticalMPC/Server/CryptoProvider"
+	"PracticalMPC/Server/Custom"
+	"PracticalMPC/Server/Initialization"
+	"PracticalMPC/Server/Open"
+	"PracticalMPC/Server/Share"
+	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/mailbox"
-	"PracticalMPC/Server/protocol"
 	"PracticalMPC/Server/storage"
-	"PracticalMPC/Server/structs"
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"sync"
 )
 
@@ -33,40 +35,32 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		var inputMessage = &structs.InputMessage{}
-		conversions.ToObj(data, inputMessage)
+		var inputMessage = &InputMessage{}
+		JSON.ToObj(data, inputMessage)
 
 		socketMutex.Lock()
 		var party_id string
 		var ok bool
 		if inputMessage.SocketProtocol == "initialization" {
-			var inputData = &structs.InputMessageDataInitialization{}
-			conversions.ToObj([]byte(inputMessage.Data), inputData)
-
-			// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten
-			party_id = strconv.Itoa(storage.InitComputation(inputData.Computation_id, inputData.Party_count))
-
-			// Initialisierung der Mailbox
-			mailbox.Init(inputData.Computation_id)
-
+			party_id = Initialization.Register(inputMessage.Data)
 		} else if party_id, ok = storage.SocketMaps.PartyId[conn]; !ok {
 			log.Fatalln("Eine neue Verbindung muss mit socketProtocol initialization beginnen!")
 		}
 
 		log.Printf("[RECEIVED][%s][%s]: %s", party_id, inputMessage.SocketProtocol, data)
-		mailbox.SendReceivedToLoggers(inputMessage, party_id)
+		mailbox.SendReceivedToLoggers(JSON.ToJSON(inputMessage), party_id)
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {
 		case "initialization":
-			protocol.Initialization(inputMessage.Data, party_id, conn)
+			Initialization.Initialization(inputMessage.Data, party_id, conn)
 		case "share":
-			protocol.HandleShare(inputMessage.Data, conn)
+			Share.HandleShare(inputMessage.Data, conn)
 		case "crypto_provider":
-			protocol.HandleCryptoProvider(inputMessage.Data, conn)
+			CryptoProvider.HandleCryptoProvider(inputMessage.Data, conn)
 		case "open":
-			protocol.HandleOpen(inputMessage.Data, conn)
+			Open.HandleOpen(inputMessage.Data, conn)
 		case "custom":
-			protocol.HandleCustom(inputMessage.Data, conn)
+			Custom.HandleCustom(inputMessage.Data, conn)
 		case "disconnect":
 			fmt.Println("disconnect")
 		case "close":

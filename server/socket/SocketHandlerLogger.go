@@ -1,8 +1,8 @@
 package socket
 
 import (
+	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
-	"PracticalMPC/Server/structs"
 	"fmt"
 	"log"
 	"net/http"
@@ -33,33 +33,21 @@ func SocketHandlerLogger(w http.ResponseWriter, r *http.Request) {
 		case "register":
 			storage.Loggers[conn] = storage.Logger_id_counter
 			message := fmt.Sprintf("Logger %d registriert!", storage.Logger_id_counter)
-			serverMessageLoggerObj := &structs.ServerMessageLogger{
-				LoggerProtocol: "ServerToLogger",
-				Message:        message,
-			}
-			conn.WriteJSON(*serverMessageLoggerObj)
+			mailbox.SendServerToLoggers(message)
 			log.Println(message)
 			storage.Logger_id_counter++
 		case "unregister":
 			_, ok := storage.Loggers[conn]
 			if ok {
 				message := fmt.Sprintf("Logger %d unregistriert!", storage.Loggers[conn])
-				serverMessageLoggerObj := &structs.ServerMessageLogger{
-					LoggerProtocol: "ServerToLogger",
-					Message:        message,
-				}
-				conn.WriteJSON(*serverMessageLoggerObj)
+				mailbox.SendServerToLoggers(message)
 				delete(storage.Loggers, conn)
 				log.Println(message)
 			}
 			conn.Close()
 		default:
 			message := fmt.Sprintf("Unimplementierte logger action: %s", action)
-			serverMessageLoggerObj := &structs.ServerMessageLogger{
-				LoggerProtocol: "ServerToLogger",
-				Message:        message,
-			}
-			conn.WriteJSON(*serverMessageLoggerObj)
+			mailbox.SendServerToLoggers(message)
 			log.Println(message)
 		}
 	}

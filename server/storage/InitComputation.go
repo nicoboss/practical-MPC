@@ -1,8 +1,7 @@
 package storage
 
 import (
-	"PracticalMPC/Server/structs"
-	"PracticalMPC/Server/types"
+	"PracticalMPC/Server/JSON"
 	"strconv"
 
 	"github.com/gorilla/websocket"
@@ -14,9 +13,9 @@ func InitComputation(computation_id string, party_count int) int {
 		ComputationMaps.ClientIds[computation_id] = make([]string, party_count)
 		ComputationMaps.MaxCount[computation_id] = party_count
 		ComputationMaps.FreeParties[computation_id] = make(map[string]bool)
-		ComputationMaps.Keys[computation_id] = make(map[string]types.JSON_key)
+		ComputationMaps.Keys[computation_id] = make(map[string]JSON.Key)
 		SocketMaps.SocketId[computation_id] = make(map[string]*websocket.Conn)
-		CryptoMap[computation_id] = make(map[string]structs.InnerCryptoMap)
+		CryptoMap[computation_id] = make(map[string]InnerCryptoMap)
 	}
 
 	ComputationMaps.ClientIds[computation_id] = append(ComputationMaps.ClientIds[computation_id], strconv.Itoa(Party_id_counter[computation_id]))

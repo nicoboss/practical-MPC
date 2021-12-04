@@ -1,21 +1,20 @@
 package crypto
 
 import (
-	"PracticalMPC/Server/conversions"
+	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/mailbox"
-	"PracticalMPC/Server/structs"
-	"PracticalMPC/Server/types"
+	"PracticalMPC/Server/storage"
 	"log"
 
 	"github.com/miguelsandro/curve25519-go/axlsign"
 )
 
-func StoreAndSendPublicKey(computationMaps *structs.ComputationMaps, computation_id string, party_id string, public_key types.JSON_key) map[string]types.JSON_key {
+func StoreAndSendPublicKey(computationMaps *storage.ComputationMapsStruct, computation_id string, party_id string, public_key JSON.Key) map[string]JSON.Key {
 	// Öffendlicher Schlüssel speichern
 	var tmp = computationMaps.Keys[computation_id]
 
 	if len(public_key) == 0 {
-		tmp["s1"] = types.JSON_key{}
+		tmp["s1"] = JSON.Key{}
 	} else if _, ok := tmp["s1"]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
 		var genkey = axlsign.GenerateKeyPair(generateRandomBytes(32)) // Generieren des Schlüsselpaars
 		computationMaps.SecretKeys[computation_id] = genkey.PrivateKey
@@ -27,7 +26,7 @@ func StoreAndSendPublicKey(computationMaps *structs.ComputationMaps, computation
 	}
 
 	// Sammeln und formatieren der Schlüssel
-	var keymap_to_send = structs.NewKeymapToSend()
+	var keymap_to_send = NewKeymapToSend()
 	for key := range tmp {
 		if val, ok := computationMaps.Keys[computation_id][key]; ok {
 			keymap_to_send.Public_keys[key] = val
@@ -35,16 +34,12 @@ func StoreAndSendPublicKey(computationMaps *structs.ComputationMaps, computation
 			log.Fatal("Fehler beim generieren des Schlüsselpaars")
 		}
 	}
-	var broadcast_message = conversions.ToJSON(keymap_to_send)
+	var broadcast_message = JSON.ToJSON(keymap_to_send)
 
 	// Öffentlicher Schlüssel an alle zuvor verbundenen Parteien ausser der Partei welche dieses Update verursacht hat senden
 	for _, party := range computationMaps.ClientIds[computation_id] {
 		if party != party_id {
-			outputMessageObj := &structs.OutputMessage{
-				SocketProtocol: "public_keys",
-				Data:           broadcast_message,
-			}
-			mailbox.Append(computation_id, party, outputMessageObj)
+			mailbox.Append(computation_id, party, "public_keys", broadcast_message)
 		}
 	}
 

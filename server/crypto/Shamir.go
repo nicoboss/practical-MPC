@@ -1,7 +1,7 @@
 package crypto
 
 import (
-	"PracticalMPC/Server/conversions"
+	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/mailbox"
 	"fmt"
 	"log"
@@ -18,7 +18,7 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 		polynomial[i] = GenerateRandomInt(Zp)
 	}
 
-	messagePolynomial := fmt.Sprintf("Crypto Provider Shamir Polynomial: %s", conversions.ToJSON(polynomial))
+	messagePolynomial := fmt.Sprintf("Crypto Provider Shamir Polynomial: %s", JSON.ToJSON(polynomial))
 	log.Println(messagePolynomial)
 	mailbox.SendServerToLoggers(messagePolynomial)
 
@@ -34,7 +34,7 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 		}
 	}
 
-	messageShares := fmt.Sprintf("Crypto Provider Shamir Shares: %s", conversions.ToJSON(shares))
+	messageShares := fmt.Sprintf("Crypto Provider Shamir Shares: %s", JSON.ToJSON(shares))
 	log.Println(messageShares)
 	mailbox.SendServerToLoggers(messageShares)
 

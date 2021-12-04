@@ -35,7 +35,7 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
       var results = option_shares[1].slice();
 
       var i, j;
-      // Get a partial tally for each option in the vote by adding the shares across parties together.
+      // Summe der Abstimmungsoption durch zusammenzählen der Anteile der Parteien berechnen
       for (j = 2; j <= jiff_instance.party_count; j++) {
         for (i = 0; i < option_shares[j].length; i++) {
           results[i] = results[i].sadd(option_shares[j][i]);
