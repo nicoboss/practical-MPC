@@ -55,6 +55,7 @@ module.exports = function (SecretShare) {
    *   index 0 represents the least significant bit.
    */
   SecretShare.prototype.bit_decomposition = function (op_id) {
+    console.log("bit_decomposition");
     if (op_id == null) {
       op_id = this.jiff.counters.gen_op_id('bit_decomposition', this.holders);
     }

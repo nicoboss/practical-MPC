@@ -16,6 +16,7 @@ module.exports = {
    */
   rejection_sampling: function (jiff, lower_bound, upper_bound, threshold, parties, Zp, op_id) {
     // defaults
+    console.log("rejection_sampling");
     if (parties == null) {
       parties = [];
       for (var i = 1; i <= jiff.party_count; i++) {
@@ -86,12 +87,15 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of the number represented by bits.
    */
   bit_composition: function (bits) {
+    console.log("bit_composition");
     var result = bits[0];
     var pow = 1;
     for (var i = 1; i < bits.length; i++) {
       pow = pow * 2;
+      console.log("bit_composition result: " + result);
       result = result.isadd(bits[i].icmult(pow));
     }
+    console.log("bit_composition final result: " + result);
     return result;
   }
 };

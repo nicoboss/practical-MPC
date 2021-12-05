@@ -9,6 +9,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cadd = function (cst) {
+    console.log("cadd");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (+)');
     }
@@ -30,6 +31,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.csub = function (cst) {
+    console.log("csub");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (-)');
     }
@@ -51,6 +53,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cmult = function (cst) {
+    console.log("cmult");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (*)');
     }
@@ -72,6 +75,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cdivfac = function (cst) {
+    console.log("cdivfac");
     if (!(this.isConstant(cst))) {
       throw new Error('Parameter should be a number (cdivfac)');
     }
@@ -104,6 +108,7 @@ module.exports = function (SecretShare) {
    *
    */
   SecretShare.prototype.sadd = function (o) {
+    console.log("sadd");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (+)');
     }
@@ -133,6 +138,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.ssub = function (o) {
+    console.log("ssub");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (-)');
     }
@@ -167,6 +173,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.smult = function (o, op_id) {
+    console.log("smult");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (*)');
     }
@@ -247,6 +254,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.smult_bgw = function (o, op_id) {
+    console.log("smult_bgw");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (bgw*)');
     }
@@ -296,6 +304,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.sdiv = function (o, l, op_id) {
+    console.log("sdiv");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (!=)');
     }
@@ -337,6 +346,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cdiv = function (cst, op_id) {
+    console.log("cdiv");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (/)');
     }
@@ -420,6 +430,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.smod = function (o, l, op_id) {
+    console.log("smod");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (!=)');
     }
@@ -461,6 +472,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cpow = function (cst, op_id) {
+    console.log("cpow");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (*)');
     }

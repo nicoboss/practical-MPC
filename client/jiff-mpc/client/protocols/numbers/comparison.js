@@ -12,6 +12,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.sgteq = function (o, op_id) {
+    console.log("sgteq");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (>=)');
     }
@@ -41,6 +42,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.sgt = function (o, op_id) {
+    console.log("sgt");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (>)');
     }
@@ -70,6 +72,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.slteq = function (o, op_id) {
+    console.log("slteq");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (<=)');
     }
@@ -99,6 +102,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.slt = function (o, op_id) {
+    console.log("slt");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (<)');
     }
@@ -147,6 +151,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cgteq = function (cst, op_id) {
+    console.log("cgteq");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (>=)');
     }
@@ -171,6 +176,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cgt = function (cst, op_id) {
+    console.log("cgt");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (>)');
     }
@@ -211,6 +217,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.clteq = function (cst, op_id) {
+    console.log("clteq");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (<=)');
     }
@@ -274,6 +281,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.seq = function (o, op_id) {
+    console.log("seq");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (==)');
     }
@@ -302,6 +310,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.sneq = function (o, op_id) {
+    console.log("sneq");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (!=)');
     }
@@ -330,6 +339,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.ceq = function (cst, op_id) {
+    console.log("ceq");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (==)');
     }
@@ -352,6 +362,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cneq = function (cst, op_id) {
+    console.log("cneq");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (!=)');
     }
@@ -373,6 +384,7 @@ module.exports = function (SecretShare) {
    * @return {module:jiff-client~JIFFClient#SecretShare} this party's share of the result.
    */
   SecretShare.prototype.lt_halfprime = function (op_id) {
+    console.log("lt_halfprime");
     if (op_id == null) {
       op_id = this.jiff.counters.gen_op_id('lt_halfprime', this.holders);
     }

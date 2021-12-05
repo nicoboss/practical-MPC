@@ -64,6 +64,7 @@ exports.get_party_number = function (party_id) {
 
 // transform number to bit array
 exports.number_to_bits = function (number, length) {
+  console.log("number_to_bits: " + number);
   number = number.toString(2);
   var bits = [];
   for (var i = 0; i < number.length; i++) {
@@ -72,5 +73,6 @@ exports.number_to_bits = function (number, length) {
   while (length != null && bits.length < length) {
     bits.push(0);
   }
+  console.log("bin: " + bits);
   return bits;
 };

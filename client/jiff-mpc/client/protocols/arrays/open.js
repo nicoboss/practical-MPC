@@ -1,4 +1,5 @@
 const open_array = function (jiff, shares, parties, op_ids) {
+  console.log("open_array");
   var i;
 
   // A base operation id is provided to use for all opens.
@@ -14,6 +15,7 @@ const open_array = function (jiff, shares, parties, op_ids) {
 };
 
 const open_ND_array = function (jiff, shares, receivers_list, senders_list, op_ids) {
+  console.log("open_ND_array");
   if (senders_list == null) {
     senders_list = [];
     for (var i = 1; i <= jiff.party_count; i++) {
@@ -107,6 +109,7 @@ const open_ND_array = function (jiff, shares, receivers_list, senders_list, op_i
 };
 
 const receive_open_ND_array = function (jiff, receivers_list, senders_list, threshold, Zp, op_ids) {
+  console.log("receive_open_ND_array");
   return open_ND_array(jiff, null, receivers_list, senders_list, op_ids);
 };
 

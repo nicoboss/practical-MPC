@@ -1,4 +1,5 @@
 const sanitize_array_params = function (jiff, receivers_list, senders_list, threshold, Zp, share_id) {
+  console.log("sanitize_array_params");
   [receivers_list, senders_list] = [receivers_list, senders_list].map(function (party_list) {
     if (party_list == null) {
       party_list = [];
@@ -30,6 +31,7 @@ const sanitize_array_params = function (jiff, receivers_list, senders_list, thre
 };
 
 const skeleton_of = function (jiff, nd_array, replace) {
+  console.log("skeleton_of");
   if (typeof(replace) === 'undefined') {
     replace = null;
   }
@@ -44,6 +46,7 @@ const skeleton_of = function (jiff, nd_array, replace) {
 };
 
 const match_skeletons = function (jiff, skeletons, senders_list) {
+  console.log("match_skeletons");
   var keys = Object.keys(skeletons);
   var expected_keys = senders_list.map(String);
   if (keys.length === senders_list.length) {

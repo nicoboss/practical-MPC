@@ -60,7 +60,7 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
           check = check.smult(sum.clteq(1));
         }
         
-        // Wenn eine Prüfung fehlschlägt: Alle Simmen auf 0 setzen
+        // Wenn eine Prüfung fehlschlägt: Alle Stimmen auf 0 setzen
         for (i = 0; i < results.length; i++) {
           results[i] = results[i].smult(check);
         }

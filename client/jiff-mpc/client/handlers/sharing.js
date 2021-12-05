@@ -8,10 +8,10 @@ module.exports = function (jiffClient) {
    * @param {object} json_msg - the parsed json message as received.
    */
   jiffClient.handlers.receive_share = function (json_msg) {
-    console.log("receive_share:");
+    //console.log("receive_share:");
     // Decrypt share
     json_msg['share'] = jiffClient.hooks.decryptSign(jiffClient, json_msg['share'], jiffClient.secret_key, jiffClient.keymap[json_msg['party_id']]);
-    console.log(json_msg['share']);
+    //console.log(json_msg['share']);
     json_msg = jiffClient.hooks.execute_array_hooks('afterOperation', [jiffClient, 'share', json_msg], 2);
 
     var sender_id = json_msg['party_id'];
@@ -41,14 +41,14 @@ module.exports = function (jiffClient) {
    * @param {object} json_msg - the json message as received with the open event.
    */
   jiffClient.handlers.receive_open = function (json_msg) {
-    console.log("receive_open:");
+    //console.log("receive_open:");
     // Decrypt share
     if (json_msg['party_id'] !== jiffClient.id) {
       json_msg['share'] = jiffClient.hooks.decryptSign(jiffClient, json_msg['share'], jiffClient.secret_key, jiffClient.keymap[json_msg['party_id']]);
-      console.log(json_msg['share']);
+      //console.log(json_msg['share']);
       json_msg = jiffClient.hooks.execute_array_hooks('afterOperation', [jiffClient, 'open', json_msg], 2);
     } else {
-      console.log(json_msg['shares']);
+      //console.log(json_msg['shares']);
     }
 
     var sender_id = json_msg['party_id'];

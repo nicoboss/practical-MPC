@@ -14,6 +14,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   ceq: function (jiff, bits, constant, op_id) {
+    console.log("ceq");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.ceq)');
     }
@@ -41,6 +42,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   cneq: function (jiff, bits, constant, op_id) {
+    console.log("cneq");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cneq)');
     }
@@ -86,6 +88,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   cgt: function (jiff, bits, constant, op_id) {
+    console.log("cgt");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cgt)');
     }
@@ -109,6 +112,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   cgteq: function (jiff, bits, constant, op_id) {
+    console.log("cgteq: " + bits + ", " + constant);
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cgteq)');
     }
@@ -131,21 +135,29 @@ module.exports = {
       // Optimization: if constant has more bits, one of them must be 1, constant must be greater than bits.
       return false;
     }
+    console.log("constant_bits: " + constant_bits);
 
     // initialize result
     var deferred = new jiff.helpers.Deferred();
     var result = new jiff.SecretShare(deferred.promise, bits[0].holders, bits[0].threshold, bits[0].Zp);
+    console.log("result: " + result);
 
     // Subtract bits2 from bits1, only keeping track of borrow
     var borrow = bits[0].inot().icmult(constant_bits[0]);
+    console.log("borrow: " + borrow);
 
     // compute one bit at a time, propagating borrow
     jiff.utils.bit_combinator(deferred, 1, bits.length, borrow, function (i, borrow) {
+      console.log("bits[" + i + "]: " + bits[i]);
+      console.log("constant_bits[" + i + "]: " + constant_bits[i]);
       var xor = bits[i].icxor_bit(constant_bits[i]);
+      console.log("xor: " + xor);
       var andNot = bits[i].inot().icmult(constant_bits[i]);
+      console.log("andNot: " + andNot);
 
       // save and update borrow
       borrow = xor.inot().ismult(borrow, op_id + ':smult:' + (i - 1));
+      console.log("borrow: " + borrow);
       return borrow.isadd(andNot);
     });
 
@@ -166,6 +178,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   clt: function (jiff, bits, constant, op_id) {
+    console.log("clt");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.clt)');
     }
@@ -193,6 +206,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   clteq: function (jiff, bits, constant, op_id) {
+    console.log("clteq");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.clteq)');
     }
@@ -218,6 +232,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of 1 if bits are equal, 0 otherwise
    */
   seq: function (jiff, bits1, bits2, op_id) {
+    console.log("seq");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.seq', bits1[0].holders);
     }
@@ -236,6 +251,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of 1 if bits are not equal, 0 otherwise
    */
   sneq: function (jiff, bits1, bits2, op_id) {
+    console.log("sneq");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.sneq', bits1[0].holders);
     }
@@ -281,6 +297,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of 1 if the first number is greater than the second, 0 otherwise
    */
   sgt: function (jiff, bits1, bits2, op_id) {
+    console.log("sgt");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.sgt', bits1[0].holders);
     }
@@ -302,6 +319,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of 1 if the first number is greater or equal to the second, 0 otherwise
    */
   sgteq: function (jiff, bits1, bits2, op_id) {
+    console.log("sgteq");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.sgteq', bits1[0].holders);
     }
@@ -352,6 +370,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of 1 if the first number is less than the second, 0 otherwise
    */
   slt: function (jiff, bits1, bits2, op_id) {
+    console.log("slt");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.slt', bits1[0].holders);
     }
@@ -371,6 +390,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare} a secret share of 1 if the first number is less than or equal to the second, 0 otherwise
    */
   slteq: function (jiff, bits1, bits2, op_id) {
+    console.log("slteq");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.slteq', bits1[0].holders);
     }

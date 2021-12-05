@@ -13,6 +13,7 @@ module.exports = {
    *                          in case of potential overflow / carry
    */
   cadd: function (jiff, bits, constant, op_id) {
+    console.log("cadd");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cadd)');
     }
@@ -80,6 +81,7 @@ module.exports = {
    *                          and the bit at index |bits| is 1 if the result overflows, or 0 otherwise
    */
   csubl: function (jiff, bits, constant, op_id) {
+    console.log("csubl");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.csubl)');
     }
@@ -149,6 +151,7 @@ module.exports = {
    *                          and the bit at index |bits| is 1 if the result overflows, or 0 otherwise
    */
   csubr: function (jiff, constant, bits, op_id) {
+    console.log("csubr");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.csubr)');
     }
@@ -212,6 +215,7 @@ module.exports = {
    *                          the bit at index 0 is the least significant bit
    */
   sadd: function (jiff, bits1, bits2, op_id) {
+    console.log("sadd");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.sadd', bits1[0].holders);
     }
@@ -273,6 +277,7 @@ module.exports = {
    *                          and the bit at index |bits| is 1 if the result overflows, or 0 otherwise
    */
   ssub: function (jiff, bits1, bits2, op_id) {
+    console.log("ssub");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.ssub', bits1[0].holders);
     }
@@ -335,6 +340,7 @@ module.exports = {
    *                          if constant is zero, the result will then be [ zero share ]
    */
   cmult: function (jiff, bits, constant, op_id) {
+    console.log("cmult");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cmult)');
     }
@@ -403,6 +409,7 @@ module.exports = {
    * @returns {module:jiff-client~JIFFClient#SecretShare[]} bitwise sharing of the result, the length of the result will be bits1.length + bits2.length
    */
   smult: function (jiff, bits1, bits2, op_id) {
+    console.log("smult");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.smult', bits1[0].holders);
     }
@@ -472,6 +479,7 @@ module.exports = {
    *                                                                is equal to bits1
    */
   sdiv: function (jiff, bits1, bits2, op_id) {
+    console.log("sdiv");
     if (op_id == null) {
       op_id = jiff.counters.gen_op_id('bits.sdiv', bits1[0].holders);
     }
@@ -554,6 +562,7 @@ module.exports = {
    * @throws if constant is 0.
    */
   cdivl: function (jiff, bits, constant, op_id) {
+    console.log("cdivl");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cdivl)');
     }
@@ -651,6 +660,7 @@ module.exports = {
    *                                                                is equal to constant
    */
   cdivr: function (jiff, constant, bits, op_id) {
+    console.log("cdivr");
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cdivr)');
     }

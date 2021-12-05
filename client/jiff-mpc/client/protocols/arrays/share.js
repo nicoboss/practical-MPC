@@ -1,6 +1,7 @@
 const util = require('./util.js');
 
 const share_array = function (jiff, array, lengths, threshold, receivers_list, senders_list, Zp, share_id) {
+  console.log("share_array");
   var skeletons = null;
   if (lengths != null) {
     // Check format of lengths
@@ -46,6 +47,7 @@ const share_array = function (jiff, array, lengths, threshold, receivers_list, s
 };
 
 const share_2D_array = function (jiff, array, lengths, threshold, receivers_list, senders_list, Zp, share_id) {
+  console.log("share_2D_array");
   var i;
 
   // Check format of lengths
@@ -192,6 +194,10 @@ const share_2D_array = function (jiff, array, lengths, threshold, receivers_list
 };
 
 const share_from_skeleton_unbound = function (jiff, that, sender, skeleton) {
+  if (typeof(skeleton) === 'string') {
+    return;
+  }
+  console.log("share_from_skeleton_unbound");
   var shares = typeof(skeleton) === 'string' ? JSON.parse(skeleton) : skeleton;
 
   var promise = share_array_single_sender(jiff, shares, that.threshold, that.receivers_list, sender, that.Zp, that.share_id + ':p_id_' + sender);
@@ -223,11 +229,13 @@ const share_array_single_sender = function (jiff, secrets, threshold, receivers_
   } else {
     // Create and distribute the share - Note: Senders are reorganized in the final array.
     // The return value of jiff.share is an array, [sender: share], and we only need to return share by itself.
+    console.log("share_array_single_sender: " + secrets + " | " + share_id);
     return Promise.resolve(jiff.share(secrets, threshold, receivers_list, [sender], Zp, 'share:' + share_id)[sender]);
   }
 };
 
 const share_ND_array_deferred = function (jiff, secrets, skeletons, threshold, receivers_list, senders_list, Zp, share_id) {
+  console.log("share_ND_array_deferred");
   var parameters = [receivers_list, senders_list, threshold, Zp, share_id];
   [receivers_list, senders_list, threshold, Zp, share_id] = util.sanitize_array_params.bind(null, jiff).apply(null, parameters);
 
@@ -299,6 +307,7 @@ const share_ND_array_deferred = function (jiff, secrets, skeletons, threshold, r
 };
 
 const share_ND_array_static = function (jiff, secrets, skeletons, threshold, receivers_list, senders_list, Zp, share_id) {
+  console.log("share_ND_array_static");
   var parameters = [receivers_list, senders_list, threshold, Zp, share_id];
   [receivers_list, senders_list, threshold, Zp, share_id] = util.sanitize_array_params.bind(null, jiff).apply(null, parameters);
 
@@ -339,6 +348,7 @@ const share_ND_array_static = function (jiff, secrets, skeletons, threshold, rec
 };
 
 const share_ND_array = function (jiff, secrets, skeletons, threshold, receivers_list, senders_list, Zp, share_id) {
+  console.log("share_ND_array");
   var share_ND_array = skeletons != null ? share_ND_array_static : share_ND_array_deferred;
   return share_ND_array(jiff, secrets, skeletons, threshold, receivers_list, senders_list, Zp, share_id);
 };

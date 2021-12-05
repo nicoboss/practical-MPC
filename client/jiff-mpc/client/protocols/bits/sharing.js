@@ -19,6 +19,7 @@ module.exports = {
    *          and the value is an array of secret shared bits
    */
   share_bits: function (jiff, secret, bit_length, threshold, receivers_list, senders_list, Zp, share_id) {
+    console.log("share_bits");
     var i;
     if (Zp == null) {
       Zp = jiff.Zp;
@@ -81,6 +82,7 @@ module.exports = {
    * @returns {promise} a promise to the number represented by bits
    */
   open_bits: function (jiff, bits, parties, op_id) {
+    console.log("open_bits");
     // Default values
     if (parties == null) {
       parties = [];
@@ -121,6 +123,7 @@ module.exports = {
    * @returns {promise} a (JQuery) promise to the open value of the secret
    */
   receive_open_bits: function (jiff, senders, receivers, count, threshold, Zp, op_id) {
+    console.log("receive_open_bits");
     if (senders == null) {
       throw new Error('Must provide "senders" parameter in receive_open');
     }

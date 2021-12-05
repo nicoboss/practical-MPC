@@ -14,6 +14,7 @@ module.exports = {
    *
    */
   jiff_compute_shares: function (jiff, secret, parties_list, threshold, Zp) {
+    console.log("jiff_compute_shares [secret]: " + secret)
     var shares = {}; // Keeps the shares
     var i;
 
@@ -45,6 +46,7 @@ module.exports = {
       }
     }
 
+    console.log("jiff_compute_shares [shares]: " + JSON.stringify(shares));
     return shares;
   },
   /**

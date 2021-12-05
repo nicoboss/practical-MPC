@@ -9,6 +9,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cxor_bit = function (cst) {
+    console.log("cxor_bit");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (^)');
     }
@@ -28,6 +29,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.cor_bit = function (cst) {
+    console.log("cor_bit");
     if (!(this.isConstant(cst))) {
       throw new Error('parameter should be a number (|)');
     }
@@ -51,6 +53,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.sxor_bit = function (o, op_id) {
+    console.log("sxor_bit");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (^)');
     }
@@ -80,6 +83,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.sor_bit = function (o, op_id) {
+    console.log("sor_bit");
     if (!(o.jiff === this.jiff)) {
       throw new Error('shares do not belong to the same instance (|)');
     }
@@ -105,6 +109,7 @@ module.exports = function (SecretShare) {
    * @instance
    */
   SecretShare.prototype.not = function () {
+    console.log("not");
     return this.icmult(-1).icadd(1);
   };
 
@@ -132,6 +137,7 @@ module.exports = function (SecretShare) {
    * var max = cmp.if_else(a, b);
    */
   SecretShare.prototype.if_else = function (trueVal, falseVal, op_id) {
+    console.log("if_else");
     if (op_id == null) {
       op_id = this.jiff.counters.gen_op_id('if_else', this.holders);
     }
