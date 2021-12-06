@@ -48,25 +48,27 @@ exports.vue_logger = function (app :any) {
             loggerMsgObj.message = socketMsgObj;
           }
 
-          loggerMsgObj.html = jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2));
-          _this.users.push(JSON.parse(JSON.stringify(loggerMsgObj)));
-          loggerMsgObj.loggerProtocol = "ClientToServer"
-          loggerMsgObj.message = "Hallo";
-          loggerMsgObj.html = jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2));
-          _this.users.push(JSON.parse(JSON.stringify(loggerMsgObj)));
-          loggerMsgObj.loggerProtocol = "ServerToClient"
-          loggerMsgObj.message = "Welt!";
-          loggerMsgObj.html = jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2));
-          _this.users.push(JSON.parse(JSON.stringify(loggerMsgObj)));
-          loggerMsgObj.loggerProtocol = "ServerToLogger"
-          loggerMsgObj.message = "Logger 99 registriert!";
-          loggerMsgObj.html = jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2));
-          _this.users.push(JSON.parse(JSON.stringify(loggerMsgObj)));
-          loggerMsgObj.loggerProtocol = "ClientToLogger"
-          loggerMsgObj.message = "Logger 100 registriert!";
-          loggerMsgObj.html = jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2));
-          _this.users.push(JSON.parse(JSON.stringify(loggerMsgObj)));
-          console.log(users);
+          if (!("message" in loggerMsgObj)) loggerMsgObj.message = {};
+          var default_op_id = "";
+          if (typeof loggerMsgObj.message === 'string' || loggerMsgObj.message instanceof String) {
+            default_op_id = loggerMsgObj.message;
+            loggerMsgObj.message = {};
+          }
+          if (!("data" in loggerMsgObj.message)) loggerMsgObj.message.data = {};
+
+          var tableRowObj =  {
+              'time': new Date(),
+              'html': jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2)),
+              "loggerProtocol": "loggerProtocol" in loggerMsgObj ? loggerMsgObj.loggerProtocol : "",
+              "sender_party_id": "sender_party_id" in loggerMsgObj ? loggerMsgObj.sender_party_id : "",
+              "receiver_party_id": "receiver_party_id" in loggerMsgObj ? loggerMsgObj.receiver_party_id : "",
+              "socketProtocol": "socketProtocol" in loggerMsgObj.message ? loggerMsgObj.message.socketProtocol : "",
+              "party_id": "party_id" in loggerMsgObj.message.data ? loggerMsgObj.message.data.party_id : "",
+              "share": "share" in loggerMsgObj.message.data ? loggerMsgObj.message.data.share : "",
+              "op_id": "op_id" in loggerMsgObj.message.data ? loggerMsgObj.message.data.op_id : default_op_id,
+              "Zp": "Zp" in loggerMsgObj.message.data ? loggerMsgObj.message.data.Zp : "",
+            };
+          _this.users.push(tableRowObj);
         }
     
         conn.onopen = function(event: any) {
@@ -99,16 +101,30 @@ exports.vue_logger = function (app :any) {
       selectedClass="selected-row"
       @stateChanged="selectedRows = $event.selectedRows">
         <template #head>
+          <VTh sortKey="time">time</VTh>
           <VTh sortKey="loggerProtocol">loggerProtocol</VTh>
-          <VTh sortKey="message">message</VTh>
+          <VTh sortKey="sender_party_id">sender</VTh>
+          <VTh sortKey="receiver_party_id">receiver</VTh>
+          <VTh sortKey="socketProtocol">socketProtocol</VTh>
+          <VTh sortKey="party_id">party_id</VTh>
+          <VTh sortKey="share">share</VTh>
+          <VTh sortKey="op_id">op_id</VTh>
+          <VTh sortKey="Zp">Zp</VTh>
         </template>
         <template #body="{ rows }">
           <VTr
           v-for="row in rows"
           :key="rows"
           :row="row">
+            <td>{{ row.time }}</td>
             <td>{{ row.loggerProtocol }}</td>
-            <td>{{ row.message }}</td>
+            <td>{{ row.sender_party_id }}</td>
+            <td>{{ row.receiver_party_id }}</td>
+            <td>{{ row.socketProtocol }}</td>
+            <td>{{ row.party_id }}</td>
+            <td>{{ row.share }}</td>
+            <td>{{ row.op_id }}</td>
+            <td>{{ row.Zp }}</td>
           </VTr>
         </template>
       </VTable>
