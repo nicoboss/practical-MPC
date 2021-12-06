@@ -15,6 +15,12 @@ func Register(inputMessageData string) string {
 
 	// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten
 	var party_id string
+	if storage.ComputationMaps.ClientIds[inputData.Computation_id] != nil {
+		if storage.Party_id_counter[inputData.Computation_id] > inputData.Party_count {
+			storage.ResetStorage()
+			mailbox.SendServerToLoggers("RESET")
+		}
+	}
 	party_id = strconv.Itoa(storage.InitComputation(inputData.Computation_id, inputData.Party_count))
 
 	// Initialisierung der Mailbox

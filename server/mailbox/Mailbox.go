@@ -60,6 +60,7 @@ func SendServerToLoggers(message string) {
 		LoggerProtocol: "ServerToLogger",
 		Message:        message,
 	}
+	log.Printf("[LOG]: %s", message)
 	for logger, _ := range storage.Loggers {
 		logger.WriteJSON(*serverMessageLoggerObj)
 	}
