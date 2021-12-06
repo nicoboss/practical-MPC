@@ -20,11 +20,11 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
   }
   if ((<HTMLInputElement>document.getElementById("calculate_multi")).checked) {
     var shares = jiff_instance.share(input);
-    var sum = shares[1];
+    var product = shares[1];
     for (var i = 2; i <= jiff_instance.party_count; i++) {
-      sum = sum.smult(shares[i]);
+      product = product.smult(shares[i]);
     }
-    return jiff_instance.open(sum);
+    return jiff_instance.open(product);
   }
   if ((<HTMLInputElement>document.getElementById("calculate_voting")).checked) {
     var this_count = 4
@@ -35,7 +35,7 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
       var results = option_shares[1].slice();
 
       var i, j;
-      // Summe der Abstimmungsoption durch zusammenzählen der Anteile der Parteien berechnen
+      // Summe der Abstimmungsoption durch Zusammenzählen der Anteile der Parteien berechnen
       for (j = 2; j <= jiff_instance.party_count; j++) {
         for (i = 0; i < option_shares[j].length; i++) {
           results[i] = results[i].sadd(option_shares[j][i]);
@@ -51,7 +51,7 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
           }
         }
   
-        // Jede Partei erhält nur eine Stimme: Die Summe aller Stimmen einer Partei sollte kleiner oder gleich 1 sein
+        // Jede Partei erhält nur eine Stimme: Die Summe aller Stimmen einer Partei soll kleiner oder gleich 1 sein
         for (j = 1; j <= jiff_instance.party_count; j++) {
           var sum = option_shares[j][0];
           for (i = 1; i < option_shares[j].length; i++) {

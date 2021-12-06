@@ -11,6 +11,7 @@
     "@babel/types": "7.16.0",
     "@types/node": "16.11.6",
     "chai": "4.3.4",
+    "dayjs": "^1.10.7",
     "vue": "3.2.19",
     "vuejs-smart-table": "^1.0.0-beta.5",
     "websocket": "1.0.34",

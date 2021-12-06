@@ -1,14 +1,22 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
+/// <reference path="../node_modules/dayjs/index.d.ts" />
 
 var jsonSyntaxHighlight = require('../modules/jsonSyntaxHighlight');
+var dayjs = require('dayjs')
 
 var users = [];
+var data_buffer = [];
+var last_data_buffer_update: Date = new Date();
 
 exports.vue_logger = function (app :any) {
   app.component('vue-logger', {
     data() {
       return {
         users,
+        totalPages: 1,
+        currentPage: 1,
+        data_buffer,
+        last_data_buffer_update,
         connection: null,
         connectButtonEnabled: true,
         selectedRows: [],
@@ -17,10 +25,22 @@ exports.vue_logger = function (app :any) {
         }
       }
     },
+    mounted: function () {
+      window.setInterval(() => {
+        if (data_buffer.length > 0) {
+          var startTime: Date = this.last_data_buffer_update;
+          var endTime: Date = new Date();
+          var timeDiff = endTime.getTime() - startTime.getTime();
+          if (timeDiff > 250) {
+            this.users.push(...this.data_buffer);
+            this.data_buffer = [];
+          }
+        }
+      }, 100)
+    },
     methods: {
       ageFilter (filterValue, row) {
         var comp = !(row.loggerProtocol in filterValue) || filterValue[row.loggerProtocol] === true;
-        console.log(JSON.stringify(filterValue) + " | " + JSON.stringify(row) + " | " + row.loggerProtocol + " | " + comp);
         return comp;
       },
       selectAll () {
@@ -57,18 +77,25 @@ exports.vue_logger = function (app :any) {
           if (!("data" in loggerMsgObj.message)) loggerMsgObj.message.data = {};
 
           var tableRowObj =  {
-              'time': new Date(),
+              'time': dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSS'),
               'html': jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2)),
               "loggerProtocol": "loggerProtocol" in loggerMsgObj ? loggerMsgObj.loggerProtocol : "",
               "sender_party_id": "sender_party_id" in loggerMsgObj ? loggerMsgObj.sender_party_id : "",
               "receiver_party_id": "receiver_party_id" in loggerMsgObj ? loggerMsgObj.receiver_party_id : "",
               "socketProtocol": "socketProtocol" in loggerMsgObj.message ? loggerMsgObj.message.socketProtocol : "",
               "party_id": "party_id" in loggerMsgObj.message.data ? loggerMsgObj.message.data.party_id : "",
-              "share": "share" in loggerMsgObj.message.data ? loggerMsgObj.message.data.share : "",
+              "shares":
+                "shares" in loggerMsgObj.message.data
+                  ? loggerMsgObj.message.data.shares
+                  : "share" in loggerMsgObj.message.data
+                    ? typeof loggerMsgObj.message.data.share === 'string' || loggerMsgObj.message.data.share instanceof String
+                      ? loggerMsgObj.message.data.share
+                      : "Encrypted"
+                    : "",
               "op_id": "op_id" in loggerMsgObj.message.data ? loggerMsgObj.message.data.op_id : default_op_id,
-              "Zp": "Zp" in loggerMsgObj.message.data ? loggerMsgObj.message.data.Zp : "",
             };
-          _this.users.push(tableRowObj);
+          _this.data_buffer.push(tableRowObj);
+          _this.last_data_buffer_update = new Date();
         }
     
         conn.onopen = function(event: any) {
@@ -92,9 +119,16 @@ exports.vue_logger = function (app :any) {
       <label for="ClientToLoggerFilter">ClientToLogger</label>
       <button v-on:click="selectAll()">Select All</button>
       <button v-on:click="deselectAll()">Deselect All</button>
+      <VTPagination
+      v-model:currentPage="currentPage"
+      :total-pages="totalPages"
+      :boundary-links="true"/>
       <VTable
       ref="usersTable"
       :data="users"
+      :page-size="20"
+      v-model:currentPage="currentPage"
+      @totalPagesChanged="totalPages = $event"
       :filters="filters"
       :hideSortIcons="false"
       selectionMode="multiple"
@@ -107,14 +141,12 @@ exports.vue_logger = function (app :any) {
           <VTh sortKey="receiver_party_id">receiver</VTh>
           <VTh sortKey="socketProtocol">socketProtocol</VTh>
           <VTh sortKey="party_id">party_id</VTh>
-          <VTh sortKey="share">share</VTh>
+          <VTh sortKey="shares">shares</VTh>
           <VTh sortKey="op_id">op_id</VTh>
-          <VTh sortKey="Zp">Zp</VTh>
         </template>
         <template #body="{ rows }">
           <VTr
           v-for="row in rows"
-          :key="rows"
           :row="row">
             <td>{{ row.time }}</td>
             <td>{{ row.loggerProtocol }}</td>
@@ -122,9 +154,8 @@ exports.vue_logger = function (app :any) {
             <td>{{ row.receiver_party_id }}</td>
             <td>{{ row.socketProtocol }}</td>
             <td>{{ row.party_id }}</td>
-            <td>{{ row.share }}</td>
+            <td>{{ row.shares }}</td>
             <td>{{ row.op_id }}</td>
-            <td>{{ row.Zp }}</td>
           </VTr>
         </template>
       </VTable>
