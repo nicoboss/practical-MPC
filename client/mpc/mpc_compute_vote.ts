@@ -4,17 +4,13 @@
 var connectButton = require('../mpc/mpc_connect');
 
 // Lose basierend auf https://github.com/multiparty/jiff/tree/master/demos
-exports.mpc_compute = function (inputss :Array<number>, security_checks: boolean, jiff_instance :any, ) {
+exports.mpc_compute = function (inputs :Array<number>, security_checks: boolean, jiff_instance :any, ) {
   if (jiff_instance == null) {
     jiff_instance = connectButton.saved_instance;
   }
   // MPC implementierung
-  var inputs:number[] = new Array(4).fill(0);
-  var this_count = inputs.length;
-  console.log(inputs);
-  console.log(this_count);
   var calculate_voting_promise = jiff_instance.share_array(inputs).then(function (option_shares: any) {
-    jiff_instance.seed_ids(this_count);
+    jiff_instance.seed_ids(inputs.length);
     var results = option_shares[1].slice();
 
     var i, j;

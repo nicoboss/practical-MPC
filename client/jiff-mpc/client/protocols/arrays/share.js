@@ -194,9 +194,6 @@ const share_2D_array = function (jiff, array, lengths, threshold, receivers_list
 };
 
 const share_from_skeleton_unbound = function (jiff, that, sender, skeleton) {
-  if (typeof(skeleton) === 'string') {
-    return;
-  }
   console.log("share_from_skeleton_unbound");
   var shares = typeof(skeleton) === 'string' ? JSON.parse(skeleton) : skeleton;
 
