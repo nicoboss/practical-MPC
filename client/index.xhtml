@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MPC</title>
+    <link rel="stylesheet" href="css/styles.css"/>
     <style>
         .error {
           color: #FF0000;
@@ -12,35 +13,43 @@
       </style>
 </head>
 <body>
-    <h1 id="title">Praktische sichere Multi-Party-Computation: Client</h1>
+    <header>
+      <h2 class="title" id="title">Praktische sichere Multi-Party-Computation: Client</h2>
+    </header>
     <div id="main_app">
+
         <hr/>
-        <h1>VueJS Testing</h1>
-        <vue-test/>
-        <br/><br/><hr/>
-        <h1>Einstellungen</h1>
-        <label for="server_address">Serveradresse</label><input id="server_address" value="http://127.0.0.1:8080"></input><br/><br/>
-        <label for="computation_id">Berechnungsname</label><input id="computation_id" value="test"></input><br/><br/>
-        <label for="party_count">Anzahl Teilnehmer</label><input id="party_count" pattern="[0-9]*" value="2"/><br/><br/>
-        <label for="use_crypto_provider">Server als Crypto Provider (sicherheitserhöhend)</label><input type="checkbox" id="use_crypto_provider" checked="true"/><br/><br/>
-        <label for="use_crypto_provider">Sichere Kommunikation (sicherheitskritisch)</label><input type="checkbox" id="secure_communication" checked="true"/><br/><br/>
-        <connect-button/>
-        <br/><br/><hr/>
-        <h1>Berechnung</h1>
-        <input type="radio" id="calculate_sum" name="operation" value="sum" checked="true"/>
-        <label for="calculate_sum">Summe</label>
-        <input type="radio" id="calculate_multi" name="operation" value="multi"/>
-        <label for="calculate_multi">Multiplikation</label><br/>
-        <input type="radio" id="calculate_voting" name="operation" value="voting"/>
-        <label for="calculate_voting">Abstimmen</label>
-        <label for="security_checks">Sicherheitschecks</label><input type="checkbox" id="security_checks" checked="true"/><br/>
-        <input type="radio" id="calculate_threshold" name="operation" value="threshold"/>
-        <label for="calculate_threshold">Threshold</label>
-        <input id="threshold_input" pattern="[0-9]+"/><br/>
-        <label for="client_input">Zahl (zwischen 0 und 100)</label>
-        <input id="client_input" pattern="[0-9]+"/>
-        <submit-button/>
-        <br/><br/><hr/>
+
+        <!-- VueJS Testing -->
+        <div class="box">
+          
+          <h1>VueJS Testing</h1>
+          <vue-test/>
+
+        </div>
+
+        <!-- Einstellungen -->
+        <div class="box">
+
+          <h1>Einstellungen</h1>
+          <label for="server_address">Serveradresse:</label><input type="text" id="server_address" value="http://127.0.0.1:8080"></input><br/><br/>
+          <label for="computation_id">Berechnungsname:</label><input type="text" id="computation_id" value="test"></input><br/><br/>
+          <label for="party_count">Anzahl Teilnehmer:</label><input type="number" id="party_count" min="0" max="9999" value="2"/><br/><br/>
+          <label for="use_crypto_provider">Server als Crypto Provider (sicherheitserhöhend):</label><input type="checkbox" id="use_crypto_provider" checked="true"/><br/><br/>
+          <label for="use_crypto_provider">Sichere Kommunikation (sicherheitskritisch):</label><input type="checkbox" id="secure_communication" checked="true"/><br/><br/>
+          <connect-button class="button-x"/>
+
+        </div>
+
+
+        <!-- Berechnung -->
+        <div class="box">
+
+          <h1>Berechnung</h1>
+          <mpc-input/>
+
+        </div>
+
         <div id="output"></div>
     </div>
 </body>
