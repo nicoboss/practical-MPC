@@ -19,4 +19,4 @@ RUN rm -rf dist && mkdir dist
 RUN npx tsc app.ts
 RUN npx webpack
 RUN rm -f app.js
-CMD npx http-server
+CMD npx http-server --ext xhtml -d false --log-ip true -p 8080

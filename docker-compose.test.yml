@@ -3,7 +3,6 @@ version: "3.7"
 services:
   server:
     image: $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
-#    command: go run .
     ports:
       - "8001:8080"
     networks:
@@ -13,7 +12,7 @@ services:
           - server.mpc.nico.re
   client:
     image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
-    command: npx http-server
+    command: npx http-server --ext xhtml -d false --log-ip true -p 8080
     ports:
       - "8002:8080"
     networks:
@@ -21,20 +20,32 @@ services:
         ipv4_address: 192.168.3.101
         aliases:
           - client.mpc.nico.re
+
+  logger:
+    image: $CI_REGISTRY_IMAGE/logger:$IMAGE_TAG
+    command: npx http-server --ext xhtml -d false --log-ip true -p 8080
+    ports:
+      - "8002:8080"
+    networks:
+      static-network:
+        ipv4_address: 192.168.3.102
+        aliases:
+          - logger.mpc.nico.re
+
   tester:
     image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
     command: go run tester.go client.mpc.nico.re:8080 server.mpc.nico.re:8080
     networks:
       static-network:
-        ipv4_address: 192.168.3.102
+        ipv4_address: 192.168.3.103
         aliases:
           - tester.mpc.nico.re
     depends_on:
       - "server"
       - "client"
+      - "logger"
 networks:
   static-network:
     ipam:
       config:
         - subnet: 192.168.3.0/24
-  

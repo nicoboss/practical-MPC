@@ -18,6 +18,16 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
+  
+  logger:
+    image: $CI_REGISTRY_IMAGE/logger:$IMAGE_TAG
+    build:
+      context: ./logger
+      dockerfile: Dockerfile
+      args:
+        GIT_VERSION: $GIT_VERSION
+        GIT_DATE: $GIT_DATE
+
   tester:
     image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
     build:

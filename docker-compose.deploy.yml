@@ -28,7 +28,7 @@ services:
 
   client:
     image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
-    command: npx http-server
+    command: npx http-server --ext xhtml -d false --log-ip true -p 8080
     networks:
       internal:
         aliases:
@@ -44,3 +44,22 @@ services:
         - 'traefik.http.routers.${STACK_NAME}Client.rule=Host(`${VH_CLIENT}.${SWARM_DOMAIN_INTERN}`)'
         - 'traefik.http.routers.${STACK_NAME}Client.entrypoints=intern'
         - 'traefik.http.services.${STACK_NAME}Client.loadbalancer.server.port=8080'
+
+  logger:
+    image: $CI_REGISTRY_IMAGE/logger:$IMAGE_TAG
+    command: npx http-server --ext xhtml -d false --log-ip true -p 8080
+    networks:
+      internal:
+        aliases:
+          - logger.mpc.nico.re
+      ingress:
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.zone == default
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.${STACK_NAME}Logger.rule=Host(`${VH_LOGGER}.${SWARM_DOMAIN_INTERN}`)'
+        - 'traefik.http.routers.${STACK_NAME}Logger.entrypoints=intern'
+        - 'traefik.http.services.${STACK_NAME}Logger.loadbalancer.server.port=8080'

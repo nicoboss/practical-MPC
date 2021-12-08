@@ -1,6 +1,7 @@
 version: "3.7"
 
 services:
+
   server:
     container_name: server
     build:
@@ -17,6 +18,7 @@ services:
         ipv4_address: 192.168.3.100
         aliases:
           - server.mpc.nico.re
+
   client:
     container_name: client
     build:
@@ -25,7 +27,7 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-    command: npx http-server
+    command: npx http-server --ext xhtml -d false --log-ip true -p 8080
     ports:
       - "8002:8080"
     networks:
@@ -35,6 +37,26 @@ services:
           - client.mpc.nico.re
     depends_on:
       - "server"
+
+  logger:
+    container_name: logger
+    build:
+      context: ./logger
+      dockerfile: Dockerfile
+      args:
+        GIT_VERSION: $GIT_VERSION
+        GIT_DATE: $GIT_DATE
+    command: npx http-server --ext xhtml -d false --log-ip true -p 8080
+    ports:
+      - "8002:8080"
+    networks:
+      static-network:
+        ipv4_address: 192.168.3.102
+        aliases:
+          - logger.mpc.nico.re
+    depends_on:
+      - "server"
+
   tester:
     container_name: tester
     build:
@@ -46,12 +68,14 @@ services:
     command: go run tester.go
     networks:
       static-network:
-        ipv4_address: 192.168.3.102
+        ipv4_address: 192.168.3.103
         aliases:
           - tester.mpc.nico.re
     depends_on:
       - "server"
       - "client"
+      - "logger"
+
 networks:
   static-network:
     ipam:
