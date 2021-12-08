@@ -12,11 +12,17 @@ exports.connect_button = function (app :any) {
     data() {
       return {
         connectButtonEnabled: true,
+        connectButtonText: "Verbinden",
+        isConnecting: false,
+        isConnected: false,
       }
     },
     methods: {
       connectButtonClick() {
+        var _this = this;
+        this.isConnecting = true;
         this.connectButtonEnabled = false;
+        this.connectButtonText = "Verbinden...";
         let computation_id = (<HTMLInputElement>document.getElementById("computation_id")).value;
         let party_count = parseInt((<HTMLInputElement>document.getElementById("party_count")).value);
       
@@ -30,6 +36,9 @@ exports.connect_button = function (app :any) {
             this.connectButtonEnabled = true;
           };
           options.onConnect = function () {
+            _this.isConnected = true;
+            _this.isConnecting = false;
+            _this.connectButtonText = "Verbunden";
             var use_crypto_provider: boolean;
             use_crypto_provider = (<HTMLInputElement>document.getElementById("use_crypto_provider")).checked;
             if (!use_crypto_provider) {
@@ -37,6 +46,7 @@ exports.connect_button = function (app :any) {
             }
             logger.log("Alle Parteien verbunden!", logger.LogType.INFO);
             this.connectButtonEnabled = false;
+            (<HTMLDivElement>document.getElementById("calculate_box")).classList.remove("disable-controls");
           };
           
           let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;
@@ -45,8 +55,13 @@ exports.connect_button = function (app :any) {
       }
     },
     template: `
-      <button id="connect_button" v-on:click="connectButtonClick()" v-bind:disabled="!connectButtonEnabled">
-        Verbinden
+      <button id="connect_button" v-on:click="connectButtonClick()" :disabled="!connectButtonEnabled" :class="{ 'button-x-connected': isConnected }">
+        <span>{{connectButtonText}}</span>
+        <span v-if="isConnecting" class="loader">
+          <span class="loader-box"></span>
+          <span class="loader-box"></span>
+          <span class="loader-box"></span>
+        </span>
       </button>`
   })
 }

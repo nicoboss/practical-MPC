@@ -27,6 +27,27 @@ h1 {
     General Classes
 */
 
+.d-flex {
+    display: flex;
+}
+
+.mt-auto {
+    margin-top: auto;
+}
+
+.mb-auto {
+    margin-bottom: auto;
+}
+
+.mtb-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.ml-1rem {
+    margin-left: 1rem;
+}
+
 .title {
     margin-left: 15px;
 }
@@ -45,16 +66,16 @@ h1 {
     Input Box
 */
 
-input[type=text]{
+input {
     border:2px solid #aaa;
     border-radius:4px;
     outline:none;
-    padding:6px;
+    padding:8px;
     box-sizing:border-box;
     transition:.3s;
   }
   
-  input[type=text]:focus{
+  input:focus{
     border-color:dodgerBlue;
     box-shadow:0 0 8px 0 dodgerBlue;
   }
@@ -67,21 +88,78 @@ input[type=text]{
     border-radius: 4px;
     background-color:rgba(63,81,181,.92);
     border: none;
+    text-decoration:none;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+}
+
+.button-x:disabled {
+    background-color:rgba(163, 163, 163, 0.92);
+    color: rgba(255, 255, 255, 0.342);
+}
+
+.button-x-connected {
+    background-color:rgb(204, 32, 32);
+}
+
+.connect-button {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 25px;
     padding-right: 25px;
-    transition: all 0.5s;
-    text-decoration:none;
-    text-align: center;
-    cursor: pointer;
-    font-size:24px !important;
-    color: white;
-    font-size: 10px;
-  }
+    font-size: 24px;
+}
+
+.command-button {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 8px;
+    font-size: 18px;
+}
+
+.command-div {
+    margin-top: 25px;
+}
+
+.one-liner-box {
+    height: 42px;
+}
+
+.disable-controls {
+    opacity: 0.5;
+    pointer-events: none;
+}
   
 
-  .button-x:hover span:after {
-    opacity: 1;
-    right: 0;
-  }
+/*
+    Loader Animation
+*/
+
+.loader {
+    height : 8px;
+    width  : 36px; /* (6 * <margin: 2px>) + (3 * <width: 8px>) */
+}
+
+.loader-box {
+    display                   : inline-block;
+    height                    : 8px;
+    width                     : 8px;
+    margin                    : 0px 2px;
+    background-color          : rgb(0,146,255);
+    animation-name            : fadeOutIn;
+    animation-duration        : 500ms;
+    animation-iteration-count : infinite;
+    animation-direction       : alternate;
+}
+
+.loader-box:nth-child(1) { animation-delay: 250ms; } /* (1/2) * <animation-duration: 500ms */
+.loader-box:nth-child(2) { animation-delay: 500ms; } /* (2/2) * <animation-duration: 500ms */
+.loader-box:nth-child(3) { animation-delay: 750ms; } /* (3/2) * <animation-duration: 500ms */
+
+@keyframes fadeOutIn {
+    0%   { background-color : rgba(0,146,255,1); }
+    100% { background-color : rgba(0,146,255,0); }
+}

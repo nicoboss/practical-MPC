@@ -18,15 +18,13 @@
     </header>
     <div id="main_app">
 
-        <hr/>
-
-        <!-- VueJS Testing -->
+        <!-- VueJS Testing 
         <div class="box">
           
           <h1>VueJS Testing</h1>
           <vue-test/>
 
-        </div>
+        </div>-->
 
         <!-- Einstellungen -->
         <div class="box">
@@ -37,17 +35,16 @@
           <label for="party_count">Anzahl Teilnehmer:</label><input type="number" id="party_count" min="0" max="9999" value="2"/><br/><br/>
           <label for="use_crypto_provider">Server als Crypto Provider (sicherheitserhöhend):</label><input type="checkbox" id="use_crypto_provider" checked="true"/><br/><br/>
           <label for="use_crypto_provider">Sichere Kommunikation (sicherheitskritisch):</label><input type="checkbox" id="secure_communication" checked="true"/><br/><br/>
-          <connect-button class="button-x"/>
-
+          
+          <connect-button id="connect-button" class="button-x connect-button"/>
+          
         </div>
 
 
         <!-- Berechnung -->
-        <div class="box">
-
+        <div id="calculate_box" class="box disable-controls">
           <h1>Berechnung</h1>
           <mpc-input/>
-
         </div>
 
         <div id="output"></div>
