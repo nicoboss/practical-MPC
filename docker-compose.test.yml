@@ -4,7 +4,7 @@ services:
   server:
     image: $CI_REGISTRY_IMAGE/server:$IMAGE_TAG
     ports:
-      - "8001:8080"
+      - "8000:8080"
     networks:
       static-network:
         ipv4_address: 192.168.3.100
@@ -14,7 +14,7 @@ services:
     image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
     command: npx http-server --ext xhtml -d false --log-ip true -p 8080
     ports:
-      - "8002:8080"
+      - "8001:8080"
     networks:
       static-network:
         ipv4_address: 192.168.3.101
