@@ -9,6 +9,7 @@ variables:
   STACK_NAME: CryptoLabPracticalMPC
   VH_SERVER:  server.mpc.cryptolab
   VH_CLIENT:  client.mpc.cryptolab
+  VH_LOGGER:  logger.mpc.cryptolab
   VH_FRONTEND: mpc.nico.re.cryptolab
 
 stages:
