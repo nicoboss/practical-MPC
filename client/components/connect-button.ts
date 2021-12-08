@@ -33,7 +33,9 @@ exports.connect_button = function (app :any) {
           var options: any = { party_count: party_count};
           options.onError = function (_ : any, error : string): any {
             logger.log(error, logger.LogType.ERROR);
-            this.connectButtonEnabled = true;
+            _this.connectButtonText = "Verbinden erneut versuchen";
+            _this.connectButtonEnabled = true;
+            _this.isConnecting = false;
           };
           options.onConnect = function () {
             _this.isConnected = true;

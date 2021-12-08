@@ -67,6 +67,11 @@
            will see it as a 'message' protocol. */
       this.socket.onopen = jiffClient.handlers.connected;
 
+      /* connection error handling */
+      this.socket.onerror = function (error) {
+        jiffClient.handlers.error('WebSocket', 'WebSocket connection failed!');
+      };
+
       // Public keys were updated on the server, and it sent us the updates
       function publicKeysChanged(msg, callback) {
 
