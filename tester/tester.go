@@ -101,6 +101,7 @@ func testServer(serverAddress string) {
 		}
 	}()
 
+	// Addition Initialization
 	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
 	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":1,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"s1\":\"\"}}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf initialization von Partei 1")
@@ -114,16 +115,7 @@ func testServer(serverAddress string) {
 		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
 	}
 
-	Send(c1, []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"1585433\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`))
-	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"1585433\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`)) {
-		log.Fatalln("Unerwartete Antwort auf preprocessing share von Partei 1")
-	}
-
-	Send(c2, []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"16698624\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`))
-	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"16698624\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`)) {
-		log.Fatalln("Unerwartete Antwort auf preprocessing share von Partei 2")
-	}
-
+	// Addition Share
 	Send(c1, []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"1812732\",\"op_id\":\"share:1,2:1,2:0\"}"}`))
 	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"1812732\",\"op_id\":\"share:1,2:1,2:0\"}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf share von Partei 1")
@@ -137,13 +129,14 @@ func testServer(serverAddress string) {
 	Send(c1, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"open:1,2:1,2:0:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
 	Send(c2, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"open:1,2:1,2:0:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
 
+	// Addition Open
 	Send(c2, []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"10041622\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`))
-	crypto_provider_party_1_match, crypto_provider_party_1_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"open:1,2:1,2:0:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg1)))
-	if crypto_provider_party_1_err != nil {
-		log.Fatalln("Fehler beim auswerten von Antwort auf crypto_provider von Partei 1")
+	crypto_provider_sum_open_party_1_match, crypto_provider_sum_open_party_1_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"open:1,2:1,2:0:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg1)))
+	if crypto_provider_sum_open_party_1_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider open von Partei 1")
 	}
-	if !crypto_provider_party_1_match {
-		log.Fatalln("Unerwartete Antwort auf crypto_provider von Partei 1")
+	if !crypto_provider_sum_open_party_1_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider open von Partei 1")
 	}
 	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"10041622\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf open von Partei 2")
@@ -152,7 +145,7 @@ func testServer(serverAddress string) {
 	Send(c1, []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"5020826\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`))
 	crypto_provider_party_2_match, crypto_provider_party_2_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"open:1,2:1,2:0:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg2)))
 	if crypto_provider_party_2_err != nil {
-		log.Fatalln("Fehler beim auswerten von Antwort auf crypto_provider von Partei 2")
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider von Partei 2")
 	}
 	if !crypto_provider_party_2_match {
 		log.Fatalln("Unerwartete Antwort auf crypto_provider von Partei 2")
@@ -161,12 +154,165 @@ func testServer(serverAddress string) {
 		log.Fatalln("Unerwartete Antwort auf open von Partei 1")
 	}
 
-}
+	// Preprocessing
+	Send(c1, []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"1585433\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`))
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"1585433\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf preprocessing share von Partei 1")
+	}
 
+	Send(c2, []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"16698624\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"16698624\",\"op_id\":\"preprocessing:open:1,2:1,2:0:refresh:1,2:share\"}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf preprocessing share von Partei 2")
+	}
+
+	// Multiplikation Initialization
+	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":1,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"s1\":\"\"}}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf initialization von Partei 1")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"public_keys","data":"{\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
+	}
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":2,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
+	}
+
+	// Multiplikation Share
+	Send(c1, []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"10368445\",\"op_id\":\"share:1,2:1,2:0\"}"}`))
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"10368445\",\"op_id\":\"share:1,2:1,2:0\"}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf share von Partei 1")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"triplet\",\"op_id\":\"smult:1,2:0:triplet\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{}}"}`))
+	crypto_provider_multi_beaver_party_1_match, crypto_provider_multi_beaver_party_1_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\\"op_id\\\":\\\"smult:1,2:0:triplet\\\",\\\"receivers\\\":\[1,2\],\\\"threshold\\\":2,\\\"Zp\\\":16777729,\\\"shares\\\":\[[0-9]*,[0-9]*,[0-9]*\]}\"}`, string(getResult(recvMsg1)))
+	if crypto_provider_multi_beaver_party_1_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf Beaver Triple von Partei 1")
+	}
+	if !crypto_provider_multi_beaver_party_1_match {
+		log.Fatalln("Unerwartete Antwort auf Beaver Triple: Kein regex match von Partei 1")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"open:1,2:1,2:0:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
+	crypto_provider_multi_open_party_1_match, crypto_provider_multi_open_party_1_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"open:1,2:1,2:0:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg1)))
+	if crypto_provider_multi_open_party_1_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider open von Partei 1")
+	}
+	if !crypto_provider_multi_open_party_1_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider open von Partei 1")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"smult:1,2:0:open1:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
+	crypto_provider_multi_smul_open1_party_1_match, crypto_provider_multi_smul_open1_party_1_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"smult:1,2:0:open1:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg1)))
+	if crypto_provider_multi_smul_open1_party_1_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider smul open1 von Partei 1")
+	}
+	if !crypto_provider_multi_smul_open1_party_1_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider smul open1 von Partei 1")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"smult:1,2:0:open2:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
+	crypto_provider_multi_smul_open2_party_1_match, crypto_provider_multi_smul_open2_party_1_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"smult:1,2:0:open2:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg1)))
+	if crypto_provider_multi_smul_open2_party_1_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider smul open2 von Partei 1")
+	}
+	if !crypto_provider_multi_smul_open2_party_1_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider smul open2 von Partei 1")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"10064751\",\"op_id\":\"smult:1,2:0:open2\",\"Zp\":16777729}"}`))
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"10064751\",\"op_id\":\"smult:1,2:0:open2\",\"Zp\":16777729}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf share von Partei 1")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"share","data":"{\"party_id\":1,\"share\":\"8911686\",\"op_id\":\"share:1,2:1,2:0\"}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"share","data":"{\"party_id\":2,\"share\":\"8911686\",\"op_id\":\"share:1,2:1,2:0\"}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf share von Partei 2")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"triplet\",\"op_id\":\"smult:1,2:0:triplet\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{}}"}`))
+	crypto_provider_multi_beaver_party_2_match, crypto_provider_multi_beaver_party_2_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\\"op_id\\\":\\\"smult:1,2:0:triplet\\\",\\\"receivers\\\":\[1,2\],\\\"threshold\\\":2,\\\"Zp\\\":16777729,\\\"shares\\\":\[[0-9]*,[0-9]*,[0-9]*\]}\"}`, string(getResult(recvMsg2)))
+	if crypto_provider_multi_beaver_party_2_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf Beaver Triple von Partei 2")
+	}
+	if !crypto_provider_multi_beaver_party_2_match {
+		log.Fatalln("Unerwartete Antwort auf Beaver Triple: Kein regex match von Partei 2")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"open:1,2:1,2:0:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
+	crypto_provider_multi_open_party_2_match, crypto_provider_multi_open_party_2_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"open:1,2:1,2:0:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg2)))
+	if crypto_provider_multi_open_party_2_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider open von Partei 2")
+	}
+	if !crypto_provider_multi_open_party_2_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider open von Partei 2")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"smult:1,2:0:open1:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
+	crypto_provider_multi_smul_open1_party_2_match, crypto_provider_multi_smul_open1_party_2_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"smult:1,2:0:open1:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg2)))
+	if crypto_provider_multi_smul_open1_party_2_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider smul open2 von Partei 2")
+	}
+	if !crypto_provider_multi_smul_open1_party_2_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider smul open2 von Partei 2")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"crypto_provider","data":"{\"label\":\"numbers\",\"op_id\":\"smult:1,2:0:open2:refresh\",\"receivers\":[1,2],\"threshold\":2,\"Zp\":16777729,\"params\":{\"number\":0,\"count\":1}}"}`))
+	crypto_provider_multi_smul_open2_party_2_match, crypto_provider_multi_smul_open2_party_2_err := regexp.MatchString(`{\"socketProtocol\":\"crypto_provider\",\"data\":\"{\\"op_id\\":\\"smult:1,2:0:open2:refresh\\",\\"receivers\\":\[1,2\],\\"threshold\\":2,\\"Zp\\":16777729,\\"shares\\":\[[0-9]*\]}\"}`, string(getResult(recvMsg2)))
+	if crypto_provider_multi_smul_open2_party_2_err != nil {
+		log.Fatalln("Fehler beim Auswerten von Antwort auf crypto_provider smul open2 von Partei 1")
+	}
+	if !crypto_provider_multi_smul_open2_party_2_match {
+		log.Fatalln("Unerwartete Antwort auf crypto_provider smul open2 von Partei 1")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":1,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"s1\":\"\"}}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf initialization von Partei 1")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"public_keys","data":"{\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
+	}
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":2,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
+	}
+
+	// Multiplikation Open
+	Send(c1, []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"11948399\",\"op_id\":\"smult:1,2:0:open1\",\"Zp\":16777729}"}`))
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"11948399\",\"op_id\":\"smult:1,2:0:open1\",\"Zp\":16777729}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf open1 von Partei 1")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"14856059\",\"op_id\":\"smult:1,2:0:open1\",\"Zp\":16777729}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"14856059\",\"op_id\":\"smult:1,2:0:open1\",\"Zp\":16777729}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf open1 von Partei 2")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"7346088\",\"op_id\":\"smult:1,2:0:open2\",\"Zp\":16777729}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"7346088\",\"op_id\":\"smult:1,2:0:open2\",\"Zp\":16777729}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf open1 von Partei 2")
+	}
+
+	Send(c2, []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"5949768\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`))
+	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"5949768\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf open1 von Partei 2")
+	}
+
+	Send(c1, []byte(`{"socketProtocol":"open","data":"{\"party_id\":2,\"share\":\"11363756\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`))
+	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"open","data":"{\"party_id\":1,\"share\":\"11363756\",\"op_id\":\"open:1,2:1,2:0\",\"Zp\":16777729}"}`)) {
+		log.Fatalln("Unerwartete Antwort auf open1 von Partei 1")
+	}
+
+	log.Println("Test erfolgreich!")
+
+}
 func main() {
 
 	// Standartwerte können mit Command Line Arguments überschreiben werden
-	// Beispiel: go run . 127.0.0.1:5500 127.0.0.1:808
+	// Beispiel: go run . 127.0.0.1:5500 127.0.0.1:8080
 	clientAddress := "client.mpc.nico.re:8080"
 	serverAddress := "server.mpc.nico.re:8080"
 
