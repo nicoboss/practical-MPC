@@ -98,7 +98,7 @@ public class JiffClientTest {
         extent.attachReporter(htmlReporter);
         printSystemInfo();
         testAccessWebpage();
-        testVueJs();
+        //testVueJs();
     }
 
     public static void testAccessWebpage() {

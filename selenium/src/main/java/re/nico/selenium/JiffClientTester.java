@@ -75,7 +75,7 @@ public class JiffClientTester {
 
         Thread.sleep(500);
         try {
-            WebElement connect_button = driver.findElement(By.id("connect_button"));
+            WebElement connect_button = driver.findElement(By.id("connect-button"));
             connect_button.click();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -87,7 +87,7 @@ public class JiffClientTester {
     }
 
     public boolean jiffAllePartiesConnected(ExtentTest test) throws InterruptedException {
-        Thread.sleep(500);
+        Thread.sleep(1000);
         try {
             WebElement output = driver.findElement(By.id("output"));
             for (WebElement element : output.findElements(By.xpath(".//*"))) {
@@ -105,7 +105,7 @@ public class JiffClientTester {
     public boolean jiffEingaben(int inputClient, ExtentTest test) throws InterruptedException {
         Thread.sleep(500);
         try {
-            WebElement client_input_text_field = driver.findElement(By.id("client_input"));
+            WebElement client_input_text_field = driver.findElement(By.id("client_input_sum"));
             client_input_text_field.clear();
             client_input_text_field.sendKeys(String.valueOf(inputClient));
         } catch (Exception e) {
@@ -132,8 +132,8 @@ public class JiffClientTester {
             WebElement output = driver.findElement(By.id("output"));
             for (WebElement element : output.findElements(By.xpath(".//*"))) {
                 String text = element.getText();
-                if (text.startsWith("Result is: ")) {
-                    String result_str = text.substring(11);
+                if (text.startsWith("Resultat: ")) {
+                    String result_str = text.substring(10);
                     int result = Integer.parseInt(result_str);
                     return result;
                 }
