@@ -9,7 +9,7 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-        SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
+        SERVER_ADDRESS: ${VH_SERVER}.${VH_DOMAIN}
 
   client:
     image: $CI_REGISTRY_IMAGE/client:$IMAGE_TAG
@@ -29,7 +29,7 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-        SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
+        SERVER_ADDRESS: ${VH_SERVER}.${VH_DOMAIN}
 
   tester:
     image: $CI_REGISTRY_IMAGE/tester:$IMAGE_TAG
@@ -39,5 +39,5 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-        SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
+        SERVER_ADDRESS: ${VH_SERVER}.${VH_DOMAIN}
     command: go build tester.go
