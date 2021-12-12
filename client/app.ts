@@ -1,6 +1,7 @@
 /// <reference path="node_modules/@types/node/index.d.ts" />
 /// <reference path="node_modules/vue/ref-macros.d.ts" />
 /// <reference path='components/vue-test.ts'/>
+/// <reference path='components/server-address.ts'/>
 /// <reference path='components/connect-button.ts'/>
 /// <reference path='components/mpc-input.ts'/>
 /// <reference path='components/submit-button-sum.ts'/>
@@ -10,6 +11,7 @@
 /// <reference path='components/submit-button-threshold.ts'/>
 
 var vueTest = require('./components/vue-test');
+var serverAddress = require('./components/server-address');
 var connectButton = require('./components/connect-button');
 var mpcInput = require('./components/mpc-input');
 var submitButtonSum = require('./components/submit-button-sum');
@@ -28,6 +30,7 @@ app.use(tabs.TabPanels);
 app.use(tabs.TabPanel);
 
 vueTest.vue_test(app);
+serverAddress.server_address(app);
 connectButton.connect_button(app);
 mpcInput.mpc_input(app);
 submitButtonSum.submit_button_sum(app);
@@ -36,4 +39,4 @@ submitButtonValentine.submit_button_valentine(app);
 submitButtonVote.submit_button_vote(app);
 submitButtonThreshold.submit_button_threshold(app);
 
-app.mount('#main_app')
+app.mount('#main_app');

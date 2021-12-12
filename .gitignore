@@ -2,9 +2,6 @@ tools/rsync
 client/dist
 client/node_modules
 server/server.exe
-logger/dist
-logger/node_modules
-tester/tester.exe
 client/app.js
 client/modules/logger.js
 client/mpc/mpc_compute.js
@@ -16,6 +13,7 @@ client/mpc/mpc_compute_threshold.js
 client/mpc/mpc_compute_valentine.js
 client/mpc/mpc_compute_vote.js
 client/components/vue-test.js
+client/components/server-address.js
 client/components/connect-button.js
 client/components/submit-button.js
 client/components/submit-button-multi.js
@@ -24,7 +22,11 @@ client/components/submit-button-threshold.js
 client/components/submit-button-valentine.js
 client/components/submit-button-vote.js
 client/components/mpc-input.js
-logger/components/vue-logger.js
+logger/dist
+logger/node_modules
 logger/components/vue-test.js
+logger/components/server-address.js
+logger/components/vue-logger.js
+tester/tester.exe
 selenium/target
 selenium/.settings
