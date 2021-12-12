@@ -9,7 +9,6 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-      environment:
         SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
 
   client:
@@ -20,7 +19,6 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-      environment:
         SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
   
   logger:
@@ -31,7 +29,6 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-      environment:
         SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
 
   tester:
@@ -42,6 +39,5 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-      environment:
         SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
     command: go build tester.go
