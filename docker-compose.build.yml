@@ -19,7 +19,7 @@ services:
       args:
         GIT_VERSION: $GIT_VERSION
         GIT_DATE: $GIT_DATE
-        SERVER_ADDRESS: ${VH_SERVER}.${SWARM_DOMAIN_INTERN}
+        SERVER_ADDRESS: ${VH_SERVER}.${VH_DOMAIN}
   
   logger:
     image: $CI_REGISTRY_IMAGE/logger:$IMAGE_TAG

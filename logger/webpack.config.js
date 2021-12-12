@@ -17,7 +17,7 @@ const config = {
     plugins: [
         new webpack.DefinePlugin({
             'process.browser': true,
-            'process.env.SERVER_ADDRESS': JSON.stringify(process.env.SERVER_ADDRESS || '127.0.0.1')
+            'process.env.SERVER_ADDRESS': JSON.stringify(process.env.SERVER_ADDRESS || '127.0.0.1:8080')
         })
     ],
 };

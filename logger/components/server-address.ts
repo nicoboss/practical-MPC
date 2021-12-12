@@ -4,7 +4,7 @@ exports.server_address = function (app :any) {
   app.component('server-address', {
     data() {
         return {
-            serveAddrEnv: "ws://" + (process.env.SERVER_ADDRESS || '127.0.0.1').trim() + ":8080/logger",
+            serveAddrEnv: "ws://" + (process.env.SERVER_ADDRESS || '127.0.0.1').trim() + "/logger",
         }
     },
     template: `

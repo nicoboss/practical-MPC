@@ -10,6 +10,7 @@ variables:
   VH_SERVER:  server.mpc.cryptolab
   VH_CLIENT:  client.mpc.cryptolab
   VH_LOGGER:  logger.mpc.cryptolab
+  VH_DOMAIN:  qaswarm.abiz.res.el.eee.intern
   VH_FRONTEND: mpc.nico.re.cryptolab
 
 stages:
