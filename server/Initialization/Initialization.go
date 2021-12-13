@@ -13,14 +13,23 @@ func Register(inputMessageData string) string {
 	var inputData = &InputMessageDataInitialization{}
 	JSON.ToObj([]byte(inputMessageData), inputData)
 
-	// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten
 	var party_id string
 	if storage.ComputationMaps.ClientIds[inputData.Computation_id] != nil {
 		if storage.Party_id_counter[inputData.Computation_id] > inputData.Party_count {
 			storage.ResetStorage()
 			mailbox.SendServerToLoggers("RESET")
 		}
+		if storage.ComputationMaps.MaxCount[inputData.Computation_id] != inputData.Party_count {
+			storage.ResetStorage()
+			mailbox.SendServerToLoggers("RESET")
+		}
+		if storage.Party_id_counter[inputData.Computation_id] > storage.ComputationMaps.MaxCount[inputData.Computation_id] {
+			storage.ResetStorage()
+			mailbox.SendServerToLoggers("RESET")
+		}
 	}
+
+	// Initialisierung der Berechnung und definieren aller noch undefinierten Objekten
 	party_id = strconv.Itoa(storage.InitComputation(inputData.Computation_id, inputData.Party_count))
 
 	// Initialisierung der Mailbox
