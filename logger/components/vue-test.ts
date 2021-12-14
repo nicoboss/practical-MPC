@@ -8,7 +8,7 @@ exports.vue_test = function (app :any) {
       }
     },
     template: `
-      <button id="vue-test-button" v-on:click="count++">
+      <button class="button-x" id="vue-test-button" v-on:click="count++">
         {{ count }}
       </button>`
   })

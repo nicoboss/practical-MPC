@@ -5,21 +5,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MPC</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-    <h1 id="title">Praktische sichere Multi-Party-Computation Logger</h1>
-    <h2 id="subtitle">Hier wird das MPC Protokoll verständlich aufgezeigt</h2>
+
+    <!-- Header -->
+    <header>
+        <h2 class="title" id="title">Praktische sichere Multi-Party-Computation: Logger</h2>
+    </header>
+
+    <h4 id="subtitle">Hier wird das MPC Protokoll verständlich aufgezeigt</h4>
+    
     <div id="main_app">
-        <hr/>
-        <h1>VueJS Testing</h1>
-        <vue-test/>
-        <br/><br/><hr/>
-        <h1>Logger</h1>
-        <server-address/>
-        <vue-logger/>
-        <br/><br/><hr/>
-        <div id="output"></div>
+
+        <!-- Logger -->
+        <div class="box">
+            <h1>Logger</h1>
+            <server-address/>
+            <vue-logger/>
+            <br/><br/>
+            <div id="output"></div>
+        </div>
+
     </div>
 </body>
 <script src="dist/main.js"></script>

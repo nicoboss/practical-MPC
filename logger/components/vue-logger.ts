@@ -105,21 +105,53 @@ exports.vue_logger = function (app :any) {
       },
     },
     template: `
-      <button id="connect_button" v-on:click="connectButtonClick()" v-bind:disabled="!connectButtonEnabled">
-        Verbinden!
+      <button class="button-x connect-button" id="connect_button" v-on:click="connectButtonClick()" v-bind:disabled="!connectButtonEnabled">
+        Verbinden
       </button>
-      <label>Filtern:</label>
-      <input v-model.number="filters.loggerProtocol.value.ClientToServer" type="checkbox" id="ClientToServerFilter" checked>
-      <label for="ClientToServerFilter">ClientToServer</label>
-      <input v-model.number="filters.loggerProtocol.value.ServerToClient" type="checkbox" id="ServerToClientFilter" checked>
-      <label for="ServerToClientFilter">ServerToClient</label>
-      <input v-model.number="filters.loggerProtocol.value.ServerToLogger" type="checkbox" id="ServerToLogger" checked>
-      <label for="ServerToLoggerFilter">ServerToLogger</label>
-      <input v-model.number="filters.loggerProtocol.value.ClientToLogger" type="checkbox" id="ClientToLogger" checked>
-      <label for="ClientToLoggerFilter">ClientToLogger</label>
-      <button v-on:click="selectAll()">Select All</button>
-      <button v-on:click="deselectAll()">Deselect All</button>
-      <VTPagination
+
+      <br/>
+      <br/>
+
+      <h4>Filtern:</h4>
+
+      <br/>
+
+      <div class="d-grid">
+
+        <div class="d-flex">
+          <label class="filter-label" for="ClientToServerFilter">ClientToServer</label>
+          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToServer" type="checkbox" id="ClientToServerFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="ServerToClientFilter">ServerToClient</label>
+          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToClient" type="checkbox" id="ServerToClientFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="ServerToLoggerFilter">ServerToLogger</label>
+          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToLogger" type="checkbox" id="ServerToLogger" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="ClientToLoggerFilter">ClientToLogger</label>
+          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToLogger" type="checkbox" id="ClientToLogger" checked>
+        </div>
+
+      </div>
+
+      <br/>
+      <br/>
+
+      <div>
+        <button v-on:click="selectAll()">Select All</button>
+        <button v-on:click="deselectAll()">Deselect All</button>
+      </div>
+
+      <br/>
+      <br/>
+
+      <VTPagination class="d-flex justify-content-center"
       v-model:currentPage="currentPage"
       :total-pages="totalPages"
       :boundary-links="true"/>
