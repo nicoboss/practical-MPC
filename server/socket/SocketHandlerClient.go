@@ -4,9 +4,9 @@ import (
 	"PracticalMPC/Server/CryptoProvider"
 	"PracticalMPC/Server/Custom"
 	"PracticalMPC/Server/Initialization"
+	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/Open"
 	"PracticalMPC/Server/Share"
-	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"fmt"
@@ -40,11 +40,19 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 
 		socketMutex.Lock()
 		var party_id string
+		var initializationSuccessful bool
 		var ok bool
 		if inputMessage.SocketProtocol == "initialization" {
-			party_id = Initialization.Register(inputMessage.Data)
+			party_id, initializationSuccessful = Initialization.Register(inputMessage.Data, JSON.ToJSON(inputMessage), conn)
+			if !initializationSuccessful {
+				break
+			}
 		} else if party_id, ok = storage.SocketMaps.PartyId[conn]; !ok {
-			log.Fatalln("Eine neue Verbindung muss mit socketProtocol initialization beginnen!")
+			log.Printf("[RECEIVED][%s]: %s", inputMessage.SocketProtocol, data)
+			mailbox.SendReceivedToLoggers(JSON.ToJSON(inputMessage), "")
+			mailbox.BroadcastError("Eine neue Verbindung muss mit socketProtocol initialization beginnen!", conn)
+			storage.ResetStorage()
+			break
 		}
 
 		log.Printf("[RECEIVED][%s][%s]: %s", party_id, inputMessage.SocketProtocol, data)

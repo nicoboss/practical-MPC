@@ -4,6 +4,8 @@ import (
 	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/storage"
 	"log"
+
+	"github.com/gorilla/websocket"
 )
 
 var mailbox = make(map[string]map[string][]*OutputMessage) // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
@@ -30,6 +32,24 @@ func SendMails(computation_id string) {
 			}
 			mailbox[computation_id][party_id_of_mailbox] = nil
 		}
+	}
+}
+
+func BroadcastError(errorMsg string, socket *websocket.Conn) {
+	log.Printf("[BroadcastError]: %s", errorMsg)
+	SendServerToLoggers(errorMsg)
+	if socket != nil {
+		message := &OutputMessage{
+			SocketProtocol: "error",
+			Data:           errorMsg,
+		}
+		socket.WriteJSON(message)
+	}
+	for computation_id := range mailbox {
+		for party_id_of_mailbox := range mailbox[computation_id] {
+			Append(computation_id, party_id_of_mailbox, "error", errorMsg)
+		}
+		SendMails(computation_id)
 	}
 }
 
