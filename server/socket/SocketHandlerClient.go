@@ -32,7 +32,7 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 		_, data, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Fehler beim lesen der websocket Nachricht:", err)
-			break
+			return
 		}
 
 		var inputMessage = &InputMessage{}
@@ -80,4 +80,5 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 		}
 		socketMutex.Unlock()
 	}
+	socketMutex.Unlock()
 }
