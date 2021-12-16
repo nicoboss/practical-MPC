@@ -7,8 +7,10 @@
 /// <reference path='components/submit-button-sum.ts'/>
 /// <reference path='components/submit-button-multi.ts'/>
 /// <reference path='components/submit-button-valentine.ts'/>
-/// <reference path='components/submit-button-vote.ts'/>
+/// <reference path='components/submit-button-vote-person.ts'/>
+/// <reference path='components/submit-button-vote-gpu.ts'/>
 /// <reference path='components/submit-button-threshold.ts'/>
+/// <reference path='components/submit-button-sum-threshold.ts'/>
 
 var vueTest = require('./components/vue-test');
 var serverAddress = require('./components/server-address');
@@ -17,8 +19,10 @@ var mpcInput = require('./components/mpc-input');
 var submitButtonSum = require('./components/submit-button-sum');
 var submitButtonMulti = require('./components/submit-button-multi');
 var submitButtonValentine = require('./components/submit-button-valentine');
-var submitButtonVote = require('./components/submit-button-vote');
+var submitButtonVotePerson = require('./components/submit-button-vote-person');
+var submitButtonVoteGPU = require('./components/submit-button-vote-gpu');
 var submitButtonThreshold = require('./components/submit-button-threshold');
+var submitButtonSumThreshold = require('./components/submit-button-sum-threshold');
 var tabs = require('vue3-tabs');
 
 import { createApp } from 'vue';
@@ -36,7 +40,9 @@ mpcInput.mpc_input(app);
 submitButtonSum.submit_button_sum(app);
 submitButtonMulti.submit_button_multi(app);
 submitButtonValentine.submit_button_valentine(app);
-submitButtonVote.submit_button_vote(app);
+submitButtonVotePerson.submit_button_vote_person(app);
+submitButtonVoteGPU.submit_button_vote_gpu(app);
 submitButtonThreshold.submit_button_threshold(app);
+submitButtonSumThreshold.submit_button_sum_threshold(app);
 
 app.mount('#main_app');

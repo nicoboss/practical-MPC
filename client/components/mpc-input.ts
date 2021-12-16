@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 
-var tabs = ['Summe', 'Multiplikation', 'Valentine', 'Abstimmen', 'Threshold'];
+var tabs = ['Summe', 'Multiplikation', 'Valentine', 'Abstimmen', 'GPU', 'Threshold', 'Sum Threshold' ];
 
 exports.mpc_input = function (app :any) {
   app.component('mpc-input', {
@@ -52,22 +52,44 @@ exports.mpc_input = function (app :any) {
           <div class="command-div d-flex">
             <label class="mtb-auto" for="security_checks">Sicherheitschecks</label><input type="checkbox" id="security_checks" checked="true"/><br/>
             <div class="box">
-              <input type="radio" id="VotedCandidate1" name="VotedCandidate" checked="true"/><label for="VotedCandidate">Maximilian Holtzmann</label><br/>
-              <input type="radio" id="VotedCandidate2" name="VotedCandidate"/><label for="VotedCandidate">Swen Bachmeier</label><br/>
-              <input type="radio" id="VotedCandidate3" name="VotedCandidate"/><label for="VotedCandidate">Andreas Brandt</label><br/>
-              <input type="radio" id="VotedCandidate4" name="VotedCandidate"/><label for="VotedCandidate">Jörg Schuster</label><br/>
+              <input type="radio" id="vote_Maximilian_Holtzmann" name="VotedCandidate" checked="true"/><label for="VotedCandidate">Maximilian Holtzmann</label><br/>
+              <input type="radio" id="vote_Swen_Bachmeier" name="VotedCandidate"/><label for="VotedCandidate">Swen Bachmeier</label><br/>
+              <input type="radio" id="vote_Andreas_Brandt" name="VotedCandidate"/><label for="VotedCandidate">Andreas Brandt</label><br/>
+              <input type="radio" id="vote_Joerg_Schuster" name="VotedCandidate"/><label for="VotedCandidate">Jörg Schuster</label><br/>
+            </div>
+            <submit-button-vote class="button-x command-button"/>
+          </div>
+        </tab-panel>
+        <tab-panel val="GPU">
+          <div class="command-div d-flex">
+            <label class="mtb-auto" for="security_checks">Sicherheitschecks</label><input type="checkbox" id="security_checks" checked="true"/><br/>
+            <div class="box">
+              <input type="radio" id="vote_RTX_3080" name="GPU_Vote" checked="true"/><label for="GPU_Vote">NVIDIA GeForce RTX 3080</label><br/>
+              <input type="radio" id="vote_RTX_3090" name="GPU_Vote"/><label for="GPU_Vote">NVIDIA GeForce RTX 3090</label><br/>
+              <input type="radio" id="vote_RX_6800_XT" name="GPU_Vote"/><label for="GPU_Vote">AMD Radeon RX 6800 XT</label><br/>
+              <input type="radio" id="vote_RX_6900_XT" name="GPU_Vote"/><label for="GPU_Vote">AMD Radeon RX 6900 XT</label><br/>
             </div>
             <submit-button-vote class="button-x command-button"/>
           </div>
         </tab-panel>
         <tab-panel val="Threshold">
           <div class="command-div one-liner-box d-flex">
-            <label class="mtb-auto" for="calculate_threshold">Threshold</label>
+            <label class="mtb-auto" for="threshold_input">Threshold</label>
             <input type="number" id="threshold_input" min="0" max="100" value="50"/>
             <br/><br/>
-            <label class="mtb-auto ml-1rem" for="client_input">Zahl:</label>
+            <label class="mtb-auto ml-1rem" for="client_input_threshold">Zahl:</label>
             <input type="number" id="client_input_threshold" min="0" max="100" value="77"/><br/>
             <submit-button-threshold class="button-x command-button"/>
+          </div>
+        </tab-panel>
+        <tab-panel val="Sum Threshold">
+          <div class="command-div one-liner-box d-flex">
+            <label class="mtb-auto" for="threshold_input_sum">Sum Threshold</label>
+            <input type="number" id="threshold_input_sum" min="0" max="100" value="50"/>
+            <br/><br/>
+            <label class="mtb-auto ml-1rem" for="client_input_threshold_sum">Zahl:</label>
+            <input type="number" id="client_input_threshold_sum" min="0" max="100" value="77"/><br/>
+            <submit-button-sum-threshold class="button-x command-button"/>
           </div>
         </tab-panel>
       </tab-panels>`

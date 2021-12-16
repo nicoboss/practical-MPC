@@ -5,7 +5,7 @@
 var logger = require('../modules/logger');
 var mpcCompute = require('../mpc/mpc_compute_vote');
 
-exports.submit_button_vote = function (app :any) {
+exports.submit_button_vote_person = function (app :any) {
   app.component('submit-button-vote', {
     data() {
       return {
@@ -14,10 +14,10 @@ exports.submit_button_vote = function (app :any) {
     },
     methods: {
       submitButtonClick() {
-        let input1 = (<HTMLInputElement>document.getElementById("VotedCandidate1")).checked ? 1 : 0;
-        let input2 = (<HTMLInputElement>document.getElementById("VotedCandidate2")).checked ? 1 : 0;
-        let input3 = (<HTMLInputElement>document.getElementById("VotedCandidate3")).checked ? 1 : 0;
-        let input4 = (<HTMLInputElement>document.getElementById("VotedCandidate4")).checked ? 1 : 0;
+        let input1 = (<HTMLInputElement>document.getElementById("vote_Maximilian_Holtzmann")).checked ? 1 : 0;
+        let input2 = (<HTMLInputElement>document.getElementById("vote_Swen_Bachmeier")).checked ? 1 : 0;
+        let input3 = (<HTMLInputElement>document.getElementById("vote_Andreas_Brandt")).checked ? 1 : 0;
+        let input4 = (<HTMLInputElement>document.getElementById("vote_Joerg_Schuster")).checked ? 1 : 0;
         let inputs:number[] = [input1, input2, input3, input4];
         let security_checks = (<HTMLInputElement>document.getElementById("security_checks")).checked;
         logger.log("Starten...", logger.LogType.INFO);
