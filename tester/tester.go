@@ -102,12 +102,12 @@ func testServer(serverAddress string) {
 	}()
 
 	// Addition Initialization
-	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"testSum\",\"party_count\":2,\"public_key\":\"\"}"}`))
 	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":1,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"s1\":\"\"}}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf initialization von Partei 1")
 	}
 
-	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"testSum\",\"party_count\":2,\"public_key\":\"\"}"}`))
 	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"public_keys","data":"{\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
 	}
@@ -166,12 +166,12 @@ func testServer(serverAddress string) {
 	}
 
 	// Multiplikation Initialization
-	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"testMulti\",\"party_count\":2,\"public_key\":\"\"}"}`))
 	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":1,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"s1\":\"\"}}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf initialization von Partei 1")
 	}
 
-	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
+	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"testMulti\",\"party_count\":2,\"public_key\":\"\"}"}`))
 	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"public_keys","data":"{\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
 		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
 	}
@@ -265,19 +265,6 @@ func testServer(serverAddress string) {
 	}
 	if !crypto_provider_multi_smul_open2_party_2_match {
 		log.Fatalln("Unerwartete Antwort auf crypto_provider smul open2 von Partei 1")
-	}
-
-	Send(c1, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
-	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":1,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"s1\":\"\"}}"}`)) {
-		log.Fatalln("Unerwartete Antwort auf initialization von Partei 1")
-	}
-
-	Send(c2, []byte(`{"socketProtocol":"initialization","data":"{\"computation_id\":\"test\",\"party_count\":2,\"public_key\":\"\"}"}`))
-	if !bytes.Equal(getResult(recvMsg1), []byte(`{"socketProtocol":"public_keys","data":"{\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
-		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
-	}
-	if !bytes.Equal(getResult(recvMsg2), []byte(`{"socketProtocol":"initialization","data":"{\"party_id\":2,\"party_count\":2,\"public_keys\":{\"1\":\"\",\"2\":\"\",\"s1\":\"\"}}"}`)) {
-		log.Fatalln("Unerwartete Antwort auf initialization von Partei 2")
 	}
 
 	// Multiplikation Open
