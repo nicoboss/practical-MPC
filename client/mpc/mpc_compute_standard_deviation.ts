@@ -4,18 +4,6 @@
 var connectButton = require('../mpc/mpc_connect');
 
 // Basierend auf https://github.com/multiparty/jiff/blob/master/demos/standard-deviation/mpc.js
-function truncate(num: number, accuracy: number) {
-  var numStr = num.toString();
-  var numParts = numStr.split('.');
-  var truncdNum;
-  if (numParts.length > 1) {
-    truncdNum = numParts[0] + '.' + numParts[1].substring(0, accuracy);
-  } else {
-    truncdNum = numParts[0]
-  }
-  return truncdNum;
-}
-
 exports.mpc_compute = function (input :any, jiff_instance :any, ) {
   if (jiff_instance == null) {
     jiff_instance = connectButton.saved_instance;
