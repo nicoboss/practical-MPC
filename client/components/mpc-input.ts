@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 
-var tabs = ['Summe', 'Multiplikation', 'Valentine', 'Abstimmen', 'GPU', 'Threshold', 'Sum Threshold' ];
+var tabs = ['Summe', 'Multiplikation', 'Division', 'Valentine', 'Abstimmung', 'GPU-Wahl', 'Threshold', 'Sum Threshold' ];
 
 exports.mpc_input = function (app :any) {
   app.component('mpc-input', {
@@ -34,6 +34,13 @@ exports.mpc_input = function (app :any) {
             <submit-button-multi class="button-x command-button"/>
           </div>
         </tab-panel>
+        <tab-panel val="Division">
+          <div class="command-div one-liner-box d-flex">
+            <label class="mtb-auto" for="client_input">Faktor:</label>
+            <input type="number" id="client_input_div" min="0" max="100" value="7"/><br/>
+            <submit-button-div class="button-x command-button"/>
+          </div>
+        </tab-panel>
         <tab-panel val="Valentine">
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto" for="client_input">Liebst du die anderen Teilnehmer?</label><br/>
@@ -48,7 +55,7 @@ exports.mpc_input = function (app :any) {
             <submit-button-valentine class="button-x command-button"/>
           </div>
         </tab-panel>
-        <tab-panel val="Abstimmen">
+        <tab-panel val="Abstimmung">
           <div class="command-div d-flex">
             <label class="mtb-auto" for="security_checks">Sicherheitschecks</label><input type="checkbox" id="security_checks" checked="true"/><br/>
             <div class="box">
@@ -60,7 +67,7 @@ exports.mpc_input = function (app :any) {
             <submit-button-vote class="button-x command-button"/>
           </div>
         </tab-panel>
-        <tab-panel val="GPU">
+        <tab-panel val="GPU-Wahl">
           <div class="command-div d-flex">
             <label class="mtb-auto" for="security_checks">Sicherheitschecks</label><input type="checkbox" id="security_checks" checked="true"/><br/>
             <div class="box">

@@ -9,6 +9,7 @@ client/mpc/mpc_connect.js
 client/mpc/mpc_preprocessing.js
 client/mpc/mpc_compute_sum.js
 client/mpc/mpc_compute_multi.js
+client/mpc/mpc_compute_div.js
 client/mpc/mpc_compute_valentine.js
 client/mpc/mpc_compute_vote.js
 client/mpc/mpc_compute_threshold.js
@@ -19,6 +20,7 @@ client/components/connect-button.js
 client/components/submit-button.js
 client/components/submit-button-sum.js
 client/components/submit-button-multi.js
+client/components/submit-button-div.js
 client/components/submit-button-valentine.js
 client/components/submit-button-vote-gpu.js
 client/components/submit-button-vote-person.js

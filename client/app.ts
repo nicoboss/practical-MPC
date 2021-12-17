@@ -6,6 +6,7 @@
 /// <reference path='components/mpc-input.ts'/>
 /// <reference path='components/submit-button-sum.ts'/>
 /// <reference path='components/submit-button-multi.ts'/>
+/// <reference path='components/submit-button-div.ts'/>
 /// <reference path='components/submit-button-valentine.ts'/>
 /// <reference path='components/submit-button-vote-person.ts'/>
 /// <reference path='components/submit-button-vote-gpu.ts'/>
@@ -18,6 +19,7 @@ var connectButton = require('./components/connect-button');
 var mpcInput = require('./components/mpc-input');
 var submitButtonSum = require('./components/submit-button-sum');
 var submitButtonMulti = require('./components/submit-button-multi');
+var submitButtonDiv = require('./components/submit-button-div');
 var submitButtonValentine = require('./components/submit-button-valentine');
 var submitButtonVotePerson = require('./components/submit-button-vote-person');
 var submitButtonVoteGPU = require('./components/submit-button-vote-gpu');
@@ -39,6 +41,7 @@ connectButton.connect_button(app);
 mpcInput.mpc_input(app);
 submitButtonSum.submit_button_sum(app);
 submitButtonMulti.submit_button_multi(app);
+submitButtonDiv.submit_button_div(app);
 submitButtonValentine.submit_button_valentine(app);
 submitButtonVotePerson.submit_button_vote_person(app);
 submitButtonVoteGPU.submit_button_vote_gpu(app);
