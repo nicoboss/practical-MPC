@@ -14,6 +14,7 @@ client/mpc/mpc_compute_valentine.js
 client/mpc/mpc_compute_vote.js
 client/mpc/mpc_compute_threshold.js
 client/mpc/mpc_compute_sum_threshold.js
+client/mpc/mpc_compute_standard_deviation.js
 client/components/vue-test.js
 client/components/server-address.js
 client/components/connect-button.js
@@ -26,6 +27,7 @@ client/components/submit-button-vote-gpu.js
 client/components/submit-button-vote-person.js
 client/components/submit-button-threshold.js
 client/components/submit-button-sum-threshold.js
+client/components/submit-button-standard-deviation.js
 client/components/mpc-input.js
 logger/dist
 logger/node_modules

@@ -10,9 +10,9 @@ exports.mpc_compute = function (input :any, jiff_instance :any, ) {
   }
   // MPC implementierung
   var shares = jiff_instance.share(input);
-  var product = shares[1];
+  var quotient = shares[1];
   for (var i = 2; i <= jiff_instance.party_count; i++) {
-    product = product.sdiv(shares[i]);
+    quotient = quotient.sdiv(shares[i]);
   }
-  return jiff_instance.open(product);
+  return jiff_instance.open(quotient);
 };

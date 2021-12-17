@@ -12,6 +12,7 @@
 /// <reference path='components/submit-button-vote-gpu.ts'/>
 /// <reference path='components/submit-button-threshold.ts'/>
 /// <reference path='components/submit-button-sum-threshold.ts'/>
+/// <reference path='components/submit-button-standard-deviation.ts'/>
 
 var vueTest = require('./components/vue-test');
 var serverAddress = require('./components/server-address');
@@ -25,6 +26,7 @@ var submitButtonVotePerson = require('./components/submit-button-vote-person');
 var submitButtonVoteGPU = require('./components/submit-button-vote-gpu');
 var submitButtonThreshold = require('./components/submit-button-threshold');
 var submitButtonSumThreshold = require('./components/submit-button-sum-threshold');
+var submitButtonStandardDeviation = require('./components/submit-button-standard-deviation');
 var tabs = require('vue3-tabs');
 
 import { createApp } from 'vue';
@@ -47,5 +49,6 @@ submitButtonVotePerson.submit_button_vote_person(app);
 submitButtonVoteGPU.submit_button_vote_gpu(app);
 submitButtonThreshold.submit_button_threshold(app);
 submitButtonSumThreshold.submit_button_sum_threshold(app);
+submitButtonStandardDeviation.submit_button_standard_deviation(app);
 
 app.mount('#main_app');
