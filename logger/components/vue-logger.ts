@@ -144,8 +144,8 @@ exports.vue_logger = function (app :any) {
       <br/>
 
       <div>
-        <button class="button-x button-x-selectbuttons" v-on:click="selectAll()">Alle selektieren</button>
-        <button class="button-x button-x-selectbuttons" v-on:click="deselectAll()">Alle unselektieren</button>
+        <button class="button-x button-x-selectbuttons" v-on:click="selectAll()">Alle anwählen</button>
+        <button class="button-x button-x-selectbuttons" v-on:click="deselectAll()">Alle abwählen</button>
       </div>
 
       <br/>
