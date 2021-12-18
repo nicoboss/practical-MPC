@@ -21,7 +21,26 @@ exports.vue_logger = function (app :any) {
         connectButtonEnabled: true,
         selectedRows: [],
         filters: {
-          loggerProtocol: { value: { ClientToServer: true, ServerToClient: true, ServerToLogger: true, ClientToLogger: true }, custom: this.ageFilter }
+          loggerProtocol: {
+            value: {
+              ClientToServer: true,
+              ServerToClient: true,
+              ServerToLogger: true,
+              ClientToLogger: true,
+            },
+            custom: this.loggerProtocolFilter,
+          },
+          socketProtocol: {
+            value: {
+              initialization: true,
+              public_keys: true,
+              share: true,
+              crypto_provider: true,
+              open: true,
+              custom: true
+            },
+            custom: this.socketProtocolFilter,
+          } 
         }
       }
     },
@@ -39,8 +58,12 @@ exports.vue_logger = function (app :any) {
       }, 100)
     },
     methods: {
-      ageFilter (filterValue, row) {
+      loggerProtocolFilter (filterValue, row) {
         var comp = !(row.loggerProtocol in filterValue) || filterValue[row.loggerProtocol] === true;
+        return comp;
+      },
+      socketProtocolFilter (filterValue, row) {
+        var comp = !(row.socketProtocol in filterValue) || filterValue[row.socketProtocol] === true;
         return comp;
       },
       selectAll () {
@@ -130,12 +153,42 @@ exports.vue_logger = function (app :any) {
 
         <div class="d-flex">
           <label class="filter-label" for="ServerToLoggerFilter">ServerToLogger</label>
-          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToLogger" type="checkbox" id="ServerToLogger" checked>
+          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToLogger" type="checkbox" id="ServerToLoggerFilter" checked>
         </div>
 
         <div class="d-flex">
           <label class="filter-label" for="ClientToLoggerFilter">ClientToLogger</label>
-          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToLogger" type="checkbox" id="ClientToLogger" checked>
+          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToLogger" type="checkbox" id="ClientToLoggerFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="initializationFilter">initialization</label>
+          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.initialization" type="checkbox" id="initializationFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="publicKeysFilter">public_keys</label>
+          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.public_keys" type="checkbox" id="publicKeysFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="shareFilter">share</label>
+          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.share" type="checkbox" id="shareFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="cryptoProviderFilter">crypto_provider</label>
+          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.crypto_provider" type="checkbox" id="cryptoProviderFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="openFilter">open</label>
+          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.open" type="checkbox" id="openFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="customFilter">custom</label>
+          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.custom" type="checkbox" id="customFilter" checked>
         </div>
 
       </div>
@@ -191,10 +244,9 @@ exports.vue_logger = function (app :any) {
           </VTr>
         </template>
       </VTable>
-      <strong>Selected:</strong>
-      <div v-if="selectedRows.length === 0">
-        Nichts ausgewählt
-      </div>
+      <br/>
+      <h2>Rohdaten:</h2>
+      <div v-if="selectedRows.length === 0">Nichts ausgewählt</div>
       <div v-for="selected in selectedRows">
         <pre v-html="selected.html"></pre>
       </div>`
