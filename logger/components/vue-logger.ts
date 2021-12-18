@@ -75,21 +75,19 @@ exports.vue_logger = function (app :any) {
         return comp;
       },
       senderFilter(filterValue, row) {
-        if (filterValue === 0 || row.sender_party_id === null) {
+        if (filterValue === 0 || row.sender_party_id === "") {
           return true;
         }
         let sender_party_id = Number(row.sender_party_id);
-        var comp = sender_party_id === filterValue;
-        console.log(sender_party_id + " === " + filterValue + " => " + comp);
+        let comp = sender_party_id === filterValue;
         return comp;
       },
       receiverFilter(filterValue, row) {
-        if (filterValue === 0 || row.receiver_party_id === null) {
+        if (filterValue === 0 || row.receiver_party_id === "") {
           return true;
         }
         let receiver_party_id = Number(row.receiver_party_id);
-        var comp = receiver_party_id === filterValue;
-        console.log(receiver_party_id + " === " + filterValue + " => " + comp);
+        let comp = receiver_party_id === filterValue;
         return comp;
       },
       selectAll () {
