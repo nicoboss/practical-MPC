@@ -159,6 +159,16 @@ input {
     background-color:rgb(204, 32, 32);
 }
 
+.button-x-selectbuttons {
+    padding: 8px;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.pagination {
+    overflow: auto;
+}
+
 .connect-button {
     padding-top: 10px;
     padding-bottom: 10px;

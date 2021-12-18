@@ -18,17 +18,8 @@
     </header>
     <div id="main_app">
 
-        <!-- VueJS Testing 
-        <div class="box">
-          
-          <h1>VueJS Testing</h1>
-          <vue-test/>
-
-        </div>-->
-
         <!-- Einstellungen -->
         <div class="box">
-
           <h1>Einstellungen</h1>
           <server-address/>
           <label for="computation_id">Berechnungsname:</label><input type="text" id="computation_id" value="test"></input><br/><br/>
@@ -37,9 +28,7 @@
           <label for="use_crypto_provider">Sichere Kommunikation (sicherheitskritisch):</label><input type="checkbox" id="secure_communication" checked="true"/><br/><br/>
           
           <connect-button id="connect-button" class="button-x connect-button"/>
-          
         </div>
-
 
         <!-- Berechnung -->
         <div id="calculate_box" class="box disable-controls">
@@ -47,7 +36,13 @@
           <mpc-input/>
         </div>
 
-        <div id="output"></div>
+        <!-- Ausgabe -->
+        <div id="log_box" class="box disable-controls">
+          <h1>Ausgabe</h1>
+          <div class="log-box" id="output"></div>
+        </div>
+
+        
     </div>
 </body>
 <script src="dist/main.js"></script>

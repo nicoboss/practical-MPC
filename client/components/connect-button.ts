@@ -49,6 +49,7 @@ exports.connect_button = function (app :any) {
             logger.log("Alle Parteien verbunden!", logger.LogType.INFO);
             this.connectButtonEnabled = false;
             (<HTMLDivElement>document.getElementById("calculate_box")).classList.remove("disable-controls");
+            (<HTMLDivElement>document.getElementById("log_box")).classList.remove("disable-controls");
           };
           
           let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;

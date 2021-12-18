@@ -62,6 +62,26 @@ h1 {
     padding: 15px;
 }
 
+.log-box {
+    overflow: auto;
+    height: 150px;
+    border-style: solid;
+    border-radius: 3px;
+    border-width: 1px;
+    border-color: #d4d4dd;
+    padding: 20px;
+    box-shadow: 2px 2px #88888826;
+}
+
+.info {
+    border-style: solid;
+    padding: 5px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #dfdfdf;
+}
+
+
 /*
     Input Box
 */
@@ -162,4 +182,18 @@ input {
 @keyframes fadeOutIn {
     0%   { background-color : rgba(0,146,255,1); }
     100% { background-color : rgba(0,146,255,0); }
+}
+
+/* 
+    Tab Overrides
+
+*/
+
+.active {
+    border-color: #8091ef !important;
+    background: #e8ecff !important;
+}
+
+.tab {
+    cursor: pointer;
 }

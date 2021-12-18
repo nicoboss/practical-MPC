@@ -45,11 +45,11 @@ exports.mpc_input = function (app :any) {
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto">Liebst du die anderen Teilnehmer?</label><br/>
             <div class="d-flex">
-              <input type="radio" id="ValentineYes" name="IsValentine" checked="true"/>
+              <input class="mtb-auto" type="radio" id="ValentineYes" name="IsValentine" checked="true"/>
               <label class="mtb-auto" for="IsValentine">Ja</label><br/>
             </div>
             <div class="d-flex">
-              <input type="radio" id="ValentineNo" name="IsValentine"/>
+              <input class="mtb-auto" type="radio" id="ValentineNo" name="IsValentine"/>
               <label class="mtb-auto" for="IsValentine">Nein</label><br/>
             </div>
             <submit-button-valentine class="button-x command-button"/>
@@ -57,7 +57,7 @@ exports.mpc_input = function (app :any) {
         </tab-panel>
         <tab-panel val="Abstimmung">
           <div class="command-div d-flex">
-            <label class="mtb-auto" for="vote_person_security_checks">Sicherheitschecks</label><input type="checkbox" id="vote_person_security_checks" checked="true"/><br/>
+            <label class="mtb-auto" for="vote_person_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_person_security_checks" checked="true"/><br/>
             <div class="box">
               <input type="radio" id="vote_Maximilian_Holtzmann" name="VotedCandidate" checked="true"/><label for="VotedCandidate">Maximilian Holtzmann</label><br/>
               <input type="radio" id="vote_Swen_Bachmeier" name="VotedCandidate"/><label for="VotedCandidate">Swen Bachmeier</label><br/>
@@ -69,7 +69,7 @@ exports.mpc_input = function (app :any) {
         </tab-panel>
         <tab-panel val="GPU-Wahl">
           <div class="command-div d-flex">
-            <label class="mtb-auto" for="vote_gpu_security_checks">Sicherheitschecks</label><input type="checkbox" id="vote_gpu_security_checks" checked="true"/><br/>
+            <label class="mtb-auto" for="vote_gpu_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_gpu_security_checks" checked="true"/><br/>
             <div class="box">
               <input type="radio" id="vote_RTX_3080" name="GPU_Vote" checked="true"/><label for="GPU_Vote">NVIDIA GeForce RTX 3080</label><br/>
               <input type="radio" id="vote_RTX_3090" name="GPU_Vote"/><label for="GPU_Vote">NVIDIA GeForce RTX 3090</label><br/>
