@@ -40,7 +40,15 @@ exports.vue_logger = function (app :any) {
               custom: true
             },
             custom: this.socketProtocolFilter,
-          } 
+          },
+          sender: {
+            value: 0,
+            custom: this.senderFilter,
+          },
+          receiver: {
+            value: 0,
+            custom: this.receiverFilter,
+          }
         }
       }
     },
@@ -58,12 +66,30 @@ exports.vue_logger = function (app :any) {
       }, 100)
     },
     methods: {
-      loggerProtocolFilter (filterValue, row) {
+      loggerProtocolFilter(filterValue, row) {
         var comp = !(row.loggerProtocol in filterValue) || filterValue[row.loggerProtocol] === true;
         return comp;
       },
-      socketProtocolFilter (filterValue, row) {
+      socketProtocolFilter(filterValue, row) {
         var comp = !(row.socketProtocol in filterValue) || filterValue[row.socketProtocol] === true;
+        return comp;
+      },
+      senderFilter(filterValue, row) {
+        if (filterValue === 0 || row.sender_party_id === null) {
+          return true;
+        }
+        let sender_party_id = Number(row.sender_party_id);
+        var comp = sender_party_id === filterValue;
+        console.log(sender_party_id + " === " + filterValue + " => " + comp);
+        return comp;
+      },
+      receiverFilter(filterValue, row) {
+        if (filterValue === 0 || row.receiver_party_id === null) {
+          return true;
+        }
+        let receiver_party_id = Number(row.receiver_party_id);
+        var comp = receiver_party_id === filterValue;
+        console.log(receiver_party_id + " === " + filterValue + " => " + comp);
         return comp;
       },
       selectAll () {
@@ -132,11 +158,8 @@ exports.vue_logger = function (app :any) {
         Verbinden
       </button>
 
-      <br/>
-      <br/>
-
+      <br/><br/>
       <h4>Filtern:</h4>
-
       <br/>
 
       <div class="d-grid">
@@ -189,6 +212,16 @@ exports.vue_logger = function (app :any) {
         <div class="d-flex">
           <label class="filter-label" for="customFilter">custom</label>
           <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.custom" type="checkbox" id="customFilter" checked>
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="senderFilter">Sender:</label>
+          <input class="filter-number" v-model.number="filters.sender.value" type="number" min="0" id="senderFilter">
+        </div>
+
+        <div class="d-flex">
+          <label class="filter-label" for="receiverFilter">Receiver:</label>
+          <input class="filter-number" v-model.number="filters.receiver.value" type="number" min="0" id="receiverFilter">
         </div>
 
       </div>
