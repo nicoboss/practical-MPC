@@ -11,6 +11,7 @@ exports.mpc_connect = function (hostname: string, computation_id: string, option
   var use_crypto_provider: boolean;
   use_crypto_provider = (<HTMLInputElement>document.getElementById("use_crypto_provider")).checked;
   opt.crypto_provider = use_crypto_provider
+  opt.Zp = Number((<HTMLInputElement>document.getElementById("Zp_input")).value);
   saved_instance = new JIFFClient(hostname, computation_id, opt);
   var secure_communication: boolean;
   secure_communication = (<HTMLInputElement>document.getElementById("secure_communication")).checked;
