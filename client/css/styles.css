@@ -1,6 +1,5 @@
 /*
     Basierend auf Xewlie's Design
-
 */
 
 body {
@@ -184,9 +183,9 @@ input {
     100% { background-color : rgba(0,146,255,0); }
 }
 
+
 /* 
     Tab Overrides
-
 */
 
 .active {
@@ -196,4 +195,9 @@ input {
 
 .tab {
     cursor: pointer;
+}
+
+.tab:hover {
+    border-color: #6071ef !important;
+    background: #c8ccff !important;
 }

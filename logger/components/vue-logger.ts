@@ -151,7 +151,7 @@ exports.vue_logger = function (app :any) {
       <br/>
       <br/>
 
-      <VTPagination class="d-flex justify-content-center"
+      <VTPagination class="d-flex justify-content-left"
       v-model:currentPage="currentPage"
       :total-pages="totalPages"
       :boundary-links="true"/>
