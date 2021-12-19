@@ -22,6 +22,16 @@ h1 {
     color: #353838;
 }
 
+table {
+    text-align: center;
+}
+
+.align_left {
+    text-align: left !important;
+    padding-left: 10px;
+}
+
+
 /*
     General Classes
 */
@@ -78,6 +88,10 @@ h1 {
     border-width: 1px;
     border-radius: 5px;
     border-color: #dfdfdf;
+}
+
+.no_margin {
+    margin: 0px !important;
 }
 
 

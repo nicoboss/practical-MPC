@@ -57,8 +57,8 @@ exports.mpc_input = function (app :any) {
         </tab-panel>
         <tab-panel val="Abstimmung">
           <div class="command-div d-flex">
-            <label class="mtb-auto" for="vote_person_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_person_security_checks" checked="true"/><br/>
-            <div class="box">
+            <div class="box no_margin">
+              <label class="mtb-auto" for="vote_person_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_person_security_checks" checked="true"/><br/><br/>
               <input type="radio" id="vote_Maximilian_Holtzmann" name="VotedCandidate" checked="true"/><label for="VotedCandidate">Maximilian Holtzmann</label><br/>
               <input type="radio" id="vote_Swen_Bachmeier" name="VotedCandidate"/><label for="VotedCandidate">Swen Bachmeier</label><br/>
               <input type="radio" id="vote_Andreas_Brandt" name="VotedCandidate"/><label for="VotedCandidate">Andreas Brandt</label><br/>
@@ -69,12 +69,17 @@ exports.mpc_input = function (app :any) {
         </tab-panel>
         <tab-panel val="GPU-Wahl">
           <div class="command-div d-flex">
-            <label class="mtb-auto" for="vote_gpu_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_gpu_security_checks" checked="true"/><br/>
-            <div class="box">
-              <input type="radio" id="vote_RTX_3080" name="GPU_Vote" checked="true"/><label for="GPU_Vote">NVIDIA GeForce RTX 3080</label><br/>
-              <input type="radio" id="vote_RTX_3090" name="GPU_Vote"/><label for="GPU_Vote">NVIDIA GeForce RTX 3090</label><br/>
-              <input type="radio" id="vote_RX_6800_XT" name="GPU_Vote"/><label for="GPU_Vote">AMD Radeon RX 6800 XT</label><br/>
-              <input type="radio" id="vote_RX_6900_XT" name="GPU_Vote"/><label for="GPU_Vote">AMD Radeon RX 6900 XT</label><br/>
+            <div class="box no_margin">
+              <table>
+                <tr>
+                  <td v-for="index in 5" :key="index"><label class="no_margin">{{index}}</label></td>
+                  <td class="align_left"><label class="mtb-auto" for="vote_gpu_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_gpu_security_checks" checked="true"/><br/></td>
+                </tr>
+                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_1"/></td><td class="align_left"><label for="GPU_Vote_1">NVIDIA GeForce RTX 3080</label></td></tr>
+                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_2"/></td><td class="align_left"><label for="GPU_Vote_2">NVIDIA GeForce RTX 3090</label></td></tr>
+                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_3"/></td><td class="align_left"><label for="GPU_Vote_3">AMD Radeon RX 6800 XT</label></td></tr>
+                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_4"/></td><td class="align_left"><label for="GPU_Vote_4">AMD Radeon RX 6900 XT</label></td></tr>
+              </table>
             </div>
             <submit-button-vote class="button-x command-button"/>
           </div>
