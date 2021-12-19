@@ -23,12 +23,27 @@ h1 {
     color: #353838;
 }
 
+.filter-title {
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+
 /*
     General Classes
 */
 
 .d-flex {
     display: flex;
+    padding: 1px;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.padding-items {
+    padding: 6px;
 }
 
 .d-grid {
@@ -65,7 +80,12 @@ h1 {
 }
 
 .filter-label {
-    min-width: 120px;
+    min-width: 120px !important;
+}
+
+.filter-number {
+    width: 70px !important;
+    min-width: 70px !important;
 }
 
 .filter-checkbox {
@@ -104,7 +124,12 @@ pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
     border-color: #007bff;
 }
 
+
 /* Basierend auf https://www.w3schools.com/css/css_table.asp */
+table {
+    border-collapse: collapse;
+}
+
 td, th {
     border: 1px solid #ddd;
     padding: 8px;

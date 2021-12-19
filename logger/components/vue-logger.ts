@@ -160,66 +160,78 @@ exports.vue_logger = function (app :any) {
       <h4>Filtern:</h4>
       <br/>
 
-      <div class="d-grid">
+      <div class="d-flex">
 
-        <div class="d-flex">
-          <label class="filter-label" for="ClientToServerFilter">ClientToServer</label>
-          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToServer" type="checkbox" id="ClientToServerFilter" checked>
+        <div class="box">
+          <b><p class="filter-title">Logger Protocol Filter:</p></b>
+
+          <div class="d-flex align-center">
+            <label class="filter-label" for="ClientToServerFilter">ClientToServer</label>
+            <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToServer" type="checkbox" id="ClientToServerFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="ServerToClientFilter">ServerToClient</label>
+            <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToClient" type="checkbox" id="ServerToClientFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="ServerToLoggerFilter">ServerToLogger</label>
+            <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToLogger" type="checkbox" id="ServerToLoggerFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="ClientToLoggerFilter">ClientToLogger</label>
+            <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToLogger" type="checkbox" id="ClientToLoggerFilter" checked>
+          </div>
         </div>
 
-        <div class="d-flex">
-          <label class="filter-label" for="ServerToClientFilter">ServerToClient</label>
-          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToClient" type="checkbox" id="ServerToClientFilter" checked>
+        <div class="box">
+          <b><p class="filter-title">Socket Protocol Filter:</p></b>
+
+          <div class="d-flex align-center">
+            <label class="filter-label" for="initializationFilter">initialization</label>
+            <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.initialization" type="checkbox" id="initializationFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="publicKeysFilter">public_keys</label>
+            <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.public_keys" type="checkbox" id="publicKeysFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="shareFilter">share</label>
+            <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.share" type="checkbox" id="shareFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="cryptoProviderFilter">crypto_provider</label>
+            <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.crypto_provider" type="checkbox" id="cryptoProviderFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="openFilter">open</label>
+            <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.open" type="checkbox" id="openFilter" checked>
+          </div>
+  
+          <div class="d-flex align-center">
+            <label class="filter-label" for="customFilter">custom</label>
+            <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.custom" type="checkbox" id="customFilter" checked>
+          </div>
         </div>
 
-        <div class="d-flex">
-          <label class="filter-label" for="ServerToLoggerFilter">ServerToLogger</label>
-          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ServerToLogger" type="checkbox" id="ServerToLoggerFilter" checked>
-        </div>
+        <div class="box">
+          <b><p class="filter-title">Sender/Receiver Filter:</p></b>
 
-        <div class="d-flex">
-          <label class="filter-label" for="ClientToLoggerFilter">ClientToLogger</label>
-          <input class="filter-checkbox" v-model.number="filters.loggerProtocol.value.ClientToLogger" type="checkbox" id="ClientToLoggerFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="initializationFilter">initialization</label>
-          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.initialization" type="checkbox" id="initializationFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="publicKeysFilter">public_keys</label>
-          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.public_keys" type="checkbox" id="publicKeysFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="shareFilter">share</label>
-          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.share" type="checkbox" id="shareFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="cryptoProviderFilter">crypto_provider</label>
-          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.crypto_provider" type="checkbox" id="cryptoProviderFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="openFilter">open</label>
-          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.open" type="checkbox" id="openFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="customFilter">custom</label>
-          <input class="filter-checkbox" v-model.number="filters.socketProtocol.value.custom" type="checkbox" id="customFilter" checked>
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="senderFilter">Sender:</label>
-          <input class="filter-number" v-model.number="filters.sender.value" type="number" min="0" id="senderFilter">
-        </div>
-
-        <div class="d-flex">
-          <label class="filter-label" for="receiverFilter">Receiver:</label>
-          <input class="filter-number" v-model.number="filters.receiver.value" type="number" min="0" id="receiverFilter">
+          <div class="d-flex align-center padding-items">
+            <label class="filter-label" for="senderFilter">Sender:</label>
+            <input class="filter-number" v-model.number="filters.sender.value" type="number" min="0" id="senderFilter">
+          </div>
+  
+          <div class="d-flex align-center padding-items">
+            <label class="filter-label" for="receiverFilter">Receiver:</label>
+            <input class="filter-number" v-model.number="filters.receiver.value" type="number" min="0" id="receiverFilter">
+          </div>
         </div>
 
       </div>

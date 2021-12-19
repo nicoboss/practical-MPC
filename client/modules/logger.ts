@@ -7,8 +7,9 @@ enum LogType {
   exports.LogType = LogType
   
   exports.log = function(message: string, logType: LogType) {
-    let infoOutput = document.createElement('p');
-    infoOutput.className = logType;
+    let infoOutput = document.createElement('div');
+    infoOutput.classList.add("logger");
+    infoOutput.classList.add(logType);
     infoOutput.textContent = message;
     document.getElementById("output")!.appendChild(infoOutput);
   }

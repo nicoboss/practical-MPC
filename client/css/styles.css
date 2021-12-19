@@ -73,7 +73,7 @@ table {
 
 .log-box {
     overflow: auto;
-    height: 150px;
+    height: 175px;
     border-style: solid;
     border-radius: 3px;
     border-width: 1px;
@@ -82,12 +82,32 @@ table {
     box-shadow: 2px 2px #88888826;
 }
 
-.info {
+.logger {
     border-style: solid;
+    margin: 3px;
     padding: 5px;
     border-width: 1px;
     border-radius: 5px;
-    border-color: #dfdfdf;
+}
+
+.warn  {
+    border-color: #ffff00;
+    background-color: #ffffb0;
+}
+
+.info {
+    border-color: #000000;
+    background-color: #e0e0e0;
+}
+
+.result {
+    border-color: #00ff00;
+    background-color: #b0ffb0;
+}
+
+.error {
+    border-color: #ff0000;
+    background-color: #ffb0b0;
 }
 
 .no_margin {

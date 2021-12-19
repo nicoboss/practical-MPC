@@ -19,7 +19,7 @@ exports.submit_button_vote_person = function (app :any) {
         let input3 = (<HTMLInputElement>document.getElementById("vote_Andreas_Brandt")).checked ? 1 : 0;
         let input4 = (<HTMLInputElement>document.getElementById("vote_Joerg_Schuster")).checked ? 1 : 0;
         let inputs:number[] = [input1, input2, input3, input4];
-        let security_checks = (<HTMLInputElement>document.getElementById("security_checks")).checked;
+        let security_checks = (<HTMLInputElement>document.getElementById("vote_person_security_checks")).checked;
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
         var promise = mpcCompute.mpc_compute(inputs, security_checks);

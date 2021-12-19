@@ -8,7 +8,8 @@ exports.mpc_preprocessing = function (input :any, jiff_instance:any) {
     jiff_instance = connectButton.saved_instance;
   }
   console.log('Starte Preprocessing');
-  jiff_instance.preprocessing('open', 0);
+  jiff_instance.preprocessing('open', 4);
+  jiff_instance.preprocessing('smult', 4);
   jiff_instance.executePreprocessing(function () {
     console.log('Fertig mit Preprocessing');
   });
