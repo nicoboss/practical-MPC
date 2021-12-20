@@ -5,23 +5,38 @@ import (
 	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"log"
+	"strconv"
 
 	"github.com/miguelsandro/curve25519-go/axlsign"
 )
 
-func StoreAndSendPublicKey(computationMaps *storage.ComputationMapsStruct, computation_id string, party_id string, public_key JSON.Key) map[string]JSON.Key {
+func get_party_id_string(party_id int) string {
+	if party_id < -1 {
+		return ""
+	}
+	switch party_id {
+	case -1:
+		return "s1"
+	case 0:
+		return ""
+	default:
+		return strconv.Itoa(party_id)
+	}
+}
+
+func StoreAndSendPublicKey(computationMaps *storage.ComputationMapsStruct, computation_id string, party_id int, public_key JSON.Key) map[string]JSON.Key {
 	// Öffendlicher Schlüssel speichern
 	var tmp = computationMaps.Keys[computation_id]
 
 	if len(public_key) == 0 {
-		tmp["s1"] = JSON.Key{}
-	} else if _, ok := tmp["s1"]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
+		tmp[-1] = JSON.Key{}
+	} else if _, ok := tmp[-1]; !ok { // Public/Private Schlüsselpaar generieren falls diese noch nicht existieren
 		var genkey = axlsign.GenerateKeyPair(generateRandomBytes(32)) // Generieren des Schlüsselpaars
 		computationMaps.SecretKeys[computation_id] = genkey.PrivateKey
-		tmp["s1"] = genkey.PublicKey
+		tmp[-1] = genkey.PublicKey
 	}
 
-	if party_id != "s1" {
+	if party_id > 0 {
 		tmp[party_id] = public_key
 	}
 
@@ -29,7 +44,8 @@ func StoreAndSendPublicKey(computationMaps *storage.ComputationMapsStruct, compu
 	var keymap_to_send = NewKeymapToSend()
 	for key := range tmp {
 		if val, ok := computationMaps.Keys[computation_id][key]; ok {
-			keymap_to_send.Public_keys[key] = val
+
+			keymap_to_send.Public_keys[get_party_id_string(key)] = val
 		} else {
 			log.Fatal("Fehler beim generieren des Schlüsselpaars")
 		}

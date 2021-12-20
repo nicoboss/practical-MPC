@@ -4,17 +4,18 @@ import (
 	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/storage"
 	"log"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
 
-var mailbox = make(map[string]map[string][]*OutputMessage) // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
+var mailbox = make(map[string]map[int][]*OutputMessage) // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
 
 func Init(computation_id string) {
-	mailbox[computation_id] = make(map[string][]*OutputMessage)
+	mailbox[computation_id] = make(map[int][]*OutputMessage)
 }
 
-func Append(computation_id string, party_id string, socketProtocol string, data string) {
+func Append(computation_id string, party_id int, socketProtocol string, data string) {
 	message := &OutputMessage{
 		SocketProtocol: socketProtocol,
 		Data:           data,
@@ -22,13 +23,36 @@ func Append(computation_id string, party_id string, socketProtocol string, data 
 	mailbox[computation_id][party_id] = append(mailbox[computation_id][party_id], message)
 }
 
+func get_party_id_string(party_id int) string {
+	if party_id < -1 {
+		return ""
+	}
+	switch party_id {
+	case -1:
+		return "s1"
+	case 0:
+		return ""
+	default:
+		return strconv.Itoa(party_id)
+	}
+}
+
 func SendMails(computation_id string) {
 	for party_id_of_mailbox := range mailbox[computation_id] {
 		if storage.SocketMaps.SocketId[computation_id][party_id_of_mailbox] != nil {
 			for _, mail := range mailbox[computation_id][party_id_of_mailbox] {
 				storage.SocketMaps.SocketId[computation_id][party_id_of_mailbox].WriteJSON(*mail)
-				log.Printf("[SENT][%s][%s]: %s", party_id_of_mailbox, mail.SocketProtocol, mail.Data)
-				SendSentToLoggers(JSON.ToJSON(mail), party_id_of_mailbox)
+				var party_id_of_mailbox_string string
+				switch party_id_of_mailbox {
+				case -1:
+					party_id_of_mailbox_string = "s1"
+				case 0:
+					party_id_of_mailbox_string = ""
+				default:
+					party_id_of_mailbox_string = get_party_id_string(party_id_of_mailbox)
+				}
+				log.Printf("[SENT][%s][%s]: %s", party_id_of_mailbox_string, mail.SocketProtocol, mail.Data)
+				SendSentToLoggers(JSON.ToJSON(mail), party_id_of_mailbox_string)
 			}
 			mailbox[computation_id][party_id_of_mailbox] = nil
 		}
@@ -53,13 +77,13 @@ func BroadcastError(errorMsg string, socket *websocket.Conn) {
 	}
 }
 
-func SendReceivedToLoggers(message string, sender_party_id string) {
+func SendReceivedToLoggers(message string, sender_party_id int) {
 	inputMessagesLoggerObj := &InputMessagesLogger{
 		LoggerProtocol:  "ClientToServer",
-		Sender_party_id: sender_party_id,
+		Sender_party_id: get_party_id_string(sender_party_id),
 		Message:         message,
 	}
-	for logger, _ := range storage.Loggers {
+	for logger := range storage.Loggers {
 		logger.WriteJSON(*inputMessagesLoggerObj)
 	}
 }
@@ -70,7 +94,7 @@ func SendSentToLoggers(message string, reciever_party_id string) {
 		Reciever_party_id: reciever_party_id,
 		Message:           message,
 	}
-	for logger, _ := range storage.Loggers {
+	for logger := range storage.Loggers {
 		logger.WriteJSON(*outputMessagesLoggerObj)
 	}
 }
@@ -81,7 +105,7 @@ func SendServerToLoggers(message string) {
 		Message:        message,
 	}
 	log.Printf("[LOG]: %s", message)
-	for logger, _ := range storage.Loggers {
+	for logger := range storage.Loggers {
 		logger.WriteJSON(*serverMessageLoggerObj)
 	}
 }

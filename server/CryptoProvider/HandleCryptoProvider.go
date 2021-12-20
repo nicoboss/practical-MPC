@@ -6,7 +6,6 @@ import (
 	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"log"
-	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -14,11 +13,8 @@ import (
 func HandleCryptoProvider(data string, socket *websocket.Conn) {
 
 	computation_id := storage.SocketMaps.ComputationId[socket]
-	from_party_id, err := strconv.Atoi(storage.SocketMaps.PartyId[socket])
+	from_party_id := storage.SocketMaps.PartyId[socket]
 
-	if err != nil {
-		log.Fatalln("from_party_id ist kein integer")
-	}
 	var message = &InputMessageCryptoProvider{}
 	JSON.ToObj([]byte(data), message)
 
@@ -67,7 +63,7 @@ func HandleCryptoProvider(data string, socket *websocket.Conn) {
 		Shares:    result.Shares[from_party_id],
 	}
 
-	mailbox.Append(computation_id, strconv.Itoa(from_party_id), "crypto_provider", JSON.ToJSON(outputMessageCryptoProvider))
+	mailbox.Append(computation_id, from_party_id, "crypto_provider", JSON.ToJSON(outputMessageCryptoProvider))
 	mailbox.SendMails(computation_id)
 
 }

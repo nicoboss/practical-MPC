@@ -3,8 +3,8 @@ package Initialization
 import "PracticalMPC/Server/JSON"
 
 type InitializePartyMsg struct {
-	Party_id    int                       `json:"party_id"`
-	Party_count int                       `json:"party_count"`
+	Party_id    int                 `json:"party_id"`
+	Party_count int                 `json:"party_count"`
 	Public_keys map[string]JSON.Key `json:"public_keys"`
 }
 
