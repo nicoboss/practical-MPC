@@ -1,11 +1,9 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 /// <reference path='../modules/logger.ts'/>
 /// <reference path='../mpc/mpc_connect.ts'/>
-/// <reference path='../mpc/mpc_preprocessing.ts'/>
 
 var logger = require('../modules/logger');
 var mpcConnect = require('../mpc/mpc_connect');
-var mpcPreprocessing = require('../mpc/mpc_preprocessing');
 
 exports.connect_button = function (app :any) {
   app.component('connect-button', {
@@ -41,11 +39,6 @@ exports.connect_button = function (app :any) {
             _this.isConnected = true;
             _this.isConnecting = false;
             _this.connectButtonText = "Verbunden";
-            var use_crypto_provider: boolean;
-            use_crypto_provider = (<HTMLInputElement>document.getElementById("use_crypto_provider")).checked;
-            if (!use_crypto_provider) {
-              mpcPreprocessing.mpc_preprocessing();
-            }
             logger.log("Alle Parteien verbunden!", logger.LogType.INFO);
             this.connectButtonEnabled = false;
             (<HTMLDivElement>document.getElementById("calculate_box")).classList.remove("disable-controls");

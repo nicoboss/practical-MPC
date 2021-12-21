@@ -24,6 +24,7 @@ exports.mpc_input = function (app :any) {
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto" for="client_input_sum">Summand:</label>
             <input type="number" id="client_input_sum" min="0" max="100" value="7"/>
+            <preprocessing-button-sum class="button-x command-button"/>
             <submit-button-sum class="button-x command-button"/>
           </div>
         </tab-panel>
@@ -31,6 +32,7 @@ exports.mpc_input = function (app :any) {
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto" for="client_input_multi">Faktor:</label>
             <input type="number" id="client_input_multi" min="0" max="100" value="7"/><br/>
+            <preprocessing-button-multi class="button-x command-button"/>
             <submit-button-multi class="button-x command-button"/>
           </div>
         </tab-panel>

@@ -4,6 +4,8 @@
 /// <reference path='components/server-address.ts'/>
 /// <reference path='components/connect-button.ts'/>
 /// <reference path='components/mpc-input.ts'/>
+/// <reference path='components/preprocessing-button-sum.ts'/>
+/// <reference path='components/preprocessing-button-multi.ts'/>
 /// <reference path='components/submit-button-sum.ts'/>
 /// <reference path='components/submit-button-multi.ts'/>
 /// <reference path='components/submit-button-div.ts'/>
@@ -18,6 +20,8 @@ var vueTest = require('./components/vue-test');
 var serverAddress = require('./components/server-address');
 var connectButton = require('./components/connect-button');
 var mpcInput = require('./components/mpc-input');
+var preprocessingButtonSum = require('./components/preprocessing-button-sum');
+var preprocessingButtonMulti = require('./components/preprocessing-button-multi');
 var submitButtonSum = require('./components/submit-button-sum');
 var submitButtonMulti = require('./components/submit-button-multi');
 var submitButtonDiv = require('./components/submit-button-div');
@@ -41,6 +45,8 @@ vueTest.vue_test(app);
 serverAddress.server_address(app);
 connectButton.connect_button(app);
 mpcInput.mpc_input(app);
+preprocessingButtonSum.preprocessing_button_sum(app);
+preprocessingButtonMulti.preprocessing_button_multi(app);
 submitButtonSum.submit_button_sum(app);
 submitButtonMulti.submit_button_multi(app);
 submitButtonDiv.submit_button_div(app);

@@ -3,14 +3,11 @@
 
 var connectButton = require('../mpc/mpc_connect');
 
-exports.mpc_preprocessing = function (input :any, jiff_instance:any) {
+exports.mpc_preprocessing_sum = function (input :any, jiff_instance:any) {
   if (jiff_instance == null) {
     jiff_instance = connectButton.saved_instance;
   }
-  console.log('Starte Preprocessing');
-  jiff_instance.preprocessing('open', 4);
-  jiff_instance.preprocessing('smult', 4);
+  jiff_instance.preprocessing('open', 1);
   jiff_instance.executePreprocessing(function () {
-    console.log('Fertig mit Preprocessing');
   });
 };

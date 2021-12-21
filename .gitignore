@@ -6,7 +6,8 @@ client/app.js
 client/modules/logger.js
 client/mpc/mpc_compute.js
 client/mpc/mpc_connect.js
-client/mpc/mpc_preprocessing.js
+client/mpc/mpc_preprocessing_multi.js
+client/mpc/mpc_preprocessing_sum.js
 client/mpc/mpc_compute_sum.js
 client/mpc/mpc_compute_multi.js
 client/mpc/mpc_compute_div.js
@@ -18,6 +19,8 @@ client/mpc/mpc_compute_standard_deviation.js
 client/components/vue-test.js
 client/components/server-address.js
 client/components/connect-button.js
+client/components/preprocessing-button-multi.js
+client/components/preprocessing-button-sum.js
 client/components/submit-button.js
 client/components/submit-button-sum.js
 client/components/submit-button-multi.js
