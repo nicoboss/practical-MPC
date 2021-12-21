@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 /// <reference path='../modules/logger.ts'/>
-/// <reference path='../mpc/mpc_compute_vote.ts'/>
+/// <reference path='../mpc/mpc_compute_vote_person.ts'/>
 
 var logger = require('../modules/logger');
 var mpcCompute = require('../mpc/mpc_compute_vote');

@@ -1,12 +1,12 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 /// <reference path='../modules/logger.ts'/>
-/// <reference path='../mpc/mpc_compute_vote.ts'/>
+/// <reference path='../mpc/mpc_compute_vote_person.ts'/>
 
 var logger = require('../modules/logger');
 var mpcCompute = require('../mpc/mpc_compute_vote');
 
 exports.submit_button_vote_person = function (app :any) {
-  app.component('submit-button-vote', {
+  app.component('submit-button-vote-person', {
     data() {
       return {
         submitButtonEnabled: true,

@@ -6,6 +6,13 @@
 /// <reference path='components/mpc-input.ts'/>
 /// <reference path='components/preprocessing-button-sum.ts'/>
 /// <reference path='components/preprocessing-button-multi.ts'/>
+/// <reference path='components/preprocessing-button-div.ts'/>
+/// <reference path='components/preprocessing-button-valentine.ts'/>
+/// <reference path='components/preprocessing-button-vote-person.ts'/>
+/// <reference path='components/preprocessing-button-vote-gpu.ts'/>
+/// <reference path='components/preprocessing-button-threshold.ts'/>
+/// <reference path='components/preprocessing-button-sum-threshold.ts'/>
+/// <reference path='components/preprocessing-button-standard-deviation.ts'/>
 /// <reference path='components/submit-button-sum.ts'/>
 /// <reference path='components/submit-button-multi.ts'/>
 /// <reference path='components/submit-button-div.ts'/>
@@ -22,6 +29,13 @@ var connectButton = require('./components/connect-button');
 var mpcInput = require('./components/mpc-input');
 var preprocessingButtonSum = require('./components/preprocessing-button-sum');
 var preprocessingButtonMulti = require('./components/preprocessing-button-multi');
+var preprocessingButtonDiv = require('./components/preprocessing-button-div');
+var preprocessingButtonValentine = require('./components/preprocessing-button-valentine');
+var preprocessingButtonVotePerson = require('./components/preprocessing-button-vote-person');
+var preprocessingButtonVoteGpu = require('./components/preprocessing-button-vote-gpu');
+var preprocessingButtonThreshold = require('./components/preprocessing-button-threshold');
+var preprocessingButtonSumThreshold = require('./components/preprocessing-button-sum-threshold');
+var preprocessingButtonStandardDeviation = require('./components/preprocessing-button-standard-deviation');
 var submitButtonSum = require('./components/submit-button-sum');
 var submitButtonMulti = require('./components/submit-button-multi');
 var submitButtonDiv = require('./components/submit-button-div');
@@ -47,6 +61,13 @@ connectButton.connect_button(app);
 mpcInput.mpc_input(app);
 preprocessingButtonSum.preprocessing_button_sum(app);
 preprocessingButtonMulti.preprocessing_button_multi(app);
+preprocessingButtonDiv.preprocessing_button_div(app);
+preprocessingButtonValentine.preprocessing_button_valentine(app);
+preprocessingButtonVotePerson.preprocessing_button_vote_person(app);
+preprocessingButtonVoteGpu.preprocessing_button_vote_gpu(app);
+preprocessingButtonThreshold.preprocessing_button_threshold(app);
+preprocessingButtonSumThreshold.preprocessing_button_sum_threshold(app);
+preprocessingButtonStandardDeviation.preprocessing_button_standard_deviation(app);
 submitButtonSum.submit_button_sum(app);
 submitButtonMulti.submit_button_multi(app);
 submitButtonDiv.submit_button_div(app);

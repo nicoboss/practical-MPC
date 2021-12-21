@@ -40,6 +40,7 @@ exports.mpc_input = function (app :any) {
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto" for="client_input_div">Dividend/Divisor:</label>
             <input type="number" id="client_input_div" min="0" max="100" value="7"/><br/>
+            <preprocessing-button-div class="button-x command-button"/>
             <submit-button-div class="button-x command-button"/>
           </div>
         </tab-panel>
@@ -54,6 +55,7 @@ exports.mpc_input = function (app :any) {
               <input class="mtb-auto" type="radio" id="ValentineNo" name="IsValentine"/>
               <label class="mtb-auto" for="IsValentine">Nein</label><br/>
             </div>
+            <preprocessing-button-valentine class="button-x command-button"/>
             <submit-button-valentine class="button-x command-button"/>
           </div>
         </tab-panel>
@@ -66,7 +68,8 @@ exports.mpc_input = function (app :any) {
               <input type="radio" id="vote_Andreas_Brandt" name="VotedCandidate"/><label for="VotedCandidate">Andreas Brandt</label><br/>
               <input type="radio" id="vote_Joerg_Schuster" name="VotedCandidate"/><label for="VotedCandidate">Jörg Schuster</label><br/>
             </div>
-            <submit-button-vote class="button-x command-button"/>
+            <preprocessing-button-vote-person class="button-x command-button"/>
+            <submit-button-vote-person class="button-x command-button"/>
           </div>
         </tab-panel>
         <tab-panel val="GPU-Wahl">
@@ -83,7 +86,8 @@ exports.mpc_input = function (app :any) {
                 <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_4"/></td><td class="align_left"><label for="GPU_Vote_4">AMD Radeon RX 6900 XT</label></td></tr>
               </table>
             </div>
-            <submit-button-vote class="button-x command-button"/>
+            <preprocessing-button-vote-gpu class="button-x command-button"/>
+            <submit-button-vote-gpu class="button-x command-button"/>
           </div>
         </tab-panel>
         <tab-panel val="Threshold">
@@ -93,6 +97,7 @@ exports.mpc_input = function (app :any) {
             <br/><br/>
             <label class="mtb-auto ml-1rem" for="client_input_threshold">Zahl:</label>
             <input type="number" id="client_input_threshold" min="0" max="100" value="77"/><br/>
+            <preprocessing-button-threshold class="button-x command-button"/>
             <submit-button-threshold class="button-x command-button"/>
           </div>
         </tab-panel>
@@ -103,6 +108,7 @@ exports.mpc_input = function (app :any) {
             <br/><br/>
             <label class="mtb-auto ml-1rem" for="client_input_threshold_sum">Zahl:</label>
             <input type="number" id="client_input_threshold_sum" min="0" max="100" value="77"/><br/>
+            <preprocessing-button-sum-threshold class="button-x command-button"/>
             <submit-button-sum-threshold class="button-x command-button"/>
           </div>
         </tab-panel>
@@ -110,6 +116,7 @@ exports.mpc_input = function (app :any) {
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto" for="client_input_standard_deviation">Wert:</label>
             <input type="number" id="client_input_standard_deviation" min="0" max="100" value="7"/>
+            <preprocessing-button-standard-deviation class="button-x command-button"/>
             <submit-button-standard-deviation class="button-x command-button"/>
           </div>
         </tab-panel>
