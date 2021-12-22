@@ -3,7 +3,7 @@
 
 var mpcPreprocessingvalentine = require('../mpc/mpc_preprocessing_valentine');
 
-exports.preprocessing_button_valentine = function (app :any) {
+exports.preprocessing_button_valentine = function (app: any) {
   app.component('preprocessing-button-valentine', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_valentine = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingvalentine.mpc_preprocessing_valentine();
+        mpcPreprocessingvalentine.mpc_preprocessing_valentine(app);
       }
     },
     mounted: function () {

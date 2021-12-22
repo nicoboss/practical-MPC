@@ -5,7 +5,7 @@
 var logger = require('../modules/logger');
 var mpcConnect = require('../mpc/mpc_connect');
 
-exports.connect_button = function (app :any) {
+exports.connect_button = function (app: any) {
   app.component('connect-button', {
     data() {
       return {

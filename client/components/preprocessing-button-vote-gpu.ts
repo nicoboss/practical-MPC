@@ -3,7 +3,7 @@
 
 var mpcPreprocessingvote_gpu = require('../mpc/mpc_preprocessing_vote_gpu');
 
-exports.preprocessing_button_vote_gpu = function (app :any) {
+exports.preprocessing_button_vote_gpu = function (app: any) {
   app.component('preprocessing-button-vote-gpu', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_vote_gpu = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingvote_gpu.mpc_preprocessing_vote_gpu();
+        mpcPreprocessingvote_gpu.mpc_preprocessing_vote_gpu(app);
       }
     },
     mounted: function () {

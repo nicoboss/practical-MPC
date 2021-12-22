@@ -3,7 +3,7 @@
 
 var mpcPreprocessingSum = require('../mpc/mpc_preprocessing_sum');
 
-exports.preprocessing_button_sum = function (app :any) {
+exports.preprocessing_button_sum = function (app: any) {
   app.component('preprocessing-button-sum', {
     data() {
       return {

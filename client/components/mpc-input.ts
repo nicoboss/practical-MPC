@@ -2,7 +2,7 @@
 
 var tabs = ['Summe', 'Multiplikation', 'Division', 'Valentine', 'Abstimmung', 'GPU-Wahl', 'Threshold', 'Sum Threshold', 'Standardabweichung' ];
 
-exports.mpc_input = function (app :any) {
+exports.mpc_input = function (app: any) {
   app.component('mpc-input', {
     data() {
       return {

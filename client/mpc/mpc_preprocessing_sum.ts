@@ -3,7 +3,7 @@
 
 var logger = require('../modules/logger');
 
-exports.mpc_preprocessing_sum = function (app :any) {
+exports.mpc_preprocessing_sum = function (app: any) {
   logger.log("Starte Preprocessing...", logger.LogType.INFO);
   let jiff_instance = app.config.globalProperties.$saved_instance;
   jiff_instance.preprocessing('open', 1);

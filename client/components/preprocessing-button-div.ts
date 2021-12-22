@@ -3,7 +3,7 @@
 
 var mpcPreprocessingdiv = require('../mpc/mpc_preprocessing_div');
 
-exports.preprocessing_button_div = function (app :any) {
+exports.preprocessing_button_div = function (app: any) {
   app.component('preprocessing-button-div', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_div = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingdiv.mpc_preprocessing_div();
+        mpcPreprocessingdiv.mpc_preprocessing_div(app);
       }
     },
     mounted: function () {

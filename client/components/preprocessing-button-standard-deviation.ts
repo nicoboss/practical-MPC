@@ -3,7 +3,7 @@
 
 var mpcPreprocessingstandard_deviation = require('../mpc/mpc_preprocessing_standard_deviation');
 
-exports.preprocessing_button_standard_deviation = function (app :any) {
+exports.preprocessing_button_standard_deviation = function (app: any) {
   app.component('preprocessing-button-standard-deviation', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_standard_deviation = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingstandard_deviation.mpc_preprocessing_standard_deviation();
+        mpcPreprocessingstandard_deviation.mpc_preprocessing_standard_deviation(app);
       }
     },
     mounted: function () {

@@ -3,7 +3,7 @@
 
 var mpcPreprocessingmulti = require('../mpc/mpc_preprocessing_multi');
 
-exports.preprocessing_button_multi = function (app :any) {
+exports.preprocessing_button_multi = function (app: any) {
   app.component('preprocessing-button-multi', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_multi = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingmulti.mpc_preprocessing_multi();
+        mpcPreprocessingmulti.mpc_preprocessing_multi(app);
       }
     },
     mounted: function () {

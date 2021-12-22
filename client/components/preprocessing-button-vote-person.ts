@@ -3,7 +3,7 @@
 
 var mpcPreprocessingvote_person = require('../mpc/mpc_preprocessing_vote_person');
 
-exports.preprocessing_button_vote_person = function (app :any) {
+exports.preprocessing_button_vote_person = function (app: any) {
   app.component('preprocessing-button-vote-person', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_vote_person = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingvote_person.mpc_preprocessing_vote_person();
+        mpcPreprocessingvote_person.mpc_preprocessing_vote_person(app);
       }
     },
     mounted: function () {

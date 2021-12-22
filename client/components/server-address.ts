@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 
-exports.server_address = function (app :any) {
+exports.server_address = function (app: any) {
   app.component('server-address', {
     data() {
         return {

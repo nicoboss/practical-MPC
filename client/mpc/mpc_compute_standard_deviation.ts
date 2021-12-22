@@ -1,7 +1,7 @@
 /// <reference path="../jiff-mpc/jiff-client.d.ts" />
 
 // Basierend auf https://github.com/multiparty/jiff/blob/master/demos/standard-deviation/mpc.js
-exports.mpc_compute = function (app: any, input: any) {
+exports.mpc_compute = function (app: any, input: number) {
   let jiff_instance = app.config.globalProperties.$saved_instance;
   let n = jiff_instance.party_count;
 

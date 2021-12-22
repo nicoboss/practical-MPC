@@ -5,7 +5,7 @@
 var logger = require('../modules/logger');
 var mpcCompute = require('../mpc/mpc_compute_multi');
 
-exports.submit_button_multi = function (app :any) {
+exports.submit_button_multi = function (app: any) {
   app.component('submit-button-multi', {
     data() {
       return {
@@ -22,7 +22,7 @@ exports.submit_button_multi = function (app :any) {
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
         var promise = mpcCompute.mpc_compute(app, input);
-        promise.then(function (result: any) {
+        promise.then(function (result: number) {
           let jiff_instance = app.config.globalProperties.$saved_instance;
           _this.submitButtonEnabled = jiff_instance.crypto_provider;
           app.config.globalProperties.$externalMethods.call('preprocessing_button_multi.SetEnabled', !jiff_instance.crypto_provider);

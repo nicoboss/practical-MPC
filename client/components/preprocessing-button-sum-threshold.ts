@@ -3,7 +3,7 @@
 
 var mpcPreprocessingsum_threshold = require('../mpc/mpc_preprocessing_sum_threshold');
 
-exports.preprocessing_button_sum_threshold = function (app :any) {
+exports.preprocessing_button_sum_threshold = function (app: any) {
   app.component('preprocessing-button-sum-threshold', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_sum_threshold = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingsum_threshold.mpc_preprocessing_sum_threshold();
+        mpcPreprocessingsum_threshold.mpc_preprocessing_sum_threshold(app);
       }
     },
     mounted: function () {

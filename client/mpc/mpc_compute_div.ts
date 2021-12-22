@@ -1,7 +1,7 @@
 /// <reference path="../jiff-mpc/jiff-client.d.ts" />
 
 // Lose basierend auf https://github.com/multiparty/jiff/tree/master/demos
-exports.mpc_compute = function (app: any, input: any) {
+exports.mpc_compute = function (app: any, input: number) {
   let jiff_instance = app.config.globalProperties.$saved_instance;
   // MPC implementierung
   let shares = jiff_instance.share(input);

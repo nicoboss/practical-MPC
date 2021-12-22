@@ -5,7 +5,7 @@
 var logger = require('../modules/logger');
 var mpcCompute = require('../mpc/mpc_compute_vote_person');
 
-exports.submit_button_vote_person = function (app :any) {
+exports.submit_button_vote_person = function (app: any) {
   app.component('submit-button-vote-person', {
     data() {
       return {
@@ -27,7 +27,7 @@ exports.submit_button_vote_person = function (app :any) {
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
         var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
-        promise.then(function (result: any) {
+        promise.then(function (result: number) {
           let jiff_instance = app.config.globalProperties.$saved_instance;
           _this.submitButtonEnabled = jiff_instance.crypto_provider;
           app.config.globalProperties.$externalMethods.call('preprocessing_button_vote_person.SetEnabled', !jiff_instance.crypto_provider);

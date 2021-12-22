@@ -3,7 +3,7 @@
 
 var logger = require('../modules/logger');
 
-exports.mpc_preprocessing_div = function (app :any) {
+exports.mpc_preprocessing_div = function (app: any) {
   logger.log("Starte Preprocessing...", logger.LogType.INFO);
   let jiff_instance = app.config.globalProperties.$saved_instance;
   let party_count = parseInt((<HTMLInputElement>document.getElementById("party_count")).value);

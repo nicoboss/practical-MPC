@@ -3,7 +3,7 @@
 
 var mpcPreprocessingthreshold = require('../mpc/mpc_preprocessing_threshold');
 
-exports.preprocessing_button_threshold = function (app :any) {
+exports.preprocessing_button_threshold = function (app: any) {
   app.component('preprocessing-button-threshold', {
     data() {
       return {
@@ -16,7 +16,7 @@ exports.preprocessing_button_threshold = function (app :any) {
       },
       preprocessingButtonClick() {
         this.preprocessingButtonEnabled = false;
-        mpcPreprocessingthreshold.mpc_preprocessing_threshold();
+        mpcPreprocessingthreshold.mpc_preprocessing_threshold(app);
       }
     },
     mounted: function () {

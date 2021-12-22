@@ -2,7 +2,7 @@
 
 var tabs = ['A', 'B', 'C'];
 
-exports.vue_test = function (app :any) {
+exports.vue_test = function (app: any) {
   app.component('vue-test', {
     data() {
       return {
