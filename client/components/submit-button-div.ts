@@ -13,6 +13,9 @@ exports.submit_button_div = function (app :any) {
       }
     },
     methods: {
+      SetEnabled(newState :boolean) {
+        this.submitButtonEnabled = newState;
+      },
       submitButtonClick() {
         let input = parseInt((<HTMLInputElement>document.getElementById("client_input_div")).value);
         logger.log("Starten...", logger.LogType.INFO);
@@ -20,6 +23,9 @@ exports.submit_button_div = function (app :any) {
         var promise = mpcCompute.mpc_compute(input);
         promise.then(handleResultDiv);
       }
+    },
+    mounted: function () {
+      app.config.globalProperties.$externalMethods.register('submit_button_div.SetEnabled', this.SetEnabled)
     },
     template: `
       <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
@@ -29,5 +35,6 @@ exports.submit_button_div = function (app :any) {
 }
 
 function handleResultDiv(result: any) {
+  this.submitButtonEnabled = true;
   logger.log("Resultat: " + result, logger.LogType.RESULT);
 }

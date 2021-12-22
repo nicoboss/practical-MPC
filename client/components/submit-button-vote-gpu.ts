@@ -1,9 +1,9 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 /// <reference path='../modules/logger.ts'/>
-/// <reference path='../mpc/mpc_compute_vote_person.ts'/>
+/// <reference path='../mpc/mpc_compute_vote_gpu.ts'/>
 
 var logger = require('../modules/logger');
-var mpcCompute = require('../mpc/mpc_compute_vote');
+var mpcCompute = require('../mpc/mpc_compute_vote_gpu');
 
 exports.submit_button_vote_gpu = function (app :any) {
   app.component('submit-button-vote-gpu', {
@@ -13,6 +13,9 @@ exports.submit_button_vote_gpu = function (app :any) {
       }
     },
     methods: {
+      SetEnabled(newState :boolean) {
+        this.submitButtonEnabled = newState;
+      },
       submitButtonClick() {
         let input1 = (<HTMLInputElement>document.getElementById("vote_RTX_3080")).checked ? 1 : 0;
         let input2 = (<HTMLInputElement>document.getElementById("vote_RTX_3090")).checked ? 1 : 0;
@@ -26,6 +29,9 @@ exports.submit_button_vote_gpu = function (app :any) {
         promise.then(handleResultVoteGPU);
       }
     },
+    mounted: function () {
+      app.config.globalProperties.$externalMethods.register('submit_button_vote_gpu.SetEnabled', this.SetEnabled)
+    },
     template: `
       <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
         Berechnen
@@ -34,5 +40,6 @@ exports.submit_button_vote_gpu = function (app :any) {
 }
 
 function handleResultVoteGPU(result: any) {
+  this.submitButtonEnabled = true;
   logger.log("Resultat: " + result, logger.LogType.RESULT);
 }

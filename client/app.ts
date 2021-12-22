@@ -49,11 +49,21 @@ var tabs = require('vue3-tabs');
 
 import { createApp } from 'vue';
 
-const app = createApp({})
+const app = createApp({});
+
 app.use(tabs.Tabs);
 app.use(tabs.Tab);
 app.use(tabs.TabPanels);
 app.use(tabs.TabPanel);
+app.use({
+    install(app) {
+      this.methods = {};
+      app.config.globalProperties.$externalMethods = {
+        register: (method :any, func :any) => this.methods[method] = func,
+        call: (method :any, ...args :any) => this.methods[method](...args)
+      }
+    }
+});
 
 vueTest.vue_test(app);
 serverAddress.server_address(app);

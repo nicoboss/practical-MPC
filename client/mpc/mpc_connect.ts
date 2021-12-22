@@ -6,10 +6,8 @@ var jiff_websockets = require('../jiff-mpc/ext/jiff-client-websockets');
 var saved_instance;
 
 // Lose basierend auf https://github.com/multiparty/jiff/tree/master/demos/sum
-exports.mpc_connect = function (hostname: string, computation_id: string, options: any) {
+exports.mpc_connect = function (hostname: string, computation_id: string, use_crypto_provider: boolean, options: any) {
   var opt = Object.assign({}, options);
-  var use_crypto_provider: boolean;
-  use_crypto_provider = (<HTMLInputElement>document.getElementById("use_crypto_provider")).checked;
   opt.crypto_provider = use_crypto_provider
   opt.Zp = Number((<HTMLInputElement>document.getElementById("Zp_input")).value);
   saved_instance = new JIFFClient(hostname, computation_id, opt);

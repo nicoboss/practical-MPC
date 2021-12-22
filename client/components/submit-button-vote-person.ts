@@ -3,7 +3,7 @@
 /// <reference path='../mpc/mpc_compute_vote_person.ts'/>
 
 var logger = require('../modules/logger');
-var mpcCompute = require('../mpc/mpc_compute_vote');
+var mpcCompute = require('../mpc/mpc_compute_vote_person');
 
 exports.submit_button_vote_person = function (app :any) {
   app.component('submit-button-vote-person', {
@@ -13,6 +13,9 @@ exports.submit_button_vote_person = function (app :any) {
       }
     },
     methods: {
+      SetEnabled(newState :boolean) {
+        this.submitButtonEnabled = newState;
+      },
       submitButtonClick() {
         let input1 = (<HTMLInputElement>document.getElementById("vote_Maximilian_Holtzmann")).checked ? 1 : 0;
         let input2 = (<HTMLInputElement>document.getElementById("vote_Swen_Bachmeier")).checked ? 1 : 0;
@@ -26,6 +29,9 @@ exports.submit_button_vote_person = function (app :any) {
         promise.then(handleResultVote);
       }
     },
+    mounted: function () {
+      app.config.globalProperties.$externalMethods.register('submit_button_vote_person.SetEnabled', this.SetEnabled)
+    },
     template: `
       <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
         Berechnen
@@ -34,5 +40,6 @@ exports.submit_button_vote_person = function (app :any) {
 }
 
 function handleResultVote(result: any) {
+  this.submitButtonEnabled = true;
   logger.log("Resultat: " + result, logger.LogType.RESULT);
 }

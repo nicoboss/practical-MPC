@@ -46,7 +46,30 @@ exports.connect_button = function (app :any) {
           };
           
           let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;
-          mpcConnect.mpc_connect(hostname, computation_id, options);
+          let use_crypto_provider = (<HTMLInputElement>document.getElementById("use_crypto_provider")).checked;
+          let ext = app.config.globalProperties.$externalMethods;
+
+          ext.call('preprocessing_button_sum.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_multi.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_div.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_valentine.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_vote_person.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_vote_gpu.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_threshold.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_sum_threshold.SetEnabled', !use_crypto_provider);
+          ext.call('preprocessing_button_standard_deviation.SetEnabled', !use_crypto_provider);
+
+          ext.call('submit_button_sum.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_multi.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_div.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_valentine.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_vote_person.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_vote_gpu.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_threshold.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_sum_threshold.SetEnabled', use_crypto_provider);
+          ext.call('submit_button_standard_deviation.SetEnabled', use_crypto_provider);
+
+          mpcConnect.mpc_connect(hostname, computation_id, use_crypto_provider, options);
         }
       }
     },
