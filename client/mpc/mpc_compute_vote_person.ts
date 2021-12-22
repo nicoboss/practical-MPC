@@ -18,10 +18,10 @@ exports.mpc_compute = function (app: any, inputs :Array<number>, security_checks
 
     if (security_checks) {
       // Jede einzelne Abstimmungsoption muss kleiner oder gleich 1 sein
-      var check = option_shares[1][0].clteq(1);
+      var check = option_shares[1][0].clteq(1); // 1
       for (j = 1; j <= jiff_instance.party_count; j++) {
         for (i = 0; i < option_shares[j].length; i++) {
-          check = check.smult(option_shares[j][i].clteq(1));
+          check = check.smult(option_shares[j][i].clteq(1)); // party_count * 4 = 8
         }
       }
   
@@ -31,12 +31,12 @@ exports.mpc_compute = function (app: any, inputs :Array<number>, security_checks
         for (i = 1; i < option_shares[j].length; i++) {
           sum = sum.sadd(option_shares[j][i]);
         }
-        check = check.smult(sum.clteq(1));
-      }
+        check = check.smult(sum.clteq(1)); // party_count = 2
+      } // party
         
       // Wenn eine Prüfung fehlschlägt: Alle Stimmen auf 0 setzen
       for (i = 0; i < results.length; i++) {
-        results[i] = results[i].smult(check);
+        results[i] = results[i].smult(check); // 4
       }
     }
 

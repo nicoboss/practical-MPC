@@ -20,7 +20,7 @@ exports.connect_button = function (app: any) {
         var _this = this;
         this.isConnecting = true;
         this.connectButtonEnabled = false;
-        this.connectButtonText = "Verbinden...";
+        this.connectButtonText = "Warten auf Teilnehmer...";
         let computation_id = (<HTMLInputElement>document.getElementById("computation_id")).value;
         let party_count = parseInt((<HTMLInputElement>document.getElementById("party_count")).value);
       

@@ -18,16 +18,16 @@ exports.mpc_compute = function (app: any, inputs :Array<number>, security_checks
 
     if (security_checks) {
       // Jede einzelne Abstimmungsoption muss kleiner oder gleich 5 sein
-      var check = option_shares[1][0].clteq(5);
+      var check = option_shares[1][0].clteq(5); // 1
       for (j = 1; j <= jiff_instance.party_count; j++) {
         for (i = 0; i < option_shares[j].length; i++) {
-          check = check.smult(option_shares[j][i].clteq(5));
+          check = check.smult(option_shares[j][i].clteq(5)); // party_count * 4 = 8
         }
       }
         
       // Wenn eine Prüfung fehlschlägt: Alle Stimmen auf 0 setzen
       for (i = 0; i < results.length; i++) {
-        results[i] = results[i].smult(check);
+        results[i] = results[i].smult(check); // 4
       }
     }
 
