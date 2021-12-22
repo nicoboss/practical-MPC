@@ -69,7 +69,7 @@ exports.connect_button = function (app :any) {
           ext.call('submit_button_sum_threshold.SetEnabled', use_crypto_provider);
           ext.call('submit_button_standard_deviation.SetEnabled', use_crypto_provider);
 
-          mpcConnect.mpc_connect(hostname, computation_id, use_crypto_provider, options);
+          mpcConnect.mpc_connect(app, hostname, computation_id, use_crypto_provider, options);
         }
       }
     },

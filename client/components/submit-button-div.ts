@@ -17,11 +17,17 @@ exports.submit_button_div = function (app :any) {
         this.submitButtonEnabled = newState;
       },
       submitButtonClick() {
+        var _this = this;
         let input = parseInt((<HTMLInputElement>document.getElementById("client_input_div")).value);
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        var promise = mpcCompute.mpc_compute(input);
-        promise.then(handleResultDiv);
+        var promise = mpcCompute.mpc_compute(app, input);
+        promise.then(function (result: any) {
+          let jiff_instance = app.config.globalProperties.$saved_instance;
+          _this.submitButtonEnabled = jiff_instance.crypto_provider;
+          app.config.globalProperties.$externalMethods.call('preprocessing_button_div.SetEnabled', !jiff_instance.crypto_provider);
+          logger.log("Resultat: " + result, logger.LogType.RESULT);
+        });
       }
     },
     mounted: function () {
@@ -32,9 +38,4 @@ exports.submit_button_div = function (app :any) {
         Berechnen
       </button>`
   })
-}
-
-function handleResultDiv(result: any) {
-  this.submitButtonEnabled = true;
-  logger.log("Resultat: " + result, logger.LogType.RESULT);
 }

@@ -17,11 +17,17 @@ exports.submit_button_standard_deviation = function (app :any) {
         this.submitButtonEnabled = newState;
       },
       submitButtonClick() {
+        var _this = this;
         let input = parseInt((<HTMLInputElement>document.getElementById("client_input_standard_deviation")).value);
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        var promise = mpcCompute.mpc_compute(input);
-        promise.then(handleResultStandardDeviation);
+        var promise = mpcCompute.mpc_compute(app, input);
+        promise.then(function (result: any) {
+          let jiff_instance = app.config.globalProperties.$saved_instance;
+          _this.submitButtonEnabled = jiff_instance.crypto_provider;
+          app.config.globalProperties.$externalMethods.call('preprocessing_button_standard_deviation.SetEnabled', !jiff_instance.crypto_provider);
+          logger.log("Resultat: " + result, logger.LogType.RESULT);
+        });
       }
     },
     mounted: function () {
@@ -34,7 +40,3 @@ exports.submit_button_standard_deviation = function (app :any) {
   })
 }
 
-function handleResultStandardDeviation(result: any) {
-  this.submitButtonEnabled = true;
-  logger.log("Resultat: " + result, logger.LogType.RESULT);
-}

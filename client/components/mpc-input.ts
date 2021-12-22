@@ -106,8 +106,8 @@ exports.mpc_input = function (app :any) {
             <label class="mtb-auto" for="threshold_input_sum">Sum Threshold</label>
             <input type="number" id="threshold_input_sum" min="0" max="100" value="50"/>
             <br/><br/>
-            <label class="mtb-auto ml-1rem" for="client_input_threshold_sum">Zahl:</label>
-            <input type="number" id="client_input_threshold_sum" min="0" max="100" value="77"/><br/>
+            <label class="mtb-auto ml-1rem" for="client_input_sum_threshold">Zahl:</label>
+            <input type="number" id="client_input_sum_threshold" min="0" max="100" value="77"/><br/>
             <preprocessing-button-sum-threshold class="button-x command-button"/>
             <submit-button-sum-threshold class="button-x command-button"/>
           </div>

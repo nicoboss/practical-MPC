@@ -17,11 +17,17 @@ exports.submit_button_valentine = function (app :any) {
         this.submitButtonEnabled = newState;
       },
       submitButtonClick() {
+        var _this = this;
         let input = (<HTMLInputElement>document.getElementById("ValentineYes")).checked ? 1 : 0;
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        var promise = mpcCompute.mpc_compute(input);
-        promise.then(handleResultValentine);
+        var promise = mpcCompute.mpc_compute(app, input);
+        promise.then(function (result: any) {
+          let jiff_instance = app.config.globalProperties.$saved_instance;
+          _this.submitButtonEnabled = jiff_instance.crypto_provider;
+          app.config.globalProperties.$externalMethods.call('preprocessing_button_valentine.SetEnabled', !jiff_instance.crypto_provider);
+          logger.log("Resultat: " + result, logger.LogType.RESULT);
+        });
       }
     },
     mounted: function () {
@@ -32,9 +38,4 @@ exports.submit_button_valentine = function (app :any) {
         Berechnen
       </button>`
   })
-}
-
-function handleResultValentine(result: any) {
-  this.submitButtonEnabled = true;
-  logger.log("Resultat: " + result, logger.LogType.RESULT);
 }

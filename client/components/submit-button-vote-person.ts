@@ -17,6 +17,7 @@ exports.submit_button_vote_person = function (app :any) {
         this.submitButtonEnabled = newState;
       },
       submitButtonClick() {
+        var _this = this;
         let input1 = (<HTMLInputElement>document.getElementById("vote_Maximilian_Holtzmann")).checked ? 1 : 0;
         let input2 = (<HTMLInputElement>document.getElementById("vote_Swen_Bachmeier")).checked ? 1 : 0;
         let input3 = (<HTMLInputElement>document.getElementById("vote_Andreas_Brandt")).checked ? 1 : 0;
@@ -25,8 +26,13 @@ exports.submit_button_vote_person = function (app :any) {
         let security_checks = (<HTMLInputElement>document.getElementById("vote_person_security_checks")).checked;
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        var promise = mpcCompute.mpc_compute(inputs, security_checks);
-        promise.then(handleResultVote);
+        var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
+        promise.then(function (result: any) {
+          let jiff_instance = app.config.globalProperties.$saved_instance;
+          _this.submitButtonEnabled = jiff_instance.crypto_provider;
+          app.config.globalProperties.$externalMethods.call('preprocessing_button_vote_person.SetEnabled', !jiff_instance.crypto_provider);
+          logger.log("Resultat: " + result, logger.LogType.RESULT);
+        });
       }
     },
     mounted: function () {
@@ -37,9 +43,4 @@ exports.submit_button_vote_person = function (app :any) {
         Berechnen
       </button>`
   })
-}
-
-function handleResultVote(result: any) {
-  this.submitButtonEnabled = true;
-  logger.log("Resultat: " + result, logger.LogType.RESULT);
 }

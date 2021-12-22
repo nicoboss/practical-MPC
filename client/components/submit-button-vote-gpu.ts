@@ -17,6 +17,7 @@ exports.submit_button_vote_gpu = function (app :any) {
         this.submitButtonEnabled = newState;
       },
       submitButtonClick() {
+        var _this = this;
         let input1 = (<HTMLInputElement>document.getElementById("vote_RTX_3080")).checked ? 1 : 0;
         let input2 = (<HTMLInputElement>document.getElementById("vote_RTX_3090")).checked ? 1 : 0;
         let input3 = (<HTMLInputElement>document.getElementById("vote_RX_6800_XT")).checked ? 1 : 0;
@@ -25,8 +26,13 @@ exports.submit_button_vote_gpu = function (app :any) {
         let security_checks = (<HTMLInputElement>document.getElementById("vote_gpu_security_checks")).checked;
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        var promise = mpcCompute.mpc_compute(inputs, security_checks);
-        promise.then(handleResultVoteGPU);
+        var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
+        promise.then(function (result: any) {
+          let jiff_instance = app.config.globalProperties.$saved_instance;
+          _this.submitButtonEnabled = jiff_instance.crypto_provider;
+          app.config.globalProperties.$externalMethods.call('preprocessing_button_vote_gpu.SetEnabled', !jiff_instance.crypto_provider);
+          logger.log("Resultat: " + result, logger.LogType.RESULT);
+        });
       }
     },
     mounted: function () {
@@ -39,7 +45,3 @@ exports.submit_button_vote_gpu = function (app :any) {
   })
 }
 
-function handleResultVoteGPU(result: any) {
-  this.submitButtonEnabled = true;
-  logger.log("Resultat: " + result, logger.LogType.RESULT);
-}
