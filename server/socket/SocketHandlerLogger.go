@@ -13,7 +13,7 @@ func SocketHandlerLogger(w http.ResponseWriter, r *http.Request) {
 	storage.Upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := storage.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
+		log.Println("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
 		return
 	}
 	defer conn.Close()

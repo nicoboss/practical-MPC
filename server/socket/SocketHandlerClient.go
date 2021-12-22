@@ -22,7 +22,7 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 	storage.Upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := storage.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
+		log.Println("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
 		return
 	}
 	defer conn.Close()
@@ -48,14 +48,14 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		} else if party_id, ok = storage.SocketMaps.PartyId[conn]; !ok {
-			log.Printf("[RECEIVED][%s]: %s", inputMessage.SocketProtocol, data)
+			//log.Printf("[RECEIVED][%s]: %s", inputMessage.SocketProtocol, data)
 			mailbox.SendReceivedToLoggers(JSON.ToJSON(inputMessage), 0)
 			mailbox.BroadcastError("Eine neue Verbindung muss mit socketProtocol initialization beginnen!", conn)
 			storage.ResetStorage()
 			break
 		}
 
-		log.Printf("[RECEIVED][%s][%s]: %s", party_id, inputMessage.SocketProtocol, data)
+		//log.Printf("[RECEIVED][%s][%s]: %s", party_id, inputMessage.SocketProtocol, data)
 		mailbox.SendReceivedToLoggers(JSON.ToJSON(inputMessage), party_id)
 
 		switch socketProtocol := inputMessage.SocketProtocol; socketProtocol {

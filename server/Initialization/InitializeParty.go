@@ -17,7 +17,7 @@ func initializeParty(computation_id string, party_id int, public_key JSON.Key, p
 
 	if party_id != 0 {
 		if party_id > 0 && storage.ComputationMaps.SpareIds[computation_id][party_id-1] {
-			log.Fatal("party_id existiert schon")
+			log.Fatalln("party_id existiert schon")
 		}
 	} else { // generate einer freien party_id
 		var currentSpareIds = storage.ComputationMaps.SpareIds[computation_id]

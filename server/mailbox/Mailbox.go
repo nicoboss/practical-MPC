@@ -51,7 +51,7 @@ func SendMails(computation_id string) {
 				default:
 					party_id_of_mailbox_string = get_party_id_string(party_id_of_mailbox)
 				}
-				log.Printf("[SENT][%s][%s]: %s", party_id_of_mailbox_string, mail.SocketProtocol, mail.Data)
+				//log.Printf("[SENT][%s][%s]: %s", party_id_of_mailbox_string, mail.SocketProtocol, mail.Data)
 				SendSentToLoggers(JSON.ToJSON(mail), party_id_of_mailbox_string)
 			}
 			mailbox[computation_id][party_id_of_mailbox] = nil
@@ -104,7 +104,7 @@ func SendServerToLoggers(message string) {
 		LoggerProtocol: "ServerToLogger",
 		Message:        message,
 	}
-	log.Printf("[LOG]: %s", message)
+	//log.Printf("[LOG]: %s\n", message)
 	for logger := range storage.Loggers {
 		logger.WriteJSON(*serverMessageLoggerObj)
 	}
