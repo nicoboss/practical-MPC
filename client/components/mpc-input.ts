@@ -80,10 +80,10 @@ exports.mpc_input = function (app: any) {
                   <td v-for="index in 5" :key="index"><label class="no_margin">{{index}}</label></td>
                   <td class="align_left"><label class="mtb-auto" for="vote_gpu_security_checks">Sicherheitschecks</label><input class="mtb-auto" type="checkbox" id="vote_gpu_security_checks" checked="true"/><br/></td>
                 </tr>
-                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_1"/></td><td class="align_left"><label for="GPU_Vote_1">NVIDIA GeForce RTX 3080</label></td></tr>
-                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_2"/></td><td class="align_left"><label for="GPU_Vote_2">NVIDIA GeForce RTX 3090</label></td></tr>
-                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_3"/></td><td class="align_left"><label for="GPU_Vote_3">AMD Radeon RX 6800 XT</label></td></tr>
-                <tr><td v-for="index in 5"><input type="radio" name="GPU_Vote_4"/></td><td class="align_left"><label for="GPU_Vote_4">AMD Radeon RX 6900 XT</label></td></tr>
+                <tr><td v-for="index in 5" :key="index"><input type="radio" name="GPU_Vote_1" :value="index" :checked="index==3"/></td><td class="align_left"><label for="GPU_Vote_1">NVIDIA GeForce RTX 3080</label></td></tr>
+                <tr><td v-for="index in 5" :key="index"><input type="radio" name="GPU_Vote_2" :value="index" :checked="index==3"/></td><td class="align_left"><label for="GPU_Vote_2">NVIDIA GeForce RTX 3090</label></td></tr>
+                <tr><td v-for="index in 5" :key="index"><input type="radio" name="GPU_Vote_3" :value="index" :checked="index==3"/></td><td class="align_left"><label for="GPU_Vote_3">AMD Radeon RX 6800 XT</label></td></tr>
+                <tr><td v-for="index in 5" :key="index"><input type="radio" name="GPU_Vote_4" :value="index" :checked="index==3"/></td><td class="align_left"><label for="GPU_Vote_4">AMD Radeon RX 6900 XT</label></td></tr>
               </table>
             </div>
             <preprocessing-button-vote-gpu class="button-x command-button"/>

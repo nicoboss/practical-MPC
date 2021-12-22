@@ -13,15 +13,15 @@ exports.submit_button_vote_gpu = function (app: any) {
       }
     },
     methods: {
-      SetEnabled(newState :boolean) {
+      SetEnabled(newState: boolean) {
         this.submitButtonEnabled = newState;
       },
       submitButtonClick() {
         var _this = this;
-        let input1 = (<HTMLInputElement>document.getElementById("vote_RTX_3080")).checked ? 1 : 0;
-        let input2 = (<HTMLInputElement>document.getElementById("vote_RTX_3090")).checked ? 1 : 0;
-        let input3 = (<HTMLInputElement>document.getElementById("vote_RX_6800_XT")).checked ? 1 : 0;
-        let input4 = (<HTMLInputElement>document.getElementById("vote_RX_6900_XT")).checked ? 1 : 0;
+        let input1 = Number(Array.prototype.slice.call(document.getElementsByName("GPU_Vote_1")).filter(item => item.checked)[0].value);
+        let input2 = Number(Array.prototype.slice.call(document.getElementsByName("GPU_Vote_2")).filter(item => item.checked)[0].value);
+        let input3 = Number(Array.prototype.slice.call(document.getElementsByName("GPU_Vote_3")).filter(item => item.checked)[0].value);
+        let input4 = Number(Array.prototype.slice.call(document.getElementsByName("GPU_Vote_4")).filter(item => item.checked)[0].value);
         let inputs:number[] = [input1, input2, input3, input4];
         let security_checks = (<HTMLInputElement>document.getElementById("vote_gpu_security_checks")).checked;
         logger.log("Starten...", logger.LogType.INFO);

@@ -17,21 +17,12 @@ exports.mpc_compute = function (app: any, inputs :Array<number>, security_checks
     }
 
     if (security_checks) {
-      // Jede einzelne Abstimmungsoption muss kleiner oder gleich 1 sein
-      var check = option_shares[1][0].clteq(1);
+      // Jede einzelne Abstimmungsoption muss kleiner oder gleich 5 sein
+      var check = option_shares[1][0].clteq(5);
       for (j = 1; j <= jiff_instance.party_count; j++) {
         for (i = 0; i < option_shares[j].length; i++) {
-          check = check.smult(option_shares[j][i].clteq(1));
+          check = check.smult(option_shares[j][i].clteq(5));
         }
-      }
-  
-      // Jede Partei erhält nur eine Stimme: Die Summe aller Stimmen einer Partei soll kleiner oder gleich 1 sein
-      for (j = 1; j <= jiff_instance.party_count; j++) {
-        var sum = option_shares[j][0];
-        for (i = 1; i < option_shares[j].length; i++) {
-          sum = sum.sadd(option_shares[j][i]);
-        }
-        check = check.smult(sum.clteq(1));
       }
         
       // Wenn eine Prüfung fehlschlägt: Alle Stimmen auf 0 setzen
