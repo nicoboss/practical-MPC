@@ -33,6 +33,7 @@ func SocketHandlerLogger(w http.ResponseWriter, r *http.Request) {
 		case "register":
 			storage.Loggers[conn] = storage.Logger_id_counter
 			message := fmt.Sprintf("Logger %d registriert!", storage.Logger_id_counter)
+			mailbox.SendCacheToLogger(conn)
 			mailbox.SendServerToLoggers(message)
 			log.Println(message)
 			storage.Logger_id_counter++

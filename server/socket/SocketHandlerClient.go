@@ -50,7 +50,7 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 		} else if party_id, ok = storage.SocketMaps.PartyId[conn]; !ok {
 			//log.Printf("[RECEIVED][%s]: %s", inputMessage.SocketProtocol, data)
 			mailbox.SendReceivedToLoggers(JSON.ToJSON(inputMessage), 0)
-			mailbox.BroadcastError("Eine neue Verbindung muss mit socketProtocol initialization beginnen!", conn)
+			mailbox.BroadcastReset("Eine neue Verbindung muss mit socketProtocol initialization beginnen!", conn)
 			storage.ResetStorage()
 			break
 		}
