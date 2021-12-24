@@ -41,8 +41,9 @@ exports.connect_button = function (app: any) {
             _this.connectButtonText = "Verbunden";
             logger.log("Alle Parteien verbunden!", logger.LogType.INFO);
             this.connectButtonEnabled = false;
+            (<HTMLDivElement>document.getElementById("settings_box")).classList.add("disable-controls");
             (<HTMLDivElement>document.getElementById("calculate_box")).classList.remove("disable-controls");
-            (<HTMLDivElement>document.getElementById("log_box")).classList.remove("disable-controls");
+            (<HTMLDivElement>document.getElementById("calculate_box")).scrollIntoView();
           };
           
           let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;
