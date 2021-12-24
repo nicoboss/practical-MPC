@@ -23,10 +23,14 @@ exports.submit_button_standard_deviation = function (app: any) {
         this.submitButtonEnabled = false;
         var promise = mpcCompute.mpc_compute(app, input);
         promise.then(function (result: number) {
-          let jiff_instance = app.config.globalProperties.$saved_instance;
-          _this.submitButtonEnabled = jiff_instance.crypto_provider;
-          app.config.globalProperties.$externalMethods.call('preprocessing_button_standard_deviation.SetEnabled', !jiff_instance.crypto_provider);
           logger.log("Resultat: " + result, logger.LogType.RESULT);
+          setTimeout(() => 
+          {
+            let jiff_instance = app.config.globalProperties.$saved_instance;
+            _this.submitButtonEnabled = jiff_instance.crypto_provider;
+            app.config.globalProperties.$externalMethods.call('preprocessing_button_standard_deviation.SetEnabled', !jiff_instance.crypto_provider);
+          },
+          500);
         });
       }
     },

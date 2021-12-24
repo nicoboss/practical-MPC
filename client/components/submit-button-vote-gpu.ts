@@ -30,11 +30,14 @@ exports.submit_button_vote_gpu = function (app: any) {
         jiff_instance.seed_ids('4');
         var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
         promise.then(function (result: number) {
-          let jiff_instance = app.config.globalProperties.$saved_instance;
-          jiff_instance.seed_ids('');
-          _this.submitButtonEnabled = jiff_instance.crypto_provider;
-          app.config.globalProperties.$externalMethods.call('preprocessing_button_vote_gpu.SetEnabled', !jiff_instance.crypto_provider);
           logger.log("Resultat: " + result, logger.LogType.RESULT);
+          setTimeout(() => 
+          {
+            let jiff_instance = app.config.globalProperties.$saved_instance;
+            _this.submitButtonEnabled = jiff_instance.crypto_provider;
+            app.config.globalProperties.$externalMethods.call('preprocessing_button_vote_gpu.SetEnabled', !jiff_instance.crypto_provider);
+          },
+          500);
         });
       }
     },
