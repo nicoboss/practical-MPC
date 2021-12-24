@@ -152,8 +152,17 @@ input {
     color: rgba(255, 255, 255, 0.342);
 }
 
+.button-x-error {
+    background-color:rgb(204, 32, 32) !important;
+}
+
+.button-x-connecting {
+    color:#000000 !important;
+}
+
 .button-x-connected {
-    background-color:rgb(204, 32, 32);
+    color:#000000 !important;
+    background-color:rgb(32, 204, 32) !important;
 }
 
 .connect-button {
