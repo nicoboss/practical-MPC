@@ -10,7 +10,9 @@ import (
 )
 
 var mailbox = make(map[string]map[int][]*OutputMessage) // { computation_id -> { party_id -> linked_list<[ message1, message2, ... ]> } }
-var logCache = make([]interface{}, 0, 10000)            // Mögliche Typen: InputMessagesLogger, OutputMessageLogger, ServerMessageLogger
+var logCache = make([]interface{}, 1000)                // Mögliche Typen: InputMessagesLogger, OutputMessageLogger, ServerMessageLogger
+var logCacheHead = 0
+var logCacheTail = -999
 
 func Init(computation_id string) {
 	mailbox[computation_id] = make(map[int][]*OutputMessage)
@@ -78,7 +80,21 @@ func BroadcastReset(errorMsg string, socket *websocket.Conn) {
 	}
 	// ResetStorage der Mailbox
 	mailbox = make(map[string]map[int][]*OutputMessage)
-	logCache = make([]interface{}, 0, 10000)
+	logCache = make([]interface{}, 1000)
+	logCacheHead = 0
+	logCacheTail = -1000
+}
+
+func addToLogCache(item interface{}) {
+	logCache[logCacheHead] = item
+	logCacheHead = (logCacheHead + 1) % 1000
+	if logCacheTail < 0 {
+		logCacheTail += 1
+	} else {
+		logCacheTail = (logCacheTail + 1) % 1000
+	}
+	log.Print(logCacheHead)
+	log.Println(logCacheTail)
 }
 
 func SendReceivedToLoggers(message string, sender_party_id int) {
@@ -87,7 +103,7 @@ func SendReceivedToLoggers(message string, sender_party_id int) {
 		Sender_party_id: get_party_id_string(sender_party_id),
 		Message:         message,
 	}
-	logCache = append(logCache, *inputMessagesLoggerObj)
+	addToLogCache(*inputMessagesLoggerObj)
 	for logger := range storage.Loggers {
 		logger.WriteJSON(*inputMessagesLoggerObj)
 	}
@@ -99,7 +115,7 @@ func SendSentToLoggers(message string, reciever_party_id string) {
 		Reciever_party_id: reciever_party_id,
 		Message:           message,
 	}
-	logCache = append(logCache, *outputMessagesLoggerObj)
+	addToLogCache(*outputMessagesLoggerObj)
 	for logger := range storage.Loggers {
 		logger.WriteJSON(*outputMessagesLoggerObj)
 	}
@@ -111,14 +127,19 @@ func SendServerToLoggers(message string) {
 		Message:        message,
 	}
 	//log.Printf("[LOG]: %s\n", message)
-	logCache = append(logCache, *serverMessageLoggerObj)
+	addToLogCache(*serverMessageLoggerObj)
 	for logger := range storage.Loggers {
 		logger.WriteJSON(*serverMessageLoggerObj)
 	}
 }
 
 func SendCacheToLogger(logger *websocket.Conn) {
-	for _, cacheEntry := range logCache {
-		logger.WriteJSON(cacheEntry)
+	i := logCacheTail
+	if i < 0 {
+		i = 0
+	}
+	for i != logCacheHead {
+		logger.WriteJSON(logCache[i])
+		i = (i + 1) % 1000
 	}
 }
