@@ -93,8 +93,6 @@ func addToLogCache(item interface{}) {
 	} else {
 		logCacheTail = (logCacheTail + 1) % 1000
 	}
-	log.Print(logCacheHead)
-	log.Println(logCacheTail)
 }
 
 func SendReceivedToLoggers(message string, sender_party_id int) {

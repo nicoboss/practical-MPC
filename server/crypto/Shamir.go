@@ -4,7 +4,6 @@ import (
 	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/mailbox"
 	"fmt"
-	"log"
 )
 
 func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[int]int {
@@ -19,7 +18,6 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 	}
 
 	messagePolynomial := fmt.Sprintf("Crypto Provider Shamir Polynomial: %s", JSON.ToJSON(polynomial))
-	log.Println(messagePolynomial)
 	mailbox.SendServerToLoggers(messagePolynomial)
 
 	for i := 0; i < len(parties_list); i++ {
@@ -35,7 +33,6 @@ func ComputeShares(secret int, parties_list []int, threshold int, Zp int) map[in
 	}
 
 	messageShares := fmt.Sprintf("Crypto Provider Shamir Shares: %s", JSON.ToJSON(shares))
-	log.Println(messageShares)
 	mailbox.SendServerToLoggers(messageShares)
 
 	return shares
