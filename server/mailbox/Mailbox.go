@@ -80,6 +80,10 @@ func BroadcastReset(errorMsg string, socket *websocket.Conn) {
 	}
 	// ResetStorage der Mailbox
 	mailbox = make(map[string]map[int][]*OutputMessage)
+	ClearLogCache()
+}
+
+func ClearLogCache() {
 	logCache = make([]interface{}, 1000)
 	logCacheHead = 0
 	logCacheTail = -1000

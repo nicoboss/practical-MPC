@@ -3,6 +3,7 @@ package Initialization
 import (
 	"PracticalMPC/Server/JSON"
 	"PracticalMPC/Server/crypto"
+	"PracticalMPC/Server/mailbox"
 	"PracticalMPC/Server/storage"
 	"log"
 )
@@ -10,9 +11,12 @@ import (
 // Initialisierung einer Partei. Rückgabe: Initialisierungsnachricht mit der Partei-ID oder eine Fehlermeldung
 func initializeParty(computation_id string, party_id int, public_key JSON.Key, party_count int, _s1 bool) (bool, *InitializePartyMsg) {
 
-	// Liste aller noch verfügbaren Partei erstellen
+	// Neue Berechnung
 	if storage.ComputationMaps.SpareIds[computation_id] == nil {
+		// Liste aller noch verfügbaren Partei erstellen
+		log.Printf("Neue Berechnung: %s\n", computation_id)
 		storage.ComputationMaps.SpareIds[computation_id] = make([]bool, party_count)
+		mailbox.ClearLogCache()
 	}
 
 	if party_id != 0 {
