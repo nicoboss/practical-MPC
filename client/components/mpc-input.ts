@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/vue/ref-macros.d.ts" />
 
-var tabs = ['Summe', 'Multiplikation', 'Division', 'Valentine', 'Abstimmung', 'GPU-Wahl', 'Threshold', 'Sum Threshold', 'Standardabweichung' ];
+var tabs = ['Summe', 'Multiplikation', 'Division', 'Valentine', 'Abstimmung', 'Wahl', 'Threshold', 'SumThreshold', 'Standardabweichung' ];
 
 exports.mpc_input = function (app: any) {
   app.component('mpc-input', {
@@ -72,7 +72,7 @@ exports.mpc_input = function (app: any) {
             <submit-button-vote-person class="button-x command-button"/>
           </div>
         </tab-panel>
-        <tab-panel val="GPU-Wahl">
+        <tab-panel val="Wahl">
           <div class="command-div d-flex">
             <div class="box no_margin">
               <table>
@@ -101,7 +101,7 @@ exports.mpc_input = function (app: any) {
             <submit-button-threshold class="button-x command-button"/>
           </div>
         </tab-panel>
-        <tab-panel val="Sum Threshold">
+        <tab-panel val="SumThreshold">
           <div class="command-div one-liner-box d-flex">
             <label class="mtb-auto" for="threshold_input_sum">Sum Threshold</label>
             <input type="number" id="threshold_input_sum" min="0" max="100" value="50"/>

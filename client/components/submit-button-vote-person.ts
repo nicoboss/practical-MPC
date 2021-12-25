@@ -31,6 +31,7 @@ exports.submit_button_vote_person = function (app: any) {
         var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
         promise.then(function (result: number) {
           logger.log("Resultat: " + result, logger.LogType.RESULT);
+          (<HTMLDivElement>document.getElementById("log_box")).scrollIntoView();
           setTimeout(() => 
           {
             let jiff_instance = app.config.globalProperties.$saved_instance;
@@ -45,7 +46,7 @@ exports.submit_button_vote_person = function (app: any) {
       app.config.globalProperties.$externalMethods.register('submit_button_vote_person.SetEnabled', this.SetEnabled)
     },
     template: `
-      <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
+      <button id="submit_button_vote_person" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
         Berechnen
       </button>`
   })

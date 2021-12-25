@@ -44,13 +44,18 @@ public class JiffClientTest {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String currentLine = "";
             while ((currentLine = br.readLine()) != null) {
+                if (currentLine.isBlank()) continue;
+                if (currentLine.startsWith("#")) continue;
+                if (currentLine.startsWith("//")) continue;
+                if (currentLine.startsWith(";")) continue;
                 var splittedLine = currentLine.split("\\|");
                 testParams.add(Arguments.of(
                     splittedLine[0],
                     splittedLine[1],
-                    parseInt(splittedLine[2]),
+                    splittedLine[2],
                     parseInt(splittedLine[3]),
-                    parseInt(splittedLine[4])));
+                    parseInt(splittedLine[4]),
+                    splittedLine[5]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -135,19 +140,20 @@ public class JiffClientTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void test(String testcaseName, String operation, int inputClient1, int inputClient2, int expectedOutput) throws InterruptedException {
-        ExtentTest test = extent.createTest(testcaseName, operation + " von " + inputClient1 + " und " + inputClient2 + " = "+ expectedOutput);
+    public void test(String testcaseName, String operationName, String operationID, int inputClient1, int inputClient2, String expectedOutput) throws InterruptedException {
+        ExtentTest test = extent.createTest(testcaseName, operationName + " von " + inputClient1 + " und " + inputClient2 + " = "+ expectedOutput);
         test.log(Status.INFO, "Test \"" + testcaseName + "\" gestartet");
         try {
-            Assertions.assertTrue(client1.jiffEinstellungen(testcaseName, operation, test));
-            Assertions.assertTrue(client2.jiffEinstellungen(testcaseName, operation, test));
+            Assertions.assertTrue(client1.jiffEinstellungen(testcaseName, test));
+            Assertions.assertTrue(client2.jiffEinstellungen(testcaseName, test));
             Assertions.assertTrue(client1.jiffAllePartiesConnected(test));
             Assertions.assertTrue(client2.jiffAllePartiesConnected(test));
-            Assertions.assertTrue(client1.jiffEingaben(inputClient1, test));
-            Assertions.assertTrue(client2.jiffEingaben(inputClient2, test));
+            Assertions.assertTrue(client1.jiffEingaben(inputClient1, operationName, operationID, test));
+            Assertions.assertTrue(client2.jiffEingaben(inputClient2, operationName, operationID, test));
             Assertions.assertEquals(expectedOutput, client1.jiffGetResult(test));
             Assertions.assertEquals(expectedOutput, client2.jiffGetResult(test));
         } catch (Exception e) {
+            e.printStackTrace();
             test.log(Status.FAIL, "Exception: " + e.getMessage());
             Assertions.fail();
         }

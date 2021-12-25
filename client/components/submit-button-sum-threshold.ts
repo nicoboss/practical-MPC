@@ -24,6 +24,7 @@ exports.submit_button_sum_threshold = function (app: any) {
         var promise = mpcCompute.mpc_compute(app, input);
         promise.then(function (result: number) {
           logger.log("Resultat: " + result, logger.LogType.RESULT);
+          (<HTMLDivElement>document.getElementById("log_box")).scrollIntoView();
           setTimeout(() => 
           {
             let jiff_instance = app.config.globalProperties.$saved_instance;
@@ -38,7 +39,7 @@ exports.submit_button_sum_threshold = function (app: any) {
       app.config.globalProperties.$externalMethods.register('submit_button_sum_threshold.SetEnabled', this.SetEnabled)
     },
     template: `
-      <button id="submit_button" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
+      <button id="submit_button_sum_threshold" v-on:click="submitButtonClick()" v-bind:disabled="!submitButtonEnabled">
         Berechnen
       </button>`
   })
