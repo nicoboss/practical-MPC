@@ -4,12 +4,12 @@ import "PracticalMPC/Server/JSON"
 
 // speichert Zustände der Berechnung
 type ComputationMapsStruct struct {
-	ClientIds   map[string][]int            // { computation_id -> [ party1_id, party2_id, ...] } for only registered/initialized clients
+	ClientIds   map[string][]int            // { computation_id -> [ party1_id, party2_id, ...] }
 	SpareIds    map[string][]bool           // { computation_id -> <interval object> }
-	MaxCount    map[string]int              // { computation_id -> <max number of parties allowed> }
+	MaxCount    map[string]int              // { computation_id -> <Anzahl Partien> }
 	Keys        map[string]map[int]JSON.Key // { computation_id -> { party_id -> <public_key> } }
 	SecretKeys  map[string]JSON.Key         // { computation_id -> <privateKey> }
-	FreeParties map[string]map[int]bool     // { computation_id -> { id of every free party -> true } }
+	FreeParties map[string]map[int]bool     // { computation_id -> { party_id von freier party -> true } }
 }
 
 func NewComputationMaps() *ComputationMapsStruct {

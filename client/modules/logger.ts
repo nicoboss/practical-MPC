@@ -12,4 +12,7 @@ enum LogType {
     infoOutput.classList.add(logType);
     infoOutput.textContent = message;
     document.getElementById("output")!.appendChild(infoOutput);
+    if (logType === LogType.ERROR) {
+      (<HTMLDivElement>document.getElementById("log_box")).scrollIntoView();
+    }
   }

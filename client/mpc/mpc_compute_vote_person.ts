@@ -41,6 +41,7 @@ exports.mpc_compute = function (app: any, inputs :Array<number>, security_checks
     }
 
     var calculate_voting_open_promise = jiff_instance.open_array(results).then(function (results: any) {
+      jiff_instance.seed_ids('');
       return results;
     });
     return Promise.resolve(calculate_voting_open_promise);

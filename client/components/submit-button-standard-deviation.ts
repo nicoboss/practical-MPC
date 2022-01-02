@@ -19,9 +19,14 @@ exports.submit_button_standard_deviation = function (app: any) {
       submitButtonClick() {
         var _this = this;
         let input = parseInt((<HTMLInputElement>document.getElementById("client_input_standard_deviation")).value);
+        try {
+          var promise = mpcCompute.mpc_compute(app, input);
+        } catch(e: any) {
+          logger.log(e.name + ': ' + e.message, logger.LogType.ERROR);
+          return;
+        }
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        var promise = mpcCompute.mpc_compute(app, input);
         promise.then(function (result: number) {
           logger.log("Resultat: " + result, logger.LogType.RESULT);
           (<HTMLDivElement>document.getElementById("log_box")).scrollIntoView();

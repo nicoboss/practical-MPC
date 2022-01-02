@@ -6,6 +6,7 @@ exports.mpc_compute = function (app: any, input: number) {
   // MPC implementierung
   var threshold = Number((<HTMLInputElement>document.getElementById("threshold_input_sum")).value)
   var shares = jiff_instance.share(input);
+  console.log("mpc_compute_shares: " + JSON.stringify(shares));
   var sum = shares[1];
   for (var i = 2; i <= jiff_instance.party_count; i++) {
     sum = sum.sadd(shares[i]);

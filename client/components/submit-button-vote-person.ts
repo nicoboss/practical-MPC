@@ -24,11 +24,14 @@ exports.submit_button_vote_person = function (app: any) {
         let input4 = (<HTMLInputElement>document.getElementById("vote_Joerg_Schuster")).checked ? 1 : 0;
         let inputs:number[] = [input1, input2, input3, input4];
         let security_checks = (<HTMLInputElement>document.getElementById("vote_person_security_checks")).checked;
+        try {
+          var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
+        } catch(e: any) {
+          logger.log(e.name + ': ' + e.message, logger.LogType.ERROR);
+          return;
+        }
         logger.log("Starten...", logger.LogType.INFO);
         this.submitButtonEnabled = false;
-        let jiff_instance = app.config.globalProperties.$saved_instance;
-        jiff_instance.seed_ids('4');
-        var promise = mpcCompute.mpc_compute(app, inputs, security_checks);
         promise.then(function (result: number) {
           logger.log("Resultat: " + result, logger.LogType.RESULT);
           (<HTMLDivElement>document.getElementById("log_box")).scrollIntoView();

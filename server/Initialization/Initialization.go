@@ -17,21 +17,21 @@ func Register(inputMessageData string, inputMessage string, socket *websocket.Co
 		if storage.Party_id_counter[inputData.Computation_id] > inputData.Party_count {
 			//log.Printf("[RECEIVED][%s]: %s", "initialization", inputMessageData)
 			mailbox.SendReceivedToLoggers(inputMessage, 0)
-			mailbox.BroadcastReset("Serverreset: Anzahl Teilnehmer überschreitet Eingabe von Partei", socket)
+			mailbox.BroadcastReset("Serverreset: Anzahl Teilnehmer überschreitet Eingabe von Partei! Bitte erneut verbinden.", socket)
 			storage.ResetStorage()
 			return 0, false
 		}
 		if storage.ComputationMaps.MaxCount[inputData.Computation_id] != inputData.Party_count {
 			//log.Printf("[RECEIVED][%s]: %s", "initialization", inputMessageData)
 			mailbox.SendReceivedToLoggers(inputMessage, 0)
-			mailbox.BroadcastReset("Serverreset: Anzahl Teilnehmer verschieden zwischen Parteien", socket)
+			mailbox.BroadcastReset("Serverreset: Anzahl Teilnehmer verschieden zwischen Parteien! Bitte erneut verbinden.", socket)
 			storage.ResetStorage()
 			return 0, false
 		}
 		if storage.Party_id_counter[inputData.Computation_id] > storage.ComputationMaps.MaxCount[inputData.Computation_id] {
 			//log.Printf("[RECEIVED][%s]: %s", "initialization", inputMessageData)
 			mailbox.SendReceivedToLoggers(inputMessage, 0)
-			mailbox.BroadcastReset("Serverreset: Anzahl Teilnehmer überschritten", socket)
+			mailbox.BroadcastReset("Serverreset: Anzahl Teilnehmer überschritten! Bitte erneut verbinden.", socket)
 			storage.ResetStorage()
 			return 0, false
 		}
