@@ -287,6 +287,10 @@ exports.vue_logger = function (app :any) {
           </VTr>
         </template>
       </VTable>
+      <VTPagination class="d-flex justify-content-left"
+      v-model:currentPage="currentPage"
+      :total-pages="totalPages"
+      :boundary-links="true"/>
       <br/>
       <h2>Rohdaten:</h2>
       <div v-if="selectedRows.length === 0">Nichts ausgewählt</div>
