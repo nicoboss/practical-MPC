@@ -162,8 +162,9 @@
        * previous information sent by socket.io will be untouched, but now sent inside of msg.data.
        */
       this.socket.onmessage = function (msg, callback) {
+        
         msg = JSON.parse(msg.data);
-        //console.log(msg.data)
+        //console.log("Empfangen: " + msg.socketProtocol + ": " + msg.data);
 
         switch (msg.socketProtocol) {
           case 'initialization':
@@ -276,7 +277,8 @@
       if (this.readyState === 1) {
         var self = this;
         // emit the message, if an acknowledgment is received, remove it from mailbox
-
+        
+        //console.log("Senden: " + label + ": " + msg);
         this.send(JSON.stringify({ socketProtocol: label, data: msg }), null, function (status) {
 
           self.mailbox.remove(mailbox_pointer);

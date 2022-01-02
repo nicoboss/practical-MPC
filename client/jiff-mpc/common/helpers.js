@@ -38,6 +38,7 @@ exports.random = function (max) {
 
     // randomValue should be smaller than largest multiple of max within maxBytes
     if (randomValue < maxValue - maxValue % max) {
+      console.log("random("+max+") = " + (randomValue % max));
       return randomValue % max;
     }
   }
@@ -46,8 +47,10 @@ exports.random = function (max) {
 // actual mode
 exports.mod = function (x, y) {
   if (x < 0) {
+    console.log("mod("+x+","+y+") = " + ((x % y) + y));
     return (x % y) + y;
   }
+  console.log("mod("+x+","+y+") = " + (x % y));
   return x % y;
 };
 

@@ -194,8 +194,11 @@ module.exports = function (SecretShare) {
 
     var self = this;
     x.wThen(function () {
+      console.log("x: " + x)
       var y = self.icmult(-1).icadd(cst).ilt_halfprime(op_id + ':halfprime:2');
+      
       y.wThen(function () {
+        console.log("y: " + y)
         var xy = y.ismult(x, op_id + ':smult1');
         var answer = x.icmult(-1).icadd(1).issub(y).isadd(xy).isadd(x.isadd(y).issub(xy.icmult(2)).icmult(w));
         answer.wThen(final_deferred.resolve);

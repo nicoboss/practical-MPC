@@ -88,7 +88,7 @@ module.exports = {
    *                                returned immediately as a boolean
    */
   cgt: function (jiff, bits, constant, op_id) {
-    console.log("cgt");
+    console.log("cgt: " + bits + ", " + constant);
     if (!(bits[0].isConstant(constant))) {
       throw new Error('parameter should be a number (bits.cgt)');
     }

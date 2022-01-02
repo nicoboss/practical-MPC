@@ -103,6 +103,7 @@ module.exports = function (jiffClient) {
       x = x * x;
       x = jiffClient.helpers.mod(x, n);
     }
+    console.log("pow_mod("+a+","+b+","+n+") = " + result);
     return result;
   };
 
@@ -115,6 +116,7 @@ module.exports = function (jiffClient) {
    * @return {number[]} [inverse of a mod b, coefficient for a, coefficient for b].
    */
   jiffClient.helpers.extended_gcd = function (a, b) {
+    console.log("extended_gcd("+a+","+b+")");
     if (b === 0) {
       return [1, 0, a];
     }
@@ -138,6 +140,7 @@ module.exports = function (jiffClient) {
     if (base == null) {
       base = 2;
     }
+    console.log("bLog("+value+","+base+") = "+(Math.log(value) / Math.log(base)));
     return Math.log(value) / Math.log(base);
   };
 
@@ -216,6 +219,7 @@ module.exports = function (jiffClient) {
    * @return {number} the array of bits.
    */
   jiffClient.helpers.bits_to_number = function (bits, length) {
+    console.log("bits_to_number("+bits+","+length+")");
     if (length == null || length > bits.length) {
       length = bits.length;
     }
@@ -230,6 +234,7 @@ module.exports = function (jiffClient) {
    * @return {boolean} true if p is prime, false otherwise
    */
   jiffClient.helpers.is_prime = function (p) {
+    console.log("is_prime("+p+")");
     // AKS Primality Test
 
     if (p === 2) {
