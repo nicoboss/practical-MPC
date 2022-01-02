@@ -35,7 +35,6 @@ exports.connect_button = function (app: any) {
           logger.log(error, logger.LogType.ERROR);
           (<HTMLDivElement>document.getElementById("calculate_box")).classList.add("disable-controls");
           (<HTMLDivElement>document.getElementById("settings_box")).classList.remove("disable-controls");
-          (<HTMLDivElement>document.getElementById("settings_box")).scrollIntoView();
           _this.connectButtonText = "Verbinden erneut versuchen";
           _this.isConnected = false;
           _this.connectButtonEnabled = true;
