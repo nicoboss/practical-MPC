@@ -47,7 +47,7 @@ func SendServerToLoggers(message string) {
 }
 
 func SendCacheToLogger(logger *websocket.Conn) {
-	i := logCacheTail
+	i := logCacheTail + 1
 	if i < 0 {
 		i = 0
 	}

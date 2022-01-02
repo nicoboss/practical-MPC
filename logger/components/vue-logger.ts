@@ -4,18 +4,20 @@
 var jsonSyntaxHighlight = require('../modules/jsonSyntaxHighlight');
 var dayjs = require('dayjs')
 
-var users = [];
+var entries = [];
 var data_buffer = [];
+var data_buffer_temp = [];
 var last_data_buffer_update: Date = new Date();
 
 exports.vue_logger = function (app :any) {
   app.component('vue-logger', {
     data() {
       return {
-        users,
+        entries,
         totalPages: 1,
         currentPage: 1,
         data_buffer,
+        data_buffer_temp,
         last_data_buffer_update,
         connection: null,
         connectButtonEnabled: true,
@@ -54,13 +56,31 @@ exports.vue_logger = function (app :any) {
     },
     mounted: function () {
       window.setInterval(() => {
-        if (data_buffer.length > 0) {
+        if (this.data_buffer.length > 0) {
           var startTime: Date = this.last_data_buffer_update;
           var endTime: Date = new Date();
           var timeDiff = endTime.getTime() - startTime.getTime();
           if (timeDiff > 250) {
-            this.users.push(...this.data_buffer);
-            this.data_buffer = [];
+            let maxItemsToAdd = 60000; //Verkleinern falls "Maximum call stack size exceeded"
+            let itemsToAdd = Math.min(this.data_buffer.length, maxItemsToAdd); 
+            console.log("Hinzufügen von " + itemsToAdd + " Einträgen");
+            for (let i = 0; i < itemsToAdd; i++) {
+              this.entries.push(this.data_buffer[i]);
+            }
+            if (itemsToAdd == maxItemsToAdd) {
+              this.data_buffer_temp = [];
+              for (let i = itemsToAdd; i < this.data_buffer.length; i++) {
+                this.data_buffer_temp.push(this.data_buffer[i]);
+              }
+              this.data_buffer = [];
+              for (let i = 0; i < this.data_buffer_temp.length; i++) {
+                this.data_buffer.push(this.data_buffer_temp[i]);
+              }
+              this.data_buffer = this.data_buffer_temp;
+              console.log(this.data_buffer.length + " Einträge verbleibend");
+            } else {
+              this.data_buffer = [];
+            }
           }
         }
       }, 100)
@@ -91,10 +111,10 @@ exports.vue_logger = function (app :any) {
         return comp;
       },
       selectAll () {
-        this.$refs.usersTable.selectAll();
+        this.$refs.entriesTable.selectAll();
       },
       deselectAll () {
-        this.$refs.usersTable.deselectAll();
+        this.$refs.entriesTable.deselectAll();
       },
       sendMessage: function(message: any) {
         this.connection.send(message);
@@ -259,8 +279,8 @@ exports.vue_logger = function (app :any) {
       :boundary-links="true"/>
       <VTable
       id="LoggerTabelle"
-      ref="usersTable"
-      :data="users"
+      ref="entriesTable"
+      :data="entries"
       :page-size="20"
       v-model:currentPage="currentPage"
       @totalPagesChanged="totalPages = $event"
