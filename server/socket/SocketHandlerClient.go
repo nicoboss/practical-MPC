@@ -22,26 +22,34 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 	storage.Upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := storage.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
+		log.Println("[SocketHandlerClient] Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
 		return
 	}
 	defer conn.Close()
 
+	var party_id int
+	var initializationSuccessful bool
+	var ok bool
+
 	// Main loop
 	for {
+
 		_, data, err := conn.ReadMessage()
 		if err != nil {
-			log.Println("Fehler beim lesen der websocket Nachricht:", err)
-			return
+			log.Println("[SocketHandlerClient]", err)
+			socketMutex.Lock()
+			if party_id, ok = storage.SocketMaps.PartyId[conn]; ok {
+				message := fmt.Sprintf("Client %d getrennt!", party_id)
+				mailbox.SendServerToLoggers(message)
+				log.Println(message)
+			}
+			break
 		}
 
 		var inputMessage = &InputMessage{}
 		JSON.ToObj(data, inputMessage)
 
 		socketMutex.Lock()
-		var party_id int
-		var initializationSuccessful bool
-		var ok bool
 		if inputMessage.SocketProtocol == "initialization" {
 			party_id, initializationSuccessful = Initialization.Register(inputMessage.Data, JSON.ToJSON(inputMessage), conn)
 			if !initializationSuccessful {
@@ -69,12 +77,6 @@ func SocketHandlerClient(w http.ResponseWriter, r *http.Request) {
 			Open.HandleOpen(inputMessage.Data, conn)
 		case "custom":
 			Custom.HandleCustom(inputMessage.Data, conn)
-		case "disconnect":
-			fmt.Println("disconnect")
-		case "close":
-			fmt.Println("close")
-		case "free":
-			fmt.Println("free")
 		default:
 			fmt.Println("Unimplementiertes socketProtocol:", socketProtocol)
 		}

@@ -13,7 +13,7 @@ func SocketHandlerLogger(w http.ResponseWriter, r *http.Request) {
 	storage.Upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := storage.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
+		log.Println("[SocketHandlerLogger] Fehler während Upgrade der Verbindung von HTTP auf websocket:", err)
 		return
 	}
 	defer conn.Close()
@@ -22,7 +22,11 @@ func SocketHandlerLogger(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, data, err := conn.ReadMessage()
 		if err != nil {
-			log.Println("Fehler beim lesen der websocket Nachricht:", err)
+			log.Println("[SocketHandlerLogger]", err)
+			message := fmt.Sprintf("Logger %d unregistriert!", storage.Loggers[conn])
+			delete(storage.Loggers, conn)
+			mailbox.SendServerToLoggers(message)
+			log.Println(message)
 			break
 		}
 

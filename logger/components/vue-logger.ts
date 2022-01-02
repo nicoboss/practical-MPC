@@ -105,7 +105,17 @@ exports.vue_logger = function (app :any) {
         let hostname = (<HTMLInputElement>document.getElementById("server_address")).value;
         let conn = new WebSocket(hostname);
         this.connection = conn;
-    
+
+        conn.onerror = function (error: any) {
+          alert("Websocket Verbindung zum Server fehlgeschlagen!");
+          _this.connectButtonEnabled = true;
+        }
+
+        conn.onopen = function(event: any) {
+          conn.send('register');
+          (<HTMLDivElement>document.getElementById("LoggerTabelle")).scrollIntoView();
+        }
+
         conn.onmessage = function(event: any) {
           var loggerMsgObj = JSON.parse(event.data);
           if (loggerMsgObj.loggerProtocol == "ClientToServer" || loggerMsgObj.loggerProtocol == "ServerToClient") {
@@ -143,10 +153,6 @@ exports.vue_logger = function (app :any) {
             };
           _this.data_buffer.push(tableRowObj);
           _this.last_data_buffer_update = new Date();
-        }
-    
-        conn.onopen = function(event: any) {
-          conn.send('register');
         }
         
       },
@@ -252,6 +258,7 @@ exports.vue_logger = function (app :any) {
       :total-pages="totalPages"
       :boundary-links="true"/>
       <VTable
+      id="LoggerTabelle"
       ref="usersTable"
       :data="users"
       :page-size="20"
