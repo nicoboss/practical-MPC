@@ -141,7 +141,7 @@ public class JiffClientTest {
     @ParameterizedTest
     @MethodSource("data")
     public void test(String testcaseName, String operationName, String operationID, int inputClient1, int inputClient2, String expectedOutput) throws InterruptedException {
-        ExtentTest test = extent.createTest(testcaseName, operationName + " von " + inputClient1 + " und " + inputClient2 + " = "+ expectedOutput);
+        ExtentTest test = extent.createTest(testcaseName, operationName + " von " + (inputClient1 == -1 ? "Standardwert" : inputClient1) + " und " + (inputClient2 == -1 ? "Standardwert" : inputClient2) + " = "+ expectedOutput);
         test.log(Status.INFO, "Test \"" + testcaseName + "\" gestartet");
         try {
             Assertions.assertTrue(client1.jiffEinstellungen(testcaseName, test));
