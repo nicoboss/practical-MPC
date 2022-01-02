@@ -2,6 +2,7 @@ package mailbox
 
 import (
 	"PracticalMPC/Server/storage"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -9,6 +10,7 @@ import (
 func SendReceivedToLoggers(message string, sender_party_id int) {
 	inputMessagesLoggerObj := &InputMessagesLogger{
 		LoggerProtocol:  "ClientToServer",
+		Time:            time.Now().UnixMilli(),
 		Sender_party_id: get_party_id_string(sender_party_id),
 		Message:         message,
 	}
@@ -21,6 +23,7 @@ func SendReceivedToLoggers(message string, sender_party_id int) {
 func SendSentToLoggers(message string, reciever_party_id string) {
 	outputMessagesLoggerObj := &OutputMessageLogger{
 		LoggerProtocol:    "ServerToClient",
+		Time:              time.Now().UnixMilli(),
 		Reciever_party_id: reciever_party_id,
 		Message:           message,
 	}
@@ -33,6 +36,7 @@ func SendSentToLoggers(message string, reciever_party_id string) {
 func SendServerToLoggers(message string) {
 	serverMessageLoggerObj := &ServerMessageLogger{
 		LoggerProtocol: "ServerToLogger",
+		Time:           time.Now().UnixMilli(),
 		Message:        message,
 	}
 	//log.Printf("[LOG]: %s\n", message)

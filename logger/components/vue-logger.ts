@@ -124,8 +124,8 @@ exports.vue_logger = function (app :any) {
           if (!("data" in loggerMsgObj.message)) loggerMsgObj.message.data = {};
 
           var tableRowObj =  {
-              'time': dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSS'),
               'html': jsonSyntaxHighlight.syntaxHighlight(JSON.stringify(loggerMsgObj, undefined, 2)),
+              'time': "loggerProtocol" in loggerMsgObj ? dayjs(loggerMsgObj.time).format('YYYY-MM-DD HH:mm:ss:SSS') : dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSS'),
               "loggerProtocol": "loggerProtocol" in loggerMsgObj ? loggerMsgObj.loggerProtocol : "",
               "sender_party_id": "sender_party_id" in loggerMsgObj ? loggerMsgObj.sender_party_id : "",
               "receiver_party_id": "receiver_party_id" in loggerMsgObj ? loggerMsgObj.receiver_party_id : "",
